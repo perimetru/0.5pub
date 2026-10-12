@@ -1,0 +1,1675 @@
+{
+  "currency": "MDL",
+  "categories": [
+    {
+      "id": "bar-draft-beer",
+      "ru": "Пиво на розлив",
+      "ro": "Bere la draft",
+      "en": "Draught beer"
+    },
+    {
+      "id": "bar-bottled-beer",
+      "ru": "Пиво в бутылке",
+      "ro": "Bere la sticla",
+      "en": "Bottled beer"
+    },
+    {
+      "id": "bar-alcohol",
+      "ru": "Алкогольные напитки",
+      "ro": "Bauturi alcoolice",
+      "en": "Alcoholic drinks"
+    },
+    {
+      "id": "bar-soft",
+      "ru": "Безалкогольные напитки",
+      "ro": "Bauturi nealcoolice",
+      "en": "Soft drinks"
+    },
+    {
+      "id": "bar-coffee-tea",
+      "ru": "Кофе/Чай",
+      "ro": "Cafea/Ceai",
+      "en": "Coffee & tea"
+    },
+    {
+      "id": "kitchen-sides-snacks",
+      "ru": "Картофель и другое",
+      "ro": "Cartofi si alte",
+      "en": "Potatoes & sides"
+    },
+    {
+      "id": "kitchen-beer-snacks",
+      "ru": "Закуски к пиву",
+      "ro": "Gustari la bere",
+      "en": "Beer snacks"
+    },
+    {
+      "id": "kitchen-burgers-wings",
+      "ru": "Бургеры",
+      "ro": "Burgeri",
+      "en": "Burgers"
+    },
+    {
+      "id": "kitchen-meat-grill",
+      "ru": "Мясо и гриль",
+      "ro": "Carne si grill",
+      "en": "Meat & grill"
+    },
+    {
+      "id": "b66b5c5f-1e23-49fc-9cc5-5ad92e5c6110",
+      "ru": "Курица",
+      "ro": "Gaina",
+      "en": "Chicken"
+    },
+    {
+      "id": "kitchen-seafood",
+      "ru": "Морепродукты",
+      "ro": "Fructe de mare",
+      "en": "Seafood"
+    },
+    {
+      "id": "95107099-9600-443f-b100-b0fea560de7a",
+      "ru": "Соусы",
+      "ro": "Sousuri",
+      "en": "Sauces"
+    },
+    {
+      "id": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "ru": "Пиво с собой",
+      "ro": "Bere la Litru",
+      "en": "Beer to go"
+    },
+    {
+      "id": "kitchen-fish-beer",
+      "ru": "Рыба к пиву",
+      "ro": "Peste la bere",
+      "en": "Fish snacks"
+    },
+    {
+      "id": "8bf1cceb-859b-4a68-814d-a0c0fa7401e8",
+      "ru": "Посуда\\Котейнеры",
+      "ro": "Vesela/Containere",
+      "en": "Tableware & containers"
+    },
+    {
+      "id": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "ru": "Посуда",
+      "ro": "Vesela",
+      "en": "Tableware"
+    }
+  ],
+  "items": [
+    {
+      "id": "fish-ansoa",
+      "ru": "Анчоус",
+      "ro": "Ansoa",
+      "category": "kitchen-fish-beer",
+      "price": 30,
+      "unit": "50 г",
+      "weighted": false,
+      "en": "Anchovies"
+    },
+    {
+      "id": "fish-merluciu",
+      "ru": "Мерлуза",
+      "ro": "Merluciu",
+      "category": "kitchen-fish-beer",
+      "price": 36,
+      "unit": "50 г",
+      "weighted": false,
+      "en": "Hake"
+    },
+    {
+      "id": "fish-stavrida",
+      "ru": "Ставрида",
+      "ro": "Stavrida",
+      "category": "kitchen-fish-beer",
+      "price": 33,
+      "unit": "50 г",
+      "weighted": false,
+      "en": "Horse mackerel"
+    },
+    {
+      "id": "fish-calmar-dungat",
+      "ru": "Кальмар",
+      "ro": "Calmar dungat",
+      "category": "kitchen-fish-beer",
+      "price": 36,
+      "unit": "50 г",
+      "weighted": false,
+      "en": "Squid"
+    },
+    {
+      "id": "fish-sudac-uscat",
+      "ru": "Судак",
+      "ro": "Sudac uscat",
+      "category": "kitchen-fish-beer",
+      "price": 55,
+      "unit": "100 г",
+      "weighted": true,
+      "en": "Pike-perch"
+    },
+    {
+      "id": "fish-platica",
+      "ru": "Лещь",
+      "ro": "Platica",
+      "category": "kitchen-fish-beer",
+      "price": 33,
+      "unit": "100 г",
+      "weighted": true,
+      "en": "Bream"
+    },
+    {
+      "id": "fish-pastrav",
+      "ru": "Форель",
+      "ro": "Pastrav",
+      "category": "kitchen-fish-beer",
+      "price": 47,
+      "unit": "100 г",
+      "weighted": true,
+      "en": "Trout"
+    },
+    {
+      "id": "fish-biban",
+      "ru": "Окунь",
+      "ro": "Biban",
+      "category": "kitchen-fish-beer",
+      "price": 65,
+      "unit": "100 г",
+      "weighted": true,
+      "en": "Perch"
+    },
+    {
+      "id": "fish-tolstolob",
+      "ru": "Толстолоб",
+      "ro": "Tolstolob (crap argintiu)",
+      "category": "kitchen-fish-beer",
+      "price": 40,
+      "unit": "100 г",
+      "weighted": true,
+      "en": "Silver carp"
+    },
+    {
+      "id": "fish-platou",
+      "ru": "Рыбное плато",
+      "ro": "Platou de peste",
+      "category": "kitchen-fish-beer",
+      "price": 98,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Fish platter"
+    },
+    {
+      "id": "snack-carne-bere",
+      "ru": "Мясо к пиву",
+      "ro": "Carne la bere",
+      "category": "kitchen-beer-snacks",
+      "price": 72,
+      "unit": "50 г",
+      "weighted": false,
+      "en": "Meat snacks for beer"
+    },
+    {
+      "id": "snack-bastonase-carne",
+      "ru": "Мясные палочки",
+      "ro": "Bastonase de carne",
+      "category": "kitchen-beer-snacks",
+      "price": 76,
+      "unit": "50 г",
+      "weighted": false,
+      "en": "Meat sticks"
+    },
+    {
+      "id": "snack-suluguni",
+      "ru": "Сулугуни",
+      "ro": "Suluguni",
+      "category": "kitchen-beer-snacks",
+      "price": 44,
+      "unit": "100 г",
+      "weighted": false,
+      "en": "Suluguni cheese"
+    },
+    {
+      "id": "snack-carne-porc",
+      "ru": "Мясо вяленое",
+      "ro": "Carne de porc",
+      "category": "kitchen-beer-snacks",
+      "price": 72,
+      "unit": "100 г",
+      "weighted": true,
+      "en": "Cured meat"
+    },
+    {
+      "id": "snack-urechi-porc",
+      "ru": "Ушки свиные",
+      "ro": "Urechi de porc",
+      "category": "kitchen-beer-snacks",
+      "price": 60,
+      "unit": "100 г",
+      "weighted": true,
+      "en": "Pork ears"
+    },
+    {
+      "id": "snack-sudjuc",
+      "ru": "Суджук",
+      "ro": "Sudjuc feliat",
+      "category": "kitchen-beer-snacks",
+      "price": 72,
+      "unit": "100 г",
+      "weighted": true,
+      "en": "Sujuk sausage"
+    },
+    {
+      "id": "snack-arahide",
+      "ru": "Арахис",
+      "ro": "Arahide",
+      "category": "kitchen-beer-snacks",
+      "price": 28,
+      "unit": "100 г",
+      "weighted": false,
+      "en": "Peanuts"
+    },
+    {
+      "id": "snack-cioric",
+      "ru": "Чиорик",
+      "ro": "Cioric",
+      "category": "kitchen-beer-snacks",
+      "price": 44,
+      "unit": "100 г",
+      "weighted": true,
+      "en": "Pork rind"
+    },
+    {
+      "id": "snack-platou-bere",
+      "ru": "Тарелка к пиву",
+      "ro": "Farfurie la bere",
+      "category": "kitchen-beer-snacks",
+      "price": 165,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Beer snack platter"
+    },
+    {
+      "id": "snack-vodka",
+      "ru": "Закуска к водке",
+      "ro": "Gustare la vodka",
+      "category": "kitchen-beer-snacks",
+      "price": 66,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Vodka snack platter"
+    },
+    {
+      "id": "k-aripioare-bbq",
+      "ru": "Крылья барбекю",
+      "ro": "Aripioare Barbecue",
+      "category": "b66b5c5f-1e23-49fc-9cc5-5ad92e5c6110",
+      "price": 77,
+      "unit": "порция",
+      "weighted": false,
+      "en": "BBQ wings"
+    },
+    {
+      "id": "k-aripioare-fresnel",
+      "ru": "Крылья фри",
+      "ro": "Aripioare Frш",
+      "category": "b66b5c5f-1e23-49fc-9cc5-5ad92e5c6110",
+      "price": 77,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Fried wings"
+    },
+    {
+      "id": "k-buffalo-wings",
+      "ru": "Buffalo Wings",
+      "ro": "Buffalo Wings",
+      "category": "b66b5c5f-1e23-49fc-9cc5-5ad92e5c6110",
+      "price": 220,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Buffalo Wings"
+    },
+    {
+      "id": "k-burger",
+      "ru": "Бургер",
+      "ro": "Burger",
+      "category": "kitchen-burgers-wings",
+      "price": 95,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Burger"
+    },
+    {
+      "id": "k-burger-vita-porc",
+      "ru": "Бургер гов/свиина",
+      "ro": "Burger vita/porc",
+      "category": "kitchen-burgers-wings",
+      "price": 100,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Beef & pork burger"
+    },
+    {
+      "id": "k-burger-pui",
+      "ru": "Бургер куриный",
+      "ro": "Burger pui",
+      "category": "kitchen-burgers-wings",
+      "price": 95,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Chicken burger"
+    },
+    {
+      "id": "k-cartofan",
+      "ru": "Картофан",
+      "ro": "Cartofan",
+      "category": "kitchen-sides-snacks",
+      "price": 90,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Cartofan potatoes"
+    },
+    {
+      "id": "k-cartofi-fri",
+      "ru": "Картофель Фри",
+      "ro": "Cartofi fri",
+      "category": "kitchen-sides-snacks",
+      "price": 40,
+      "unit": "порция",
+      "weighted": false,
+      "en": "French fries"
+    },
+    {
+      "id": "k-inele-ceapa",
+      "ru": "Луковые кольца",
+      "ro": "Inele de ceapa",
+      "category": "kitchen-sides-snacks",
+      "price": 50,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Onion rings"
+    },
+    {
+      "id": "k-nughete-pui",
+      "ru": "Нагетсы",
+      "ro": "Nughete de pui",
+      "category": "b66b5c5f-1e23-49fc-9cc5-5ad92e5c6110",
+      "price": 99,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Chicken nuggets"
+    },
+    {
+      "id": "k-varza-murata",
+      "ru": "Капуста маринованная",
+      "ro": "Varza Murata",
+      "category": "kitchen-beer-snacks",
+      "price": 30,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Pickled cabbage"
+    },
+    {
+      "id": "k-carnaciori-gratar",
+      "ru": "Колбаски гриль",
+      "ro": "Cirnaciori la gtratar",
+      "category": "kitchen-meat-grill",
+      "price": 50,
+      "unit": "100 г",
+      "weighted": false,
+      "en": "Grilled sausages"
+    },
+    {
+      "id": "k-ciolan-copt",
+      "ru": "Рулька",
+      "ro": "Ciolan copt",
+      "category": "kitchen-meat-grill",
+      "price": 40,
+      "unit": "100 г",
+      "weighted": false,
+      "en": "Pork knuckle"
+    },
+    {
+      "id": "k-costita-bbq",
+      "ru": "Ребра Барбекю",
+      "ro": "Costita Barbeque",
+      "category": "kitchen-meat-grill",
+      "price": 50,
+      "unit": "100 г",
+      "weighted": true,
+      "en": "BBQ ribs"
+    },
+    {
+      "id": "k-frigarui-pui",
+      "ru": "Шашлык куриный",
+      "ro": "Frigarui de pui",
+      "category": "b66b5c5f-1e23-49fc-9cc5-5ad92e5c6110",
+      "price": 95,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Chicken skewers"
+    },
+    {
+      "id": "k-inimi-iuti",
+      "ru": "Сердечки острые",
+      "ro": "Inimi iuti",
+      "category": "b66b5c5f-1e23-49fc-9cc5-5ad92e5c6110",
+      "price": 143,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Spicy hearts"
+    },
+    {
+      "id": "k-platou-carne",
+      "ru": "Мясное плато",
+      "ro": "Platou de carne",
+      "category": "kitchen-meat-grill",
+      "price": 750,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Meat platter"
+    },
+    {
+      "id": "k-steak-porc",
+      "ru": "Стейк свиной",
+      "ro": "Steak de porc",
+      "category": "kitchen-meat-grill",
+      "price": 50,
+      "unit": "100 г",
+      "weighted": false,
+      "en": "Pork steak"
+    },
+    {
+      "id": "k-urechi-tava",
+      "ru": "Уши на сковороде",
+      "ro": "Urechi de porc la tava",
+      "category": "kitchen-meat-grill",
+      "price": 145,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Pan-fried pork ears"
+    },
+    {
+      "id": "k-creveti-rose",
+      "ru": "Креветки Rose",
+      "ro": "Creveti Rose",
+      "category": "kitchen-seafood",
+      "price": 200,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Rose shrimp"
+    },
+    {
+      "id": "k-creveti-grill",
+      "ru": "Креветки гриль",
+      "ro": "Creveti grill",
+      "category": "kitchen-seafood",
+      "price": 145,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Grilled shrimp"
+    },
+    {
+      "id": "k-creveti-pane",
+      "ru": "Креветки в панировке",
+      "ro": "Creveti pane",
+      "category": "kitchen-seafood",
+      "price": 154,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Breaded shrimp"
+    },
+    {
+      "id": "k-dorado",
+      "ru": "Дорадо",
+      "ro": "Dorado",
+      "category": "kitchen-seafood",
+      "price": 62,
+      "unit": "100 г",
+      "weighted": true,
+      "en": "Sea bream"
+    },
+    {
+      "id": "k-farfurie-asorti",
+      "ru": "Тарелка асорти",
+      "ro": "Farfurie asorti",
+      "category": "kitchen-sides-snacks",
+      "price": 315,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Mixed platter"
+    },
+    {
+      "id": "k-hamsi",
+      "ru": "Хамса",
+      "ro": "Hamsi",
+      "category": "kitchen-seafood",
+      "price": 85,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Anchovies"
+    },
+    {
+      "id": "k-inele-calmar",
+      "ru": "Кольца кальмара",
+      "ro": "Inele de calmar pane",
+      "category": "kitchen-seafood",
+      "price": 90,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Breaded calamari rings"
+    },
+    {
+      "id": "k-midii",
+      "ru": "Мидии",
+      "ro": "Midii",
+      "category": "kitchen-seafood",
+      "price": 235,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Mussels"
+    },
+    {
+      "id": "k-midii-pane",
+      "ru": "Мидии в панеровку",
+      "ro": "Midii pane",
+      "category": "kitchen-seafood",
+      "price": 95,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Breaded mussels"
+    },
+    {
+      "id": "k-midii-cascaval",
+      "ru": "Мидии в сырном соусе",
+      "ro": "Midii sos cascaval",
+      "category": "kitchen-seafood",
+      "price": 340,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Mussels in cheese sauce"
+    },
+    {
+      "id": "beer-albeer11-033",
+      "ru": "Albeer 11 0,33",
+      "ro": "Albeer 11 0,33 l",
+      "category": "bar-draft-beer",
+      "price": 17,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Albeer 11 · 0.33 L"
+    },
+    {
+      "id": "beer-albeer11-05",
+      "ru": "Albeer 11 ” 0,5",
+      "ro": "Albeer 11 ” 0,5 l",
+      "category": "bar-draft-beer",
+      "price": 25,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Albeer 11 · 0.5 L"
+    },
+    {
+      "id": "beer-albeer11-15",
+      "ru": "Albeer 11 Кувшин",
+      "ro": "Albeer 11  Ulcior",
+      "category": "bar-draft-beer",
+      "price": 75,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Albeer 11 · pitcher"
+    },
+    {
+      "id": "beer-albeer12-033",
+      "ru": "Albeer 12 0,33",
+      "ro": "Albeer 12 0,33 l",
+      "category": "bar-draft-beer",
+      "price": 17,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Albeer 12 · 0.33 L"
+    },
+    {
+      "id": "beer-albeer12-05",
+      "ru": "Albeer 12 0,5",
+      "ro": "Albeer 12 0,5 l",
+      "category": "bar-draft-beer",
+      "price": 25,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Albeer 12 · 0.5 L"
+    },
+    {
+      "id": "beer-albeer12-15",
+      "ru": "Albeer 12 Кувшин",
+      "ro": "Albeer 12 Ulcior",
+      "category": "bar-draft-beer",
+      "price": 75,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Albeer 12 · pitcher"
+    },
+    {
+      "id": "beer-ipa-weiss-033",
+      "ru": "Weissbier 0,33",
+      "ro": "Weissbier 0,33",
+      "category": "bar-draft-beer",
+      "price": 17,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Weissbier · 0.33 L"
+    },
+    {
+      "id": "beer-ipa-weiss-05",
+      "ru": "Weissbier 0,5",
+      "ro": "Weissbier 0,5 l",
+      "category": "bar-draft-beer",
+      "price": 25,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Weissbier · 0.5 L"
+    },
+    {
+      "id": "beer-ipa-weiss-15",
+      "ru": "Weissbier Кувшин",
+      "ro": "Weissbier Ulcior",
+      "category": "bar-draft-beer",
+      "price": 75,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Weissbier · pitcher"
+    },
+    {
+      "id": "beer-ipa-hasdeu-033",
+      "ru": "IPA Hasdeu 0,33",
+      "ro": "IPA Hasdeu 0,33 l",
+      "category": "bar-draft-beer",
+      "price": 20,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "IPA Hasdeu · 0.33 L"
+    },
+    {
+      "id": "beer-ipa-hasdeu-05",
+      "ru": "IPA Hasdeu0,5",
+      "ro": "IPA Hasdeu 0,5 l",
+      "category": "bar-draft-beer",
+      "price": 30,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "IPA Hasdeu · 0.5 L"
+    },
+    {
+      "id": "beer-ipa-hasdeu-15",
+      "ru": "IPA Hasdeu Кувшин",
+      "ro": "IPA Hasdeu Ulcior",
+      "category": "bar-draft-beer",
+      "price": 90,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "IPA Hasdeu · pitcher"
+    },
+    {
+      "id": "beer-cvas-033",
+      "ru": "Квас 0,33",
+      "ro": "Cvas 0,33",
+      "category": "bar-draft-beer",
+      "price": 13,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Kvass · 0.33 L"
+    },
+    {
+      "id": "beer-cvas-05",
+      "ru": "Квас 0,5",
+      "ro": "Cvas 0,5",
+      "category": "bar-draft-beer",
+      "price": 17,
+      "unit": "0,5 л",
+      "weighted": false,
+      "en": "Kvass · 0.5 L"
+    },
+    {
+      "id": "beer-apostel",
+      "ru": "Apostel",
+      "ro": "Apostel",
+      "category": "bar-bottled-beer",
+      "price": 50,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Apostel"
+    },
+    {
+      "id": "beer-carlsberg",
+      "ru": "Carlsberg",
+      "ro": "Carlsberg",
+      "category": "bar-bottled-beer",
+      "price": 50,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Carlsberg"
+    },
+    {
+      "id": "beer-guinness",
+      "ru": "Guinness",
+      "ro": "Guinness",
+      "category": "bar-bottled-beer",
+      "price": 103,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Guinness"
+    },
+    {
+      "id": "beer-stella-na",
+      "ru": "Stella Artois безалкогольное",
+      "ro": "Stella Artois (non-alc.)",
+      "category": "bar-bottled-beer",
+      "price": 50,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Stella Artois · non-alcoholic"
+    },
+    {
+      "id": "beer-bergenbier-na",
+      "ru": "Bergenbier безалкогольное",
+      "ro": "Bergenbier (non-alc.)",
+      "category": "bar-bottled-beer",
+      "price": 40,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Bergenbier · non-alcoholic"
+    },
+    {
+      "id": "alc-hortita",
+      "ru": "Водка Хортица",
+      "ro": "Vodca Hortita",
+      "category": "bar-alcohol",
+      "price": 35,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Khortytsia vodka"
+    },
+    {
+      "id": "alc-finlandia",
+      "ru": "Водка Finlandia",
+      "ro": "Vodca Finlandia",
+      "category": "bar-alcohol",
+      "price": 50,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Finlandia vodka"
+    },
+    {
+      "id": "alc-calarasi",
+      "ru": "Коньяк Calarasi 5",
+      "ro": "Coniac Calarasi5*",
+      "category": "bar-alcohol",
+      "price": 40,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Calarasi 5 brandy"
+    },
+    {
+      "id": "alc-kvint",
+      "ru": "Bardar 5",
+      "ro": "Bardar 5",
+      "category": "bar-alcohol",
+      "price": 40,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Bardar 5"
+    },
+    {
+      "id": "alc-jack",
+      "ru": "Jack Daniels",
+      "ro": "Whisky Jack Daniels",
+      "category": "bar-alcohol",
+      "price": 80,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Jack Daniels"
+    },
+    {
+      "id": "alc-jameson",
+      "ru": "Jameson",
+      "ro": "Whisky Jameson",
+      "category": "bar-alcohol",
+      "price": 80,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Jameson"
+    },
+    {
+      "id": "alc-jager",
+      "ru": "Jagermeister",
+      "ro": "Jagermeister",
+      "category": "bar-alcohol",
+      "price": 55,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Jagermeister"
+    },
+    {
+      "id": "alc-tequila",
+      "ru": "Текила",
+      "ro": "Tequila",
+      "category": "bar-alcohol",
+      "price": 55,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Tequila"
+    },
+    {
+      "id": "alc-radacini",
+      "ru": "Вино  Radacini",
+      "ro": "Vin Radacini",
+      "category": "bar-alcohol",
+      "price": 310,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Radacini wine"
+    },
+    {
+      "id": "alc-lacrima",
+      "ru": "Шампанское Lacrima dulce",
+      "ro": "Sampanie Lacrima Dulce",
+      "category": "bar-alcohol",
+      "price": 165,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Lacrima Dulce sparkling wine"
+    },
+    {
+      "id": "alc-martini",
+      "ru": "Martini",
+      "ro": "Martini",
+      "category": "bar-alcohol",
+      "price": 45,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Martini"
+    },
+    {
+      "id": "alc-martini-asti",
+      "ru": "Martini Asti",
+      "ro": "Martini Asti",
+      "category": "bar-alcohol",
+      "price": 395,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Martini Asti"
+    },
+    {
+      "id": "alc-aperol",
+      "ru": "Aperol Spritz",
+      "ro": "Aperol Spritz",
+      "category": "bar-alcohol",
+      "price": 130,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Aperol Spritz"
+    },
+    {
+      "id": "alc-pina-colada",
+      "ru": "Pina Colada",
+      "ro": "Pina Colada",
+      "category": "bar-alcohol",
+      "price": 90,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Pina Colada"
+    },
+    {
+      "id": "soft-cola",
+      "ru": "Cola/Fanta/Sprite",
+      "ro": "Cola/Fanta/Sprite",
+      "category": "bar-soft",
+      "price": 25,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Cola / Fanta / Sprite"
+    },
+    {
+      "id": "soft-natakhtari",
+      "ru": "Natakhtari",
+      "ro": "Natakhtari",
+      "category": "bar-soft",
+      "price": 55,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Natakhtari"
+    },
+    {
+      "id": "soft-water",
+      "ru": "Apa Dorna",
+      "ro": "Apa Dorna",
+      "category": "bar-soft",
+      "price": 25,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Dorna water"
+    },
+    {
+      "id": "soft-juice",
+      "ru": "Сок",
+      "ro": "Suc",
+      "category": "bar-soft",
+      "price": 22,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Juice"
+    },
+    {
+      "id": "soft-redbull",
+      "ru": "Red Bull",
+      "ro": "Red Bull",
+      "category": "bar-soft",
+      "price": 55,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Red Bull"
+    },
+    {
+      "id": "coffee-espresso-americano",
+      "ru": "Кофе",
+      "ro": "Espresso/Americano",
+      "category": "bar-coffee-tea",
+      "price": 22,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Coffee"
+    },
+    {
+      "id": "coffee-cappuccino",
+      "ru": "Капучино",
+      "ro": "Cappuccino",
+      "category": "bar-coffee-tea",
+      "price": 28,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Cappuccino"
+    },
+    {
+      "id": "coffee-latte",
+      "ru": "Латте",
+      "ro": "Latte",
+      "category": "bar-coffee-tea",
+      "price": 30,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Latte"
+    },
+    {
+      "id": "tea-althaus-cup",
+      "ru": "Чай Althaus чашка",
+      "ro": "Ceai Althaus cana",
+      "category": "bar-coffee-tea",
+      "price": 17,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Althaus tea · cup"
+    },
+    {
+      "id": "tea-althaus-pot",
+      "ru": "Чай Althaus чайник",
+      "ro": "Ceai Althaus in ceainic",
+      "category": "bar-coffee-tea",
+      "price": 25,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Althaus tea · teapot"
+    },
+    {
+      "id": "coffee-chocolate",
+      "ru": "Шоколад",
+      "ro": "Ciocolata",
+      "category": "bar-coffee-tea",
+      "price": 50,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Chocolate"
+    },
+    {
+      "id": "6aa63884-bf2c-4698-961b-2968048ec53f",
+      "ru": "Albeer 11 1L",
+      "ro": "Albeer 11 1L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 35,
+      "unit": "л",
+      "weighted": false,
+      "en": "Albeer 11 · 1 L"
+    },
+    {
+      "id": "1a0b3985-dbe5-44da-91eb-ac3978771db3",
+      "ru": "Becherovka",
+      "ro": "Becherovka",
+      "category": "bar-alcohol",
+      "price": 40,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Becherovka"
+    },
+    {
+      "id": "70b624d9-b66d-47bd-b199-33adf75b7eab",
+      "ru": "Лимонад",
+      "ro": "Limonada",
+      "category": "bar-soft",
+      "price": 50,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Lemonade"
+    },
+    {
+      "id": "6739095f-8a99-45ed-a172-e6d34e32117d",
+      "ru": "Bacardi",
+      "ro": "Bacardi",
+      "category": "bar-alcohol",
+      "price": 40,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Bacardi"
+    },
+    {
+      "id": "69d3b7ce-1f3a-4a5f-9c72-3eff07273874",
+      "ru": "Mojito Алк",
+      "ro": "Mojito Alc",
+      "category": "bar-alcohol",
+      "price": 66,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Mojito"
+    },
+    {
+      "id": "466d609d-9585-42fe-a7c2-3cdf3863a6c8",
+      "ru": "Mojito Безалк",
+      "ro": "Mojito Fara alc",
+      "category": "bar-alcohol",
+      "price": 55,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Non-alcoholic mojito"
+    },
+    {
+      "id": "0331a2c4-69ef-4dc6-be4b-772b20886bae",
+      "ru": "Albeer 11 1.5 Л",
+      "ro": "Albeer 11 1.5 L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 53,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Albeer 11 · 1.5 L"
+    },
+    {
+      "id": "00c8328c-2396-4591-85f6-71ceefba3b57",
+      "ru": "Albeer 11 2Л",
+      "ro": "Albeer 11 2L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 70,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Albeer 11 · 2 L"
+    },
+    {
+      "id": "f19695c0-9662-4830-a8bb-0d0d12f31789",
+      "ru": "IPA Hasdeu 1Л",
+      "ro": "IPA Hasdeu 1L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 50,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "IPA Hasdeu · 1 L"
+    },
+    {
+      "id": "99367334-0b72-4995-ba88-55cc39813d78",
+      "ru": "Albeer 12 1L",
+      "ro": "Albeer 12 1L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 35,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Albeer 12 · 1 L"
+    },
+    {
+      "id": "46700713-c818-4c97-a70f-deb335dffc4d",
+      "ru": "Albeer 12 2Л",
+      "ro": "Albeer 12 2L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 70,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Albeer 12 · 2 L"
+    },
+    {
+      "id": "5ce3c303-8c62-48be-91d9-bd08445e5ef9",
+      "ru": "Albeer 12 1.5Л",
+      "ro": "Albeer 12 1.5L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 53,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Albeer 12 · 1.5 L"
+    },
+    {
+      "id": "e8377c87-ed9c-4acb-a3e6-ad215431488b",
+      "ru": "IPA Hasdeu 1.5Л",
+      "ro": "IPA Hasdeu 1.5L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 75,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "IPA Hasdeu · 1.5 L"
+    },
+    {
+      "id": "1d2b0de2-b571-4096-9c54-76f3f6ed9695",
+      "ru": "IPA Hasdeu 2Л",
+      "ro": "IPA Hasdeu 2L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 100,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "IPA Hasdeu · 2 L"
+    },
+    {
+      "id": "5a809112-996d-424f-bdf3-06681e36605a",
+      "ru": "Квас 1Л",
+      "ro": "Cvas 1L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 25,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Kvass · 1 L"
+    },
+    {
+      "id": "981bf4fd-6bd6-46c5-944e-78db6dafac55",
+      "ru": "Квас 1.5 Л",
+      "ro": "Cvas 1.5 L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 34,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Kvass · 1.5 L"
+    },
+    {
+      "id": "84661002-a054-4c6c-8a0d-60b9377cfe59",
+      "ru": "Квас 2Л",
+      "ro": "Cvas 2L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 50,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Kvass · 2 L"
+    },
+    {
+      "id": "6dd1699f-7d39-49ff-95ac-26b61c2582eb",
+      "ru": "Кетчуп",
+      "ro": "Ketchup",
+      "category": "95107099-9600-443f-b100-b0fea560de7a",
+      "price": 10,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Ketchup"
+    },
+    {
+      "id": "a5cf03b7-259f-4a96-b041-e5cafe8950b3",
+      "ru": "Белый честночный",
+      "ro": "Alb ustroi",
+      "category": "95107099-9600-443f-b100-b0fea560de7a",
+      "price": 10,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "White garlic sauce"
+    },
+    {
+      "id": "a5b06561-4636-4f47-8f91-756eb2408050",
+      "ru": "Горчица",
+      "ro": "Mustar",
+      "category": "95107099-9600-443f-b100-b0fea560de7a",
+      "price": 10,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Mustard"
+    },
+    {
+      "id": "617f9f60-3b6a-459e-8537-51000e1e1244",
+      "ru": "Аджика",
+      "ro": "Adjica",
+      "category": "95107099-9600-443f-b100-b0fea560de7a",
+      "price": 10,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Adjika"
+    },
+    {
+      "id": "ed5f6dac-9fb2-4697-966f-2092c64c58e6",
+      "ru": "Хрен",
+      "ro": "Hrean",
+      "category": "95107099-9600-443f-b100-b0fea560de7a",
+      "price": 10,
+      "unit": "50 мл",
+      "weighted": false,
+      "en": "Horseradish"
+    },
+    {
+      "id": "f3b63276-a013-42a5-b613-ecdf6604dd3c",
+      "ru": "Картофель по домашнему",
+      "ro": "Cartofi ca acasa",
+      "category": "kitchen-sides-snacks",
+      "price": 40,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Home-style potatoes"
+    },
+    {
+      "id": "b59d9f46-df3e-4447-9300-8e9ebfef1358",
+      "ru": "Картофель чипс",
+      "ro": "Cartofi cips",
+      "category": "kitchen-sides-snacks",
+      "price": 40,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Potato chips"
+    },
+    {
+      "id": "14af2912-0925-4632-a677-762f9c3c5bf7",
+      "ru": "Картофель шарик",
+      "ro": "Cartofi bile",
+      "category": "kitchen-sides-snacks",
+      "price": 40,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Potato balls"
+    },
+    {
+      "id": "cb4420d8-56b6-459d-9660-00aed60705d5",
+      "ru": "Albeer Weissbier 1Л",
+      "ro": "Albeer Weissbier 1L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 35,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Albeer Weissbier · 1 L"
+    },
+    {
+      "id": "c237cf92-36c8-42fe-8b61-cad6256b3600",
+      "ru": "Albeer Weissbier 1.5Л",
+      "ro": "Albeer Weissbier 1.5L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 53,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Albeer Weissbier · 1.5 L"
+    },
+    {
+      "id": "bc6b751b-f834-4ff6-9a03-36cf226a5c25",
+      "ru": "Albeer Weissbier 2 Л",
+      "ro": "Albeer Weissbier 2 L",
+      "category": "095ccf07-67de-4618-bfaf-5873f3607279",
+      "price": 70,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Albeer Weissbier · 2 L"
+    },
+    {
+      "id": "b374ae01-c02b-4cb4-b207-a5d66a0d0568",
+      "ru": "Контейнер",
+      "ro": "Caserola",
+      "category": "8bf1cceb-859b-4a68-814d-a0c0fa7401e8",
+      "price": 5,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Takeaway container"
+    },
+    {
+      "id": "5c3f8b35-c1f2-4c25-8620-dfd0be6db457",
+      "ru": "Хлеб",
+      "ro": "Pine",
+      "category": "95107099-9600-443f-b100-b0fea560de7a",
+      "price": 2,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Bread"
+    },
+    {
+      "id": "9932130b-391f-4fe3-8ae0-a0dc5c2fa279",
+      "ru": "Лимон",
+      "ro": "Lamie",
+      "category": "95107099-9600-443f-b100-b0fea560de7a",
+      "price": 4,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Lemon"
+    },
+    {
+      "id": "531b7bfb-0b72-4159-a3e6-0ead8c561298",
+      "ru": "Лимон",
+      "ro": "Lamie",
+      "category": "bar-coffee-tea",
+      "price": 2,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Lemon"
+    },
+    {
+      "id": "3b157dd8-5ae9-43e8-b5fb-37f3332c9cf5",
+      "ru": "Молоко",
+      "ro": "Lapte",
+      "category": "bar-coffee-tea",
+      "price": 2,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Milk"
+    },
+    {
+      "id": "83920642-c64e-475c-b20e-c8fd1a870e64",
+      "ru": "Mionetto",
+      "ro": "Mionetto",
+      "category": "bar-alcohol",
+      "price": 340,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Mionetto"
+    },
+    {
+      "id": "03d13dd5-c8f5-485d-98ff-5b7027ccb9e7",
+      "ru": "Треугольники сулугуни",
+      "ro": "Triunghiri suluguni",
+      "category": "kitchen-beer-snacks",
+      "price": 90,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Suluguni cheese triangles"
+    },
+    {
+      "id": "709465b2-127c-4abb-b107-688332a18b7c",
+      "ru": "Овощи гриль",
+      "ro": "Legume gratar",
+      "category": "kitchen-meat-grill",
+      "price": 125,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Grilled vegetables"
+    },
+    {
+      "id": "15fe2afc-81cb-427d-8ebd-bfb6bf2c710b",
+      "ru": "Кружка чяй",
+      "ro": "Cana ceai",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 50,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Tea mug"
+    },
+    {
+      "id": "3b197f45-f3d2-4a35-a982-632a533dde96",
+      "ru": "Чашка Американо",
+      "ro": "Ceasca Americano",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 50,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Americano cup"
+    },
+    {
+      "id": "e13e03a9-a633-4823-a2cc-6587b6941200",
+      "ru": "Чашка еспрессо",
+      "ro": "Ceasca espresso",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 50,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Espresso cup"
+    },
+    {
+      "id": "a03aff8e-aa29-4061-8dd9-b9b4a5e5864d",
+      "ru": "Тарелка",
+      "ro": "Farfurie",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 60,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Plate"
+    },
+    {
+      "id": "66bbcae0-73c6-482f-957f-d307de891e98",
+      "ru": "Графин 500мл",
+      "ro": "Garafa 500ml",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 60,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Carafe · 500 ml"
+    },
+    {
+      "id": "1a386f47-a44b-4e66-8d15-7e27624ee8cf",
+      "ru": "Пивно стакан 330мл",
+      "ro": "Halba 0.33 ml",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 40,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Beer glass · 330 ml"
+    },
+    {
+      "id": "55fd9645-d12f-477b-bac0-a49426da39c4",
+      "ru": "Пивной Стакан 0.5",
+      "ro": "Halba 0.5",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 60,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Beer glass · 0.5 L"
+    },
+    {
+      "id": "c0d34cd8-7ddc-401d-b9a5-11f96cfb1991",
+      "ru": "Стакан 250мл",
+      "ro": "Pahar 250ml",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 25,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Glass · 250 ml"
+    },
+    {
+      "id": "da972737-1368-4de4-a348-8a67767c3372",
+      "ru": "Стакан Виски",
+      "ro": "Pahar whiskey",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 75,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Whisky glass"
+    },
+    {
+      "id": "3d51128b-44bc-425d-b6d7-e55622faade9",
+      "ru": "Бокал шампанское",
+      "ro": "Pahar sampanie",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 40,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Champagne glass"
+    },
+    {
+      "id": "1f9ccff9-9743-4516-8f7d-d4dd80513acf",
+      "ru": "Стакан вино",
+      "ro": "Pahar vin",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 40,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Wine glass"
+    },
+    {
+      "id": "a559d021-6b6f-4d0f-9841-e54a13df490c",
+      "ru": "Рюмка водка",
+      "ro": "Pahar vodca",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 20,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Vodka shot glass"
+    },
+    {
+      "id": "6f98fad6-40e4-4a2d-b48d-a22930c2006f",
+      "ru": "Салфетница",
+      "ro": "Box servitele",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 250,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Napkin holder"
+    },
+    {
+      "id": "d46eda19-031e-4c81-86c0-30b0963a8af3",
+      "ru": "Контейнер мидии",
+      "ro": "Container midii",
+      "category": "8bf1cceb-859b-4a68-814d-a0c0fa7401e8",
+      "price": 30,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Mussels container"
+    },
+    {
+      "id": "b7815846-93cc-40b8-a27d-5f55733c54bb",
+      "ru": "Чайник",
+      "ro": "Ceainic p\\u ceai",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 320,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Teapot"
+    },
+    {
+      "id": "74090b59-841a-4d79-80b2-dc849684c29c",
+      "ru": "Чашка фарфор",
+      "ro": "Cana portelan",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 120,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Porcelain cup"
+    },
+    {
+      "id": "9c040c7e-5ad3-4ca4-bf11-623671f83da0",
+      "ru": "Блюдце Фарфор",
+      "ro": "Farfurie portelan",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 100,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Porcelain saucer"
+    },
+    {
+      "id": "7fd2e921-929e-4a4f-9636-e12e8deb5244",
+      "ru": "Кувшин 1.5",
+      "ro": "Ulcior 1.5",
+      "category": "372ea23f-d907-4664-99ac-016964eb6fb4",
+      "price": 150,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Pitcher · 1.5 L"
+    },
+    {
+      "id": "b30148f5-29dd-45b7-bffc-0fd09f2c9305",
+      "ru": "Чипсы",
+      "ro": "Chips",
+      "category": "bar-coffee-tea",
+      "price": 68,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Chips"
+    },
+    {
+      "id": "e73ab96e-177e-4f5d-bb6a-cfa61c7e03be",
+      "ru": "Овощи стэйк",
+      "ro": "Legume la steake",
+      "category": "kitchen-beer-snacks",
+      "price": 20,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Vegetables for steak"
+    },
+    {
+      "id": "b88f9d87-7023-4985-b5e6-5ab7eeb0e3e7",
+      "ru": "Овощи",
+      "ro": "Legume",
+      "category": "kitchen-meat-grill",
+      "price": 25,
+      "unit": "порция",
+      "weighted": false,
+      "en": "Vegetables"
+    },
+    {
+      "id": "7acb5ac0-4fa7-4f22-a478-17d1b44b7f6f",
+      "ru": "Чай натуральный",
+      "ro": "Ceai natural",
+      "category": "bar-coffee-tea",
+      "price": 28,
+      "unit": "шт.",
+      "weighted": false,
+      "en": "Natural tea"
+    }
+  ],
+  "beerProfiles": {
+    "beer-albeer11-05": {
+      "alcohol": null,
+      "originalDensity": null,
+      "bitterness": null,
+      "color": {
+        "ru": null,
+        "ro": null,
+        "en": null
+      },
+      "haze": {
+        "ru": null,
+        "ro": null,
+        "en": null
+      }
+    },
+    "beer-albeer12-05": {
+      "alcohol": null,
+      "originalDensity": null,
+      "bitterness": null,
+      "color": {
+        "ru": null,
+        "ro": null,
+        "en": null
+      },
+      "haze": {
+        "ru": null,
+        "ro": null,
+        "en": null
+      }
+    },
+    "beer-ipa-hasdeu-05": {
+      "alcohol": null,
+      "originalDensity": null,
+      "bitterness": null,
+      "color": {
+        "ru": null,
+        "ro": null,
+        "en": null
+      },
+      "haze": {
+        "ru": null,
+        "ro": null,
+        "en": null
+      }
+    },
+    "beer-ipa-weiss-05": {
+      "alcohol": null,
+      "originalDensity": null,
+      "bitterness": null,
+      "color": {
+        "ru": null,
+        "ro": null,
+        "en": null
+      },
+      "haze": {
+        "ru": null,
+        "ro": null,
+        "en": null
+      }
+    }
+  }
+}
