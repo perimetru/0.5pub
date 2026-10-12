@@ -1436,15 +1436,16 @@
       "colorHex": "#d7a254"
     },
     "beer-albeer12-05": {
-      "alcohol": null,
-      "originalDensity": null,
-      "bitterness": null,
+      "alcohol": 4.8,
+      "originalDensity": 12,
+      "bitterness": 30,
       "color": {
-        "ru": null,
-        "ro": null,
-        "en": null
+        "ru": "Светлый янтарный",
+        "ro": "Chihlimbar deschis",
+        "en": "Light amber"
       },
-      "clarity": null
+      "clarity": 4,
+      "colorHex": "#d7a254"
     },
     "beer-ipa-hasdeu-05": {
       "alcohol": null,
