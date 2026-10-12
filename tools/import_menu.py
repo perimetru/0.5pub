@@ -7,7 +7,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument('backup', type=Path)
 args = parser.parse_args()
 source = json.loads(args.backup.read_text(encoding='utf-8'))
-categories = [{k: c[k] for k in ('id', 'ru', 'ro', 'route')} for c in source['categories'] if c.get('active')]
+# Operational tableware and packaging categories must not appear in the guest menu.
+hidden_categories = {'8bf1cceb-859b-4a68-814d-a0c0fa7401e8', '372ea23f-d907-4664-99ac-016964eb6fb4'}
+categories = [{k: c[k] for k in ('id', 'ru', 'ro', 'route')} for c in source['categories']
+              if c.get('active') and c['id'] not in hidden_categories]
 if any(c['route'] not in ('bar', 'kitchen') for c in categories):
     raise ValueError('Every active category must belong to bar or kitchen')
 category_ids = {c['id'] for c in categories}
