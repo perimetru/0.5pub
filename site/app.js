@@ -16,7 +16,7 @@ const pageCopy = {
     "valueBeer": "Пиво Albeer",
     "valueFood": "Вкусная еда",
     "valueFriends": "Добрая компания",
-    "valueQueen": "За королеву!",
+    "valueQueen": "Королева в душе",
     "beerLabel": "С ПИВОВАРНИ — В ПАБ",
     "beerTitle": "Начнём с Albeer.",
     "beerIntro": "Наш стиль пивоварения — чешский. Выбирайте пиво по вкусу, а компанию берите с собой.",
@@ -33,8 +33,8 @@ const pageCopy = {
     "symbolsTitle": "У паба есть свои символы.",
     "witchTitle": "Из Праги — с характером",
     "witchBody": "Баба-яга на метле приехала из Праги и стала одним из символов нашего паба. Маленькая деталь с большой историей.",
-    "queenTitle": "И за здоровье королевы",
-    "queenBody": "Мы любим хорошую компанию, вкусную еду и чтим королеву. Её портрет — часть интерьера, а тост — часть нашего девиза.",
+    "queenTitle": "Королева в душе",
+    "queenBody": "Мы любим пиво, вкусную еду и встречи с друзьями. И чтим память королевы: её портрет — часть атмосферы нашего паба.",
     "closingTitle": "Собирайте своих.\nВстречаемся в 0.5 PUB.",
     "closingLink": "Выбрать что-нибудь вкусное",
     "loading": "Загружаем меню…",
@@ -52,7 +52,7 @@ const pageCopy = {
     "valueBeer": "Bere Albeer",
     "valueFood": "Mâncare gustoasă",
     "valueFriends": "Companie bună",
-    "valueQueen": "Pentru regină!",
+    "valueQueen": "Regina în suflet",
     "beerLabel": "DE LA BERĂRIE — LA PUB",
     "beerTitle": "Începem cu Albeer.",
     "beerIntro": "Stilul nostru de fabricare a berii este ceh. Alege berea care îți place și adu-ți prietenii.",
@@ -69,8 +69,8 @@ const pageCopy = {
     "symbolsTitle": "Pubul are simbolurile sale.",
     "witchTitle": "Din Praga — cu personalitate",
     "witchBody": "Baba Iaga pe mătură a venit din Praga și a devenit unul dintre simbolurile pubului nostru. Un mic detaliu cu o poveste mare.",
-    "queenTitle": "Și pentru sănătatea reginei",
-    "queenBody": "Ne plac compania bună și mâncarea gustoasă și o cinstim pe regină. Portretul ei face parte din decor, iar toastul — din deviza noastră.",
+    "queenTitle": "Regina în suflet",
+    "queenBody": "Ne plac berea, mâncarea bună și întâlnirile cu prietenii. Cinstim memoria reginei: portretul ei face parte din atmosfera pubului nostru.",
     "closingTitle": "Adună-ți prietenii.\nNe vedem la 0.5 PUB.",
     "closingLink": "Alege ceva gustos",
     "loading": "Încărcăm meniul…",
@@ -88,7 +88,7 @@ const pageCopy = {
     "valueBeer": "Albeer beer",
     "valueFood": "Good food",
     "valueFriends": "Good company",
-    "valueQueen": "To the Queen!",
+    "valueQueen": "The Queen in our hearts",
     "beerLabel": "FROM THE BREWERY TO THE PUB",
     "beerTitle": "Let’s start with Albeer.",
     "beerIntro": "We brew in the Czech tradition. Choose your favourite beer and bring your friends along.",
@@ -105,8 +105,8 @@ const pageCopy = {
     "symbolsTitle": "A pub with its own symbols.",
     "witchTitle": "From Prague, with character",
     "witchBody": "Our Baba Yaga on a broom came from Prague and became one of the pub’s symbols. A small detail with a big story.",
-    "queenTitle": "And to the Queen’s health",
-    "queenBody": "We love good company, good food and honour the Queen. Her portrait is part of our interior, and the toast is part of our motto.",
+    "queenTitle": "The Queen in our hearts",
+    "queenBody": "We love beer, good food and getting together with friends. We honour the Queen’s memory: her portrait is part of our pub’s atmosphere.",
     "closingTitle": "Gather your friends.\nSee you at 0.5 PUB.",
     "closingLink": "Find something delicious",
     "loading": "Loading the menu…",
@@ -186,9 +186,9 @@ const heroCopy = {
   "ru": {
     "eyebrow": "КАХУЛ · ПАБ ПРИ ПИВОВАРНЕ ALBEER",
     "title": [
-      "За добрую компанию,",
-      "сытный стол",
-      "и здоровье королевы!"
+      "Пиво. Еда.",
+      "Друзья.",
+      "И в душе — Королева."
     ],
     "description": "Пиво в чешском стиле от Albeer. Вкусная еда, тёплый свет и место за столом для своих.",
     "label": "К ХОРОШЕМУ ПИВУ — ХОРОШИЙ СТОЛ"
@@ -196,9 +196,9 @@ const heroCopy = {
   "ro": {
     "eyebrow": "CAHUL · PUB LA BERĂRIA ALBEER",
     "title": [
-      "Pentru companie bună,",
-      "o masă îmbelșugată",
-      "și sănătatea reginei!"
+      "Bere. Mâncare.",
+      "Prieteni.",
+      "Și Regina în suflet."
     ],
     "description": "Bere în stil ceh de la Albeer. Mâncare gustoasă, lumină caldă și un loc la masă pentru prieteni.",
     "label": "LÂNGĂ O BERE BUNĂ — O MASĂ BUNĂ"
@@ -206,9 +206,9 @@ const heroCopy = {
   "en": {
     "eyebrow": "CAHUL · AT THE ALBEER BREWERY",
     "title": [
-      "To good company,",
-      "a hearty meal",
-      "and the Queen’s health!"
+      "Beer. Food.",
+      "Friends.",
+      "And the Queen in our hearts."
     ],
     "description": "Czech-style beer from Albeer. Good food, warm light and a place at the table for friends.",
     "label": "GOOD BEER DESERVES GOOD FOOD"
