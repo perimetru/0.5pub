@@ -179,6 +179,9 @@ const allergenLabels = {
 Object.assign(pageCopy.ru, {"allergenTitle": "Аллергены", "allergenContains": "По составу техкарты", "allergenCheck": "Требуют проверки", "allergenUnknown": "Полный список аллергенов не подтверждён.", "allergenReview": "Состав готовых продуктов, соусов или панировки нужно уточнить у персонала.", "allergenAdvice": "При аллергии сообщите официанту и уточните состав и условия приготовления.", "allergenRowLabel": "По техкарте:", "allergenRowReview": "Аллергены: уточните состав", "allergenMenuNote": "Отметки сделаны по доступным техкартам; это не полный список для всех позиций. При аллергии уточните у персонала состав и условия приготовления."});
 Object.assign(pageCopy.ro, {"allergenTitle": "Alergeni", "allergenContains": "Conform ingredientelor din fișă", "allergenCheck": "Necesită verificare", "allergenUnknown": "Lista completă a alergenilor nu este confirmată.", "allergenReview": "Compoziția produselor gata preparate, a sosurilor sau a crustei trebuie verificată cu personalul.", "allergenAdvice": "Dacă aveți alergii, informați chelnerul și verificați ingredientele și condițiile de preparare.", "allergenRowLabel": "Conform fișei:", "allergenRowReview": "Alergeni: verificați ingredientele", "allergenMenuNote": "Mențiunile se bazează pe fișele disponibile; lista nu este completă pentru toate produsele. Dacă aveți alergii, verificați ingredientele și condițiile de preparare cu personalul."});
 Object.assign(pageCopy.en, {"allergenTitle": "Allergens", "allergenContains": "Based on recipe ingredients", "allergenCheck": "Need verification", "allergenUnknown": "The full allergen list has not been confirmed.", "allergenReview": "Please check the ingredients of prepared products, sauces or coatings with our staff.", "allergenAdvice": "If you have an allergy, tell your server and check the ingredients and preparation conditions.", "allergenRowLabel": "From the recipe:", "allergenRowReview": "Allergens: check ingredients", "allergenMenuNote": "Labels are based on the available recipe sheets and do not cover every menu item. If you have an allergy, check ingredients and preparation conditions with our staff."});
+Object.assign(pageCopy.ru, {witchImageAlt:'Ведьма на метле — символ паба', queenImageAlt:'Пивная афиша с портретом королевы'});
+Object.assign(pageCopy.ro, {witchImageAlt:'Vrăjitoare pe mătură — simbolul pubului', queenImageAlt:'Afiș de bere cu portretul reginei'});
+Object.assign(pageCopy.en, {witchImageAlt:'Witch on a broom — a symbol of the pub', queenImageAlt:'Beer poster featuring the Queen'});
 const heroCopy = {
   "ru": {
     "eyebrow": "КАХУЛ · ПАБ ПРИ ПИВОВАРНЕ ALBEER",
@@ -438,6 +441,7 @@ function setLanguage(next) {
   language = next;
   const t = translations[language];
   document.documentElement.lang = language;
+  document.querySelectorAll('[data-alt]').forEach(image => image.alt = pageCopy[language][image.dataset.alt]);
   document.title = `0.5 PUB · ${t.heading}`;
   document.querySelector('.languages').setAttribute('aria-label', {ru:'Язык', ro:'Limba', en:'Language'}[language]);
   document.querySelector('meta[name=description]').content = `${t.footer} ${t.currency}.`;

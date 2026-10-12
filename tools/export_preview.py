@@ -2,6 +2,7 @@
 import argparse
 import base64
 import json
+import mimetypes
 import re
 from pathlib import Path
 
@@ -21,7 +22,10 @@ for detail in menu.get('dishDetails', {}).values():
 menu['photoAssets'] = photo_assets
 html = html.replace('<link rel="stylesheet" href="styles.css"><script src="app.js" defer></script>', '<style>' + css + '</style>')
 for relative in set(re.findall(r'src="(assets/[^\"]+)"', html)):
-    uri = 'data:image/svg+xml;base64,' + base64.b64encode((root / relative).read_bytes()).decode()
+    mime = mimetypes.guess_type(relative)[0]
+    if mime not in {'image/svg+xml', 'image/png', 'image/jpeg', 'image/webp'}:
+        raise ValueError(f'Unsupported image type: {relative}')
+    uri = 'data:' + mime + ';base64,' + base64.b64encode((root / relative).read_bytes()).decode()
     html = html.replace('src="' + relative + '"', 'src="' + uri + '"')
 start = js.index("fetch('menu.json').then(response => {")
 end = js.index('}).then(menu =>', start)
