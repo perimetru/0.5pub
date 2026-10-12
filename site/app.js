@@ -126,6 +126,59 @@ Object.assign(pageCopy.en, {barMenu:'Bar', kitchenMenu:'Kitchen', allBar:'All ba
 Object.assign(pageCopy.ru, {dishMore:'Подробнее', dishPhotoMore:'Описание и фото', dishClose:'Закрыть описание'});
 Object.assign(pageCopy.ro, {dishMore:'Detalii', dishPhotoMore:'Descriere și fotografie', dishClose:'Închide descrierea'});
 Object.assign(pageCopy.en, {dishMore:'Details', dishPhotoMore:'Description & photo', dishClose:'Close description'});
+const allergenLabels = {
+  "ru": {
+    "milk": "Молоко",
+    "eggs": "Яйца",
+    "gluten": "Глютен",
+    "fish": "Рыба",
+    "crustaceans": "Ракообразные",
+    "molluscs": "Моллюски",
+    "peanuts": "Арахис",
+    "nuts": "Орехи",
+    "soy": "Соя",
+    "celery": "Сельдерей",
+    "mustard": "Горчица",
+    "sesame": "Кунжут",
+    "sulphites": "Сульфиты",
+    "lupin": "Люпин"
+  },
+  "ro": {
+    "milk": "Lapte",
+    "eggs": "Ouă",
+    "gluten": "Gluten",
+    "fish": "Pește",
+    "crustaceans": "Crustacee",
+    "molluscs": "Moluște",
+    "peanuts": "Arahide",
+    "nuts": "Fructe cu coajă lemnoasă",
+    "soy": "Soia",
+    "celery": "Țelină",
+    "mustard": "Muștar",
+    "sesame": "Susan",
+    "sulphites": "Sulfiți",
+    "lupin": "Lupin"
+  },
+  "en": {
+    "milk": "Milk",
+    "eggs": "Eggs",
+    "gluten": "Gluten",
+    "fish": "Fish",
+    "crustaceans": "Crustaceans",
+    "molluscs": "Molluscs",
+    "peanuts": "Peanuts",
+    "nuts": "Tree nuts",
+    "soy": "Soy",
+    "celery": "Celery",
+    "mustard": "Mustard",
+    "sesame": "Sesame",
+    "sulphites": "Sulphites",
+    "lupin": "Lupin"
+  }
+};
+Object.assign(pageCopy.ru, {"allergenTitle": "Аллергены", "allergenContains": "По составу техкарты", "allergenCheck": "Требуют проверки", "allergenUnknown": "Полный список аллергенов не подтверждён.", "allergenReview": "Состав готовых продуктов, соусов или панировки нужно уточнить у персонала.", "allergenAdvice": "При аллергии сообщите официанту и уточните состав и условия приготовления.", "allergenRowLabel": "По техкарте:", "allergenRowReview": "Аллергены: уточните состав", "allergenMenuNote": "Отметки сделаны по доступным техкартам; это не полный список для всех позиций. При аллергии уточните у персонала состав и условия приготовления."});
+Object.assign(pageCopy.ro, {"allergenTitle": "Alergeni", "allergenContains": "Conform ingredientelor din fișă", "allergenCheck": "Necesită verificare", "allergenUnknown": "Lista completă a alergenilor nu este confirmată.", "allergenReview": "Compoziția produselor gata preparate, a sosurilor sau a crustei trebuie verificată cu personalul.", "allergenAdvice": "Dacă aveți alergii, informați chelnerul și verificați ingredientele și condițiile de preparare.", "allergenRowLabel": "Conform fișei:", "allergenRowReview": "Alergeni: verificați ingredientele", "allergenMenuNote": "Mențiunile se bazează pe fișele disponibile; lista nu este completă pentru toate produsele. Dacă aveți alergii, verificați ingredientele și condițiile de preparare cu personalul."});
+Object.assign(pageCopy.en, {"allergenTitle": "Allergens", "allergenContains": "Based on recipe ingredients", "allergenCheck": "Need verification", "allergenUnknown": "The full allergen list has not been confirmed.", "allergenReview": "Please check the ingredients of prepared products, sauces or coatings with our staff.", "allergenAdvice": "If you have an allergy, tell your server and check the ingredients and preparation conditions.", "allergenRowLabel": "From the recipe:", "allergenRowReview": "Allergens: check ingredients", "allergenMenuNote": "Labels are based on the available recipe sheets and do not cover every menu item. If you have an allergy, check ingredients and preparation conditions with our staff."});
 const heroCopy = {
   "ru": {
     "eyebrow": "КАХУЛ · ПАБ ПРИ ПИВОВАРНЕ ALBEER",
@@ -244,6 +297,11 @@ function renderItems() {
       if (language !== 'ru') unit = unit.replace('порция', t.portion).replace('шт.', t.piece).replace('г', 'g').replace('мл', 'ml').replace('л', 'l');
       row.append(element('div', 'unit', item.weighted ? `${t.weight} ${unit}` : unit));
       const detail = data.dishDetails?.[item.id];
+      if (detail?.allergens) {
+        const labels = detail.allergens.contains.map(code => allergenLabels[language][code]);
+        const note = element('p', 'menu-allergens', labels.length ? pageCopy[language].allergenRowLabel + ' ' + labels.join(' · ') : pageCopy[language].allergenRowReview);
+        row.append(note);
+      }
       if (detail) {
         const more = element('button', 'dish-more', pageCopy[language][detail.image ? 'dishPhotoMore' : 'dishMore']);
         more.type = 'button';
@@ -297,6 +355,23 @@ function renderFeaturedBeers() {
     container.append(card);
   }
 }
+function renderAllergens(profile) {
+  const container = document.querySelector('#dish-allergens');
+  const copy = pageCopy[language];
+  container.replaceChildren(element('h3', '', copy.allergenTitle));
+  const groups = [['contains', copy.allergenContains], ['check', copy.allergenCheck]];
+  for (const [key, label] of groups) {
+    const codes = profile?.[key] || [];
+    if (!codes.length) continue;
+    container.append(element('p', 'allergen-group-label', label));
+    const badges = element('ul', 'allergen-badges ' + (key === 'check' ? 'allergen-badges-check' : ''));
+    for (const code of codes) badges.append(element('li', '', allergenLabels[language][code]));
+    container.append(badges);
+  }
+  if (!profile?.contains?.length) container.append(element('p', 'allergen-note', copy.allergenUnknown));
+  if (profile?.needsReview) container.append(element('p', 'allergen-note', copy.allergenReview));
+  container.append(element('p', 'allergen-advice', copy.allergenAdvice));
+}
 function openDish(id) {
   const item = data.items.find(entry => entry.id === id);
   const detail = data.dishDetails?.[id];
@@ -306,6 +381,7 @@ function openDish(id) {
   document.querySelector('#dish-category').textContent = group ? name(group) : '';
   document.querySelector('#dish-title').textContent = name(item);
   document.querySelector('#dish-description').textContent = detail.description[language];
+  renderAllergens(detail.allergens);
   document.querySelector('#dish-price').textContent = new Intl.NumberFormat({ru:'ru-MD',ro:'ro-MD',en:'en-GB'}[language]).format(item.price) + ' ' + data.currency;
   let unit = text(item.unit);
   if (language !== 'ru') unit = unit.replace('порция', translations[language].portion).replace('шт.', translations[language].piece).replace('г','g').replace('мл','ml').replace('л','l');

@@ -1700,6 +1700,13 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "celery"
+        ],
+        "check": [],
+        "needsReview": false
       }
     },
     "snack-arahide": {
@@ -1707,6 +1714,15 @@
         "ru": "Хрустящий запечённый арахис с солью и лёгким мучным покрытием. Закуска к пиву.",
         "ro": "Arahide crocante coapte, cu sare și un strat fin de făină. Gustare la bere.",
         "en": "Crunchy oven-roasted peanuts with salt and a light flour coating. A snack for beer."
+      },
+      "allergens": {
+        "contains": [
+          "peanuts"
+        ],
+        "check": [
+          "gluten"
+        ],
+        "needsReview": true
       }
     },
     "k-burger-pui": {
@@ -1720,6 +1736,18 @@
         "ru": "Ориентир подачи: на фото свиной бургер.",
         "ro": "Exemplu de prezentare: în fotografie este burgerul de porc.",
         "en": "Serving reference: the photo shows the pork burger."
+      },
+      "allergens": {
+        "contains": [
+          "milk"
+        ],
+        "check": [
+          "gluten",
+          "eggs",
+          "mustard",
+          "sesame"
+        ],
+        "needsReview": true
       }
     },
     "k-burger-vita-porc": {
@@ -1733,6 +1761,18 @@
         "ru": "Ориентир подачи: на фото свиной бургер.",
         "ro": "Exemplu de prezentare: în fotografie este burgerul de porc.",
         "en": "Serving reference: the photo shows the pork burger."
+      },
+      "allergens": {
+        "contains": [
+          "milk"
+        ],
+        "check": [
+          "gluten",
+          "eggs",
+          "mustard",
+          "sesame"
+        ],
+        "needsReview": true
       }
     },
     "k-burger": {
@@ -1746,6 +1786,18 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "milk"
+        ],
+        "check": [
+          "gluten",
+          "eggs",
+          "mustard",
+          "sesame"
+        ],
+        "needsReview": true
       }
     },
     "k-dorado": {
@@ -1759,6 +1811,13 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "fish"
+        ],
+        "check": [],
+        "needsReview": true
       }
     },
     "k-varza-murata": {
@@ -1772,6 +1831,11 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [],
+        "check": [],
+        "needsReview": false
       }
     },
     "k-cartofan": {
@@ -1785,6 +1849,13 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "milk"
+        ],
+        "check": [],
+        "needsReview": true
       }
     },
     "k-carnaciori-gratar": {
@@ -1798,6 +1869,11 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [],
+        "check": [],
+        "needsReview": true
       }
     },
     "k-creveti-rose": {
@@ -1811,6 +1887,14 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "crustaceans",
+          "milk"
+        ],
+        "check": [],
+        "needsReview": false
       }
     },
     "k-creveti-grill": {
@@ -1824,6 +1908,13 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "crustaceans"
+        ],
+        "check": [],
+        "needsReview": false
       }
     },
     "k-buffalo-wings": {
@@ -1837,6 +1928,18 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "milk"
+        ],
+        "check": [
+          "eggs",
+          "mustard",
+          "fish",
+          "gluten"
+        ],
+        "needsReview": true
       }
     },
     "k-aripioare-bbq": {
@@ -1850,6 +1953,15 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [],
+        "check": [
+          "eggs",
+          "mustard",
+          "gluten"
+        ],
+        "needsReview": true
       }
     },
     "k-aripioare-fresnel": {
@@ -1863,6 +1975,15 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [],
+        "check": [
+          "gluten",
+          "eggs",
+          "mustard"
+        ],
+        "needsReview": true
       }
     },
     "k-frigarui-pui": {
@@ -1876,6 +1997,11 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [],
+        "check": [],
+        "needsReview": true
       }
     },
     "k-midii": {
@@ -1889,6 +2015,16 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "molluscs",
+          "celery"
+        ],
+        "check": [
+          "sulphites"
+        ],
+        "needsReview": true
       }
     },
     "k-midii-cascaval": {
@@ -1902,6 +2038,16 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "molluscs",
+          "milk"
+        ],
+        "check": [
+          "gluten"
+        ],
+        "needsReview": true
       }
     },
     "k-platou-carne": {
@@ -1915,6 +2061,16 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "mustard"
+        ],
+        "check": [
+          "gluten",
+          "eggs"
+        ],
+        "needsReview": true
       }
     },
     "k-costita-bbq": {
@@ -1928,6 +2084,16 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "mustard"
+        ],
+        "check": [
+          "fish",
+          "gluten"
+        ],
+        "needsReview": true
       }
     },
     "k-ciolan-copt": {
@@ -1941,6 +2107,15 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "mustard"
+        ],
+        "check": [
+          "gluten"
+        ],
+        "needsReview": true
       }
     },
     "k-inimi-iuti": {
@@ -1954,6 +2129,15 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "soy"
+        ],
+        "check": [
+          "gluten"
+        ],
+        "needsReview": true
       }
     },
     "a5cf03b7-259f-4a96-b041-e5cafe8950b3": {
@@ -1967,6 +2151,14 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [],
+        "check": [
+          "eggs",
+          "mustard"
+        ],
+        "needsReview": true
       }
     },
     "k-steak-porc": {
@@ -1980,6 +2172,15 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "mustard"
+        ],
+        "check": [
+          "sulphites"
+        ],
+        "needsReview": true
       }
     },
     "k-farfurie-asorti": {
@@ -1993,6 +2194,17 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "milk"
+        ],
+        "check": [
+          "gluten",
+          "eggs",
+          "mustard"
+        ],
+        "needsReview": true
       }
     },
     "k-urechi-tava": {
@@ -2006,6 +2218,15 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "soy"
+        ],
+        "check": [
+          "gluten"
+        ],
+        "needsReview": true
       }
     },
     "k-hamsi": {
@@ -2019,6 +2240,13 @@
         "ru": "Пример подачи из техкарты.",
         "ro": "Exemplu de prezentare din fișa preparatului.",
         "en": "Serving example from the recipe sheet."
+      },
+      "allergens": {
+        "contains": [
+          "fish"
+        ],
+        "check": [],
+        "needsReview": false
       }
     },
     "k-cartofi-fri": {
@@ -2026,6 +2254,11 @@
         "ru": "Картофель фри, обжаренный во фритюре и посоленный перед подачей.",
         "ro": "Cartofi pai prăjiți în baie de ulei, sărați înainte de servire.",
         "en": "Deep-fried French fries, salted before serving."
+      },
+      "allergens": {
+        "contains": [],
+        "check": [],
+        "needsReview": true
       }
     },
     "f3b63276-a013-42a5-b613-ecdf6604dd3c": {
@@ -2033,6 +2266,11 @@
         "ru": "Картофель по-домашнему, обжаренный во фритюре и поданный горячим.",
         "ro": "Cartofi ca acasă, prăjiți în baie de ulei și serviți fierbinți.",
         "en": "Deep-fried home-style potatoes, served hot."
+      },
+      "allergens": {
+        "contains": [],
+        "check": [],
+        "needsReview": true
       }
     },
     "b59d9f46-df3e-4447-9300-8e9ebfef1358": {
@@ -2040,6 +2278,11 @@
         "ru": "Картофельные чипсы, обжаренные во фритюре и посоленные перед подачей.",
         "ro": "Chipsuri de cartofi prăjite în baie de ulei și sărate înainte de servire.",
         "en": "Deep-fried potato chips, salted before serving."
+      },
+      "allergens": {
+        "contains": [],
+        "check": [],
+        "needsReview": true
       }
     },
     "14af2912-0925-4632-a677-762f9c3c5bf7": {
@@ -2047,6 +2290,11 @@
         "ru": "Картофельные шарики, обжаренные во фритюре. Подаются горячими.",
         "ro": "Bile de cartofi prăjite în baie de ulei. Servite fierbinți.",
         "en": "Deep-fried potato balls, served hot."
+      },
+      "allergens": {
+        "contains": [],
+        "check": [],
+        "needsReview": true
       }
     },
     "k-creveti-pane": {
@@ -2054,6 +2302,17 @@
         "ru": "Креветки в панировке, обжаренные во фритюре. Подаются с чесночным соусом и лимоном.",
         "ro": "Creveți pane prăjiți în baie de ulei. Serviți cu sos de usturoi și lămâie.",
         "en": "Deep-fried breaded shrimp, served with garlic sauce and lemon."
+      },
+      "allergens": {
+        "contains": [
+          "crustaceans"
+        ],
+        "check": [
+          "gluten",
+          "eggs",
+          "mustard"
+        ],
+        "needsReview": true
       }
     },
     "k-midii-pane": {
@@ -2061,6 +2320,16 @@
         "ru": "Мидии в кляре, обжаренные во фритюре и посоленные перед подачей.",
         "ro": "Midii în aluat, prăjite în baie de ulei și sărate înainte de servire.",
         "en": "Battered mussels, deep-fried and salted before serving."
+      },
+      "allergens": {
+        "contains": [
+          "molluscs"
+        ],
+        "check": [
+          "gluten",
+          "eggs"
+        ],
+        "needsReview": true
       }
     },
     "k-inele-ceapa": {
@@ -2068,6 +2337,14 @@
         "ru": "Луковые кольца, обжаренные во фритюре. Горячая закуска к пиву.",
         "ro": "Inele de ceapă prăjite în baie de ulei. Gustare caldă la bere.",
         "en": "Deep-fried onion rings. A hot snack to enjoy with beer."
+      },
+      "allergens": {
+        "contains": [],
+        "check": [
+          "gluten",
+          "eggs"
+        ],
+        "needsReview": true
       }
     },
     "k-nughete-pui": {
@@ -2075,6 +2352,14 @@
         "ru": "Куриные нагетсы, обжаренные во фритюре и поданные горячими.",
         "ro": "Nuggets de pui prăjite în baie de ulei și servite fierbinți.",
         "en": "Deep-fried chicken nuggets, served hot."
+      },
+      "allergens": {
+        "contains": [],
+        "check": [
+          "gluten",
+          "eggs"
+        ],
+        "needsReview": true
       }
     },
     "k-inele-calmar": {
@@ -2082,6 +2367,17 @@
         "ru": "Кольца кальмара, обжаренные во фритюре. Подаются с чесночным соусом.",
         "ro": "Inele de calmar prăjite în baie de ulei. Servite cu sos de usturoi.",
         "en": "Deep-fried calamari rings, served with garlic sauce."
+      },
+      "allergens": {
+        "contains": [
+          "molluscs"
+        ],
+        "check": [
+          "gluten",
+          "eggs",
+          "mustard"
+        ],
+        "needsReview": true
       }
     },
     "03d13dd5-c8f5-485d-98ff-5b7027ccb9e7": {
@@ -2089,6 +2385,16 @@
         "ru": "Три сырных треугольника сулугуни, обжаренные во фритюре. Подаются на небольшой деревянной доске.",
         "ro": "Trei triunghiuri de brânză suluguni, prăjite în baie de ulei. Servite pe un platou mic de lemn.",
         "en": "Three deep-fried suluguni cheese triangles, served on a small wooden board."
+      },
+      "allergens": {
+        "contains": [
+          "milk"
+        ],
+        "check": [
+          "gluten",
+          "eggs"
+        ],
+        "needsReview": true
       }
     }
   }
