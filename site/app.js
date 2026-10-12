@@ -327,6 +327,7 @@ function renderFeaturedBeers() {
     if (!item) continue;
     const card = element('article', 'beer-card');
     card.dataset.featuredId = id;
+    card.style.setProperty('--beer-accent', data.beerProfiles?.[id]?.colorHex || '#e6aa42');
     const top = element('div', 'beer-card-top');
     top.append(element('span', '', pageCopy[language].draft), element('span', '', 'ALBEER'));
     const bottom = element('div', 'beer-card-bottom');
