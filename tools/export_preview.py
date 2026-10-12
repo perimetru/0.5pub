@@ -13,6 +13,12 @@ html = (root / 'index.html').read_text(encoding='utf-8')
 css = (root / 'styles.css').read_text(encoding='utf-8')
 js = (root / 'app.js').read_text(encoding='utf-8')
 menu = json.loads((root / 'menu.json').read_text(encoding='utf-8'))
+photo_assets = {}
+for detail in menu.get('dishDetails', {}).values():
+    relative = detail.get('image')
+    if relative and relative not in photo_assets:
+        photo_assets[relative] = 'data:image/webp;base64,' + base64.b64encode((root / relative).read_bytes()).decode()
+menu['photoAssets'] = photo_assets
 html = html.replace('<link rel="stylesheet" href="styles.css"><script src="app.js" defer></script>', '<style>' + css + '</style>')
 for relative in set(re.findall(r'src="(assets/[^\"]+)"', html)):
     uri = 'data:image/svg+xml;base64,' + base64.b64encode((root / relative).read_bytes()).decode()

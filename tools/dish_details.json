@@ -1,0 +1,404 @@
+{
+  "617f9f60-3b6a-459e-8537-51000e1e1244": {
+    "description": {
+      "ru": "Острый томатный соус с чесноком, петрушкой, сельдереем и лимоном. Подаётся охлаждённым.",
+      "ro": "Sos picant de roșii cu usturoi, pătrunjel, țelină și lămâie. Se servește rece.",
+      "en": "Spicy tomato sauce with garlic, parsley, celery and lemon. Served chilled."
+    },
+    "image": "assets/dishes/photo-01.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "snack-arahide": {
+    "description": {
+      "ru": "Хрустящий запечённый арахис с солью и лёгким мучным покрытием. Закуска к пиву.",
+      "ro": "Arahide crocante coapte, cu sare și un strat fin de făină. Gustare la bere.",
+      "en": "Crunchy oven-roasted peanuts with salt and a light flour coating. A snack for beer."
+    }
+  },
+  "k-burger-pui": {
+    "description": {
+      "ru": "Бургер с куриной котлетой, сыром, помидором, свежим огурцом, маринованным луком и чесночным соусом в подрумяненной булочке.",
+      "ro": "Burger cu chiftea de pui, brânză, roșii, castravete proaspăt, ceapă marinată și sos de usturoi într-o chiflă rumenită.",
+      "en": "A chicken burger with cheese, tomato, fresh cucumber, pickled onion and garlic sauce in a toasted bun."
+    },
+    "image": "assets/dishes/photo-03.webp",
+    "photoCaption": {
+      "ru": "Ориентир подачи: на фото свиной бургер.",
+      "ro": "Exemplu de prezentare: în fotografie este burgerul de porc.",
+      "en": "Serving reference: the photo shows the pork burger."
+    }
+  },
+  "k-burger-vita-porc": {
+    "description": {
+      "ru": "Бургер с котлетой из говядины и свинины, сыром, помидором, свежим огурцом, маринованным луком и чесночным соусом.",
+      "ro": "Burger cu chiftea de vită și porc, brânză, roșii, castravete proaspăt, ceapă marinată și sos de usturoi.",
+      "en": "A beef and pork burger with cheese, tomato, fresh cucumber, pickled onion and garlic sauce."
+    },
+    "image": "assets/dishes/photo-03.webp",
+    "photoCaption": {
+      "ru": "Ориентир подачи: на фото свиной бургер.",
+      "ro": "Exemplu de prezentare: în fotografie este burgerul de porc.",
+      "en": "Serving reference: the photo shows the pork burger."
+    }
+  },
+  "k-burger": {
+    "description": {
+      "ru": "Бургер со свининой на гриле, сыром, помидором, свежим огурцом, маринованным луком и чесночным соусом в подрумяненной булочке.",
+      "ro": "Burger cu carne de porc la grătar, brânză, roșii, castravete proaspăt, ceapă marinată și sos de usturoi într-o chiflă rumenită.",
+      "en": "A grilled pork burger with cheese, tomato, fresh cucumber, pickled onion and garlic sauce in a toasted bun."
+    },
+    "image": "assets/dishes/photo-04.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-dorado": {
+    "description": {
+      "ru": "Целая запечённая дорадо с четвертинкой лимона на деревянной доске. Цена в меню указана за 100 г.",
+      "ro": "Dorada întreagă la cuptor, cu un sfert de lămâie, pe un platou de lemn. Prețul din meniu este pentru 100 g.",
+      "en": "Whole baked sea bream with a lemon wedge, served on a wooden board. The menu price is per 100 g."
+    },
+    "image": "assets/dishes/photo-05.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-varza-murata": {
+    "description": {
+      "ru": "Крупные дольки капусты, маринованные со свёклой, чесноком, уксусом и пряностями.",
+      "ro": "Bucăți mari de varză marinate cu sfeclă, usturoi, oțet și condimente.",
+      "en": "Large cabbage wedges pickled with beetroot, garlic, vinegar and spices."
+    },
+    "image": "assets/dishes/photo-06.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-cartofan": {
+    "description": {
+      "ru": "Запечённый картофель в фольге со сливочным маслом, ветчиной, сулугуни или моцареллой, чесноком и зеленью. Ароматное масло с розмарином и чили.",
+      "ro": "Cartofi copți în folie cu unt, șuncă, suluguni sau mozzarella, usturoi și verdeață. Ulei aromatizat cu rozmarin și ardei iute.",
+      "en": "Foil-baked potatoes with butter, ham, suluguni or mozzarella, garlic and herbs. Seasoned with rosemary and chilli oil."
+    },
+    "image": "assets/dishes/photo-07.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-carnaciori-gratar": {
+    "description": {
+      "ru": "Колбаска, подрумяненная на гриле, на длинной деревянной доске. Реализуется поштучно.",
+      "ro": "Cârnăcior rumenit la grătar, pe un platou lung de lemn. Se vinde la bucată.",
+      "en": "A browned grilled sausage on a long wooden board. Sold individually."
+    },
+    "image": "assets/dishes/photo-08.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-creveti-rose": {
+    "description": {
+      "ru": "Креветки, тушённые в сливочном масле с томатной пастой, чесноком, перцем и петрушкой. Подаются с лимоном.",
+      "ro": "Creveți înăbușiți în unt cu pastă de roșii, usturoi, piper și pătrunjel. Serviți cu lămâie.",
+      "en": "Shrimp simmered in butter with tomato paste, garlic, pepper and parsley. Served with lemon."
+    },
+    "image": "assets/dishes/photo-09.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-creveti-grill": {
+    "description": {
+      "ru": "Креветки на шпажках, приготовленные на гриле в маринаде из паприки, чеснока и орегано. Подаются с лимоном на деревянной доске.",
+      "ro": "Creveți pe frigărui, gătiți la grătar într-o marinadă cu boia, usturoi și oregano. Serviți cu lămâie pe un platou de lemn.",
+      "en": "Grilled shrimp skewers marinated with paprika, garlic and oregano. Served with lemon on a wooden board."
+    },
+    "image": "assets/dishes/photo-10.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-buffalo-wings": {
+    "description": {
+      "ru": "Крылышки в остром соусе Buffalo со сливочным маслом, Sriracha, Worcestershire, чесноком и уксусом. С морковными палочками и чесночным соусом.",
+      "ro": "Aripioare în sos Buffalo picant cu unt, Sriracha, Worcestershire, usturoi și oțet. Cu bastonașe de morcov și sos de usturoi.",
+      "en": "Wings in spicy Buffalo sauce with butter, Sriracha, Worcestershire, garlic and vinegar. Served with carrot sticks and garlic sauce."
+    },
+    "image": "assets/dishes/photo-11.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-aripioare-bbq": {
+    "description": {
+      "ru": "Куриные крылья в соусе BBQ, обжаренные во фритюре. Подаются с чесночным соусом.",
+      "ro": "Aripioare de pui în sos BBQ, prăjite în baie de ulei. Servite cu sos de usturoi.",
+      "en": "Chicken wings coated in BBQ sauce and deep-fried. Served with garlic sauce."
+    },
+    "image": "assets/dishes/photo-12.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-aripioare-fresnel": {
+    "description": {
+      "ru": "Куриные крылья в хрустящей панировке с паприкой, обжаренные во фритюре. Подаются с чесночным соусом.",
+      "ro": "Aripioare de pui în crustă crocantă cu boia, prăjite în baie de ulei. Servite cu sos de usturoi.",
+      "en": "Deep-fried chicken wings in a crunchy paprika breadcrumb coating. Served with garlic sauce."
+    },
+    "image": "assets/dishes/photo-13.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-frigarui-pui": {
+    "description": {
+      "ru": "Шашлык из куриного бедра с чесноком, паприкой и пряностями, приготовленный на гриле. Подаётся на шпажках с маринованными огурцами.",
+      "ro": "Frigărui din pulpă de pui cu usturoi, boia și condimente, gătite la grătar. Servite cu castraveți murați.",
+      "en": "Grilled chicken thigh skewers marinated with garlic, paprika and spices. Served with pickled cucumbers."
+    },
+    "image": "assets/dishes/photo-14.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-midii": {
+    "description": {
+      "ru": "Мидии в раковинах, томлённые в белом сухом вине с чесноком, сельдереем и лимоном.",
+      "ro": "Midii în cochilie, înăbușite în vin alb sec cu usturoi, țelină și lămâie.",
+      "en": "Shell-on mussels simmered in dry white wine with garlic, celery and lemon."
+    },
+    "image": "assets/dishes/photo-15.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-midii-cascaval": {
+    "description": {
+      "ru": "Мидии в сливочно-сырном соусе с моцареллой, пармезаном, чесноком и укропом. Подаются с белым хлебом, подрумяненным на гриле.",
+      "ro": "Midii în sos de smântână cu mozzarella, parmezan, usturoi și mărar. Servite cu pâine albă rumenită la grătar.",
+      "en": "Mussels in a creamy sauce with mozzarella, Parmesan, garlic and dill. Served with grilled white bread."
+    },
+    "image": "assets/dishes/photo-16.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-platou-carne": {
+    "description": {
+      "ru": "Большое мясное плато: свиная рулька, колбаски гриль, свиной стейк, крылышки фри и картофель по-домашнему. С маринованной капустой, чесночным соусом, кетчупом, горчицей и аджикой.",
+      "ro": "Platou mare cu ciolan de porc, cârnăciori la grătar, steak de porc, aripioare prăjite și cartofi ca acasă. Cu varză marinată, sos de usturoi, ketchup, muștar și adjică.",
+      "en": "A large platter of pork knuckle, grilled sausages, pork steak, fried wings and home-style potatoes. With pickled cabbage, garlic sauce, ketchup, mustard and adjika."
+    },
+    "image": "assets/dishes/photo-17.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-costita-bbq": {
+    "description": {
+      "ru": "Запечённые и подкопчённые рёбра в пряном маринаде с мёдом, горчицей, копчёной паприкой и острыми соусами. С маринованной капустой, горчицей, BBQ-соусом и кетчупом. Цена за 100 г.",
+      "ro": "Coaste coapte și afumate ușor, marinate cu miere, muștar, boia afumată și sosuri picante. Cu varză marinată, muștar, sos BBQ și ketchup. Preț pentru 100 g.",
+      "en": "Roasted, lightly smoked ribs marinated with honey, mustard, smoked paprika and spicy sauces. With pickled cabbage, mustard, BBQ sauce and ketchup. Priced per 100 g."
+    },
+    "image": "assets/dishes/photo-18.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-ciolan-copt": {
+    "description": {
+      "ru": "Свиная рулька, запечённая с пивом, чесноком и мёдом. Подаётся с маринованной капустой, красным хреном, горчицей и кетчупом.",
+      "ro": "Ciolan de porc copt cu bere, usturoi și miere. Servit cu varză marinată, hrean roșu, muștar și ketchup.",
+      "en": "Pork knuckle roasted with beer, garlic and honey. Served with pickled cabbage, red horseradish, mustard and ketchup."
+    },
+    "image": "assets/dishes/photo-19.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-inimi-iuti": {
+    "description": {
+      "ru": "Сердечки, обжаренные и тушённые с луком, чесноком, соевым соусом, паприкой, кориандром и петрушкой. Чили добавляется по желанию.",
+      "ro": "Inimi prăjite și înăbușite cu ceapă, usturoi, sos de soia, boia, coriandru și pătrunjel. Ardeiul iute se adaugă la cerere.",
+      "en": "Hearts fried and simmered with onion, garlic, soy sauce, paprika, coriander and parsley. Chilli can be added on request."
+    },
+    "image": "assets/dishes/photo-20.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "a5cf03b7-259f-4a96-b041-e5cafe8950b3": {
+    "description": {
+      "ru": "Соус на основе майонеза Провансаль с лимонным соком, чесноком, укропом и чёрным перцем.",
+      "ro": "Sos pe bază de maioneză Provansal cu suc de lămâie, usturoi, mărar și piper negru.",
+      "en": "A Provansal mayonnaise-based sauce with lemon juice, garlic, dill and black pepper."
+    },
+    "image": "assets/dishes/photo-21.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-steak-porc": {
+    "description": {
+      "ru": "Свиной стейк на гриле в маринаде с томатным соком, белым вином, горчицей и пряностями. С болгарским перцем, помидором, маринованным луком и кетчупом или аджикой.",
+      "ro": "Steak de porc la grătar, marinat cu suc de roșii, vin alb, muștar și condimente. Cu ardei gras, roșii, ceapă marinată și ketchup sau adjică.",
+      "en": "Grilled pork steak marinated with tomato juice, white wine, mustard and spices. With bell pepper, tomato, pickled onion and ketchup or adjika."
+    },
+    "image": "assets/dishes/photo-22.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-farfurie-asorti": {
+    "description": {
+      "ru": "Ассорти закусок на деревянной доске: сырные треугольники, картофельные шарики, чипсы и луковые кольца. Чесночный соус подаётся отдельно.",
+      "ro": "Gustări asortate pe un platou de lemn: triunghiuri de brânză, bile de cartofi, chipsuri și inele de ceapă. Sosul de usturoi se servește separat.",
+      "en": "A wooden board of cheese triangles, potato balls, potato chips and onion rings. Garlic sauce is served separately."
+    },
+    "image": "assets/dishes/photo-23.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-urechi-tava": {
+    "description": {
+      "ru": "Свиные ушки, обжаренные с чесноком, соевым соусом и чили. Подаются с красным луком, острым перцем и петрушкой.",
+      "ro": "Urechi de porc prăjite cu usturoi, sos de soia și chili. Servite cu ceapă roșie, ardei iute și pătrunjel.",
+      "en": "Pork ears pan-fried with garlic, soy sauce and chilli. Served with red onion, hot pepper and parsley."
+    },
+    "image": "assets/dishes/photo-24.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-hamsi": {
+    "description": {
+      "ru": "Хамса, обжаренная во фритюре, с щепоткой соли и лимоном.",
+      "ro": "Hamsii prăjite în baie de ulei, cu un praf de sare și lămâie.",
+      "en": "Deep-fried anchovies with a pinch of salt and lemon."
+    },
+    "image": "assets/dishes/photo-25.webp",
+    "photoCaption": {
+      "ru": "Пример подачи из техкарты.",
+      "ro": "Exemplu de prezentare din fișa preparatului.",
+      "en": "Serving example from the recipe sheet."
+    }
+  },
+  "k-cartofi-fri": {
+    "description": {
+      "ru": "Картофель фри, обжаренный во фритюре и посоленный перед подачей.",
+      "ro": "Cartofi pai prăjiți în baie de ulei, sărați înainte de servire.",
+      "en": "Deep-fried French fries, salted before serving."
+    }
+  },
+  "f3b63276-a013-42a5-b613-ecdf6604dd3c": {
+    "description": {
+      "ru": "Картофель по-домашнему, обжаренный во фритюре и поданный горячим.",
+      "ro": "Cartofi ca acasă, prăjiți în baie de ulei și serviți fierbinți.",
+      "en": "Deep-fried home-style potatoes, served hot."
+    }
+  },
+  "b59d9f46-df3e-4447-9300-8e9ebfef1358": {
+    "description": {
+      "ru": "Картофельные чипсы, обжаренные во фритюре и посоленные перед подачей.",
+      "ro": "Chipsuri de cartofi prăjite în baie de ulei și sărate înainte de servire.",
+      "en": "Deep-fried potato chips, salted before serving."
+    }
+  },
+  "14af2912-0925-4632-a677-762f9c3c5bf7": {
+    "description": {
+      "ru": "Картофельные шарики, обжаренные во фритюре. Подаются горячими.",
+      "ro": "Bile de cartofi prăjite în baie de ulei. Servite fierbinți.",
+      "en": "Deep-fried potato balls, served hot."
+    }
+  },
+  "k-creveti-pane": {
+    "description": {
+      "ru": "Креветки в панировке, обжаренные во фритюре. Подаются с чесночным соусом и лимоном.",
+      "ro": "Creveți pane prăjiți în baie de ulei. Serviți cu sos de usturoi și lămâie.",
+      "en": "Deep-fried breaded shrimp, served with garlic sauce and lemon."
+    }
+  },
+  "k-midii-pane": {
+    "description": {
+      "ru": "Мидии в кляре, обжаренные во фритюре и посоленные перед подачей.",
+      "ro": "Midii în aluat, prăjite în baie de ulei și sărate înainte de servire.",
+      "en": "Battered mussels, deep-fried and salted before serving."
+    }
+  },
+  "k-inele-ceapa": {
+    "description": {
+      "ru": "Луковые кольца, обжаренные во фритюре. Горячая закуска к пиву.",
+      "ro": "Inele de ceapă prăjite în baie de ulei. Gustare caldă la bere.",
+      "en": "Deep-fried onion rings. A hot snack to enjoy with beer."
+    }
+  },
+  "k-nughete-pui": {
+    "description": {
+      "ru": "Куриные нагетсы, обжаренные во фритюре и поданные горячими.",
+      "ro": "Nuggets de pui prăjite în baie de ulei și servite fierbinți.",
+      "en": "Deep-fried chicken nuggets, served hot."
+    }
+  },
+  "k-inele-calmar": {
+    "description": {
+      "ru": "Кольца кальмара, обжаренные во фритюре. Подаются с чесночным соусом.",
+      "ro": "Inele de calmar prăjite în baie de ulei. Servite cu sos de usturoi.",
+      "en": "Deep-fried calamari rings, served with garlic sauce."
+    }
+  },
+  "03d13dd5-c8f5-485d-98ff-5b7027ccb9e7": {
+    "description": {
+      "ru": "Три сырных треугольника сулугуни, обжаренные во фритюре. Подаются на небольшой деревянной доске.",
+      "ro": "Trei triunghiuri de brânză suluguni, prăjite în baie de ulei. Servite pe un platou mic de lemn.",
+      "en": "Three deep-fried suluguni cheese triangles, served on a small wooden board."
+    }
+  }
+}

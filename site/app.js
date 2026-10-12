@@ -123,6 +123,9 @@ Object.assign(pageCopy.en, {abvLabel:'Alcohol', densityLabel:'Original gravity',
 Object.assign(pageCopy.ru, {barMenu:'Бар', kitchenMenu:'Кухня', allBar:'Весь бар', allKitchen:'Вся кухня', departmentsLabel:'Разделы меню'});
 Object.assign(pageCopy.ro, {barMenu:'Bar', kitchenMenu:'Bucătărie', allBar:'Tot barul', allKitchen:'Toată bucătăria', departmentsLabel:'Secțiuni de meniu'});
 Object.assign(pageCopy.en, {barMenu:'Bar', kitchenMenu:'Kitchen', allBar:'All bar items', allKitchen:'All kitchen items', departmentsLabel:'Menu sections'});
+Object.assign(pageCopy.ru, {dishMore:'Подробнее', dishPhotoMore:'Описание и фото', dishClose:'Закрыть описание'});
+Object.assign(pageCopy.ro, {dishMore:'Detalii', dishPhotoMore:'Descriere și fotografie', dishClose:'Închide descrierea'});
+Object.assign(pageCopy.en, {dishMore:'Details', dishPhotoMore:'Description & photo', dishClose:'Close description'});
 const heroCopy = {
   "ru": {
     "eyebrow": "КАХУЛ · ПАБ ПРИ ПИВОВАРНЕ ALBEER",
@@ -161,6 +164,8 @@ let category = 'all';
 let department = 'bar';
 let data;
 let menuFailed = false;
+let currentDish = null;
+const dishDialog = document.querySelector('#dish-dialog');
 const search = document.querySelector('#search');
 const itemsContainer = document.querySelector('#items');
 const categoryContainer = document.querySelector('#categories');
@@ -238,6 +243,15 @@ function renderItems() {
       let unit = text(item.unit);
       if (language !== 'ru') unit = unit.replace('порция', t.portion).replace('шт.', t.piece).replace('г', 'g').replace('мл', 'ml').replace('л', 'l');
       row.append(element('div', 'unit', item.weighted ? `${t.weight} ${unit}` : unit));
+      const detail = data.dishDetails?.[item.id];
+      if (detail) {
+        const more = element('button', 'dish-more', pageCopy[language][detail.image ? 'dishPhotoMore' : 'dishMore']);
+        more.type = 'button';
+        more.dataset.dishId = item.id;
+        more.setAttribute('aria-haspopup', 'dialog');
+        more.addEventListener('click', () => openDish(item.id));
+        row.append(more);
+      }
       grid.append(row);
     }
     section.append(summary, grid);
@@ -283,6 +297,41 @@ function renderFeaturedBeers() {
     container.append(card);
   }
 }
+function openDish(id) {
+  const item = data.items.find(entry => entry.id === id);
+  const detail = data.dishDetails?.[id];
+  if (!item || !detail) return;
+  currentDish = id;
+  const group = data.categories.find(entry => entry.id === item.category);
+  document.querySelector('#dish-category').textContent = group ? name(group) : '';
+  document.querySelector('#dish-title').textContent = name(item);
+  document.querySelector('#dish-description').textContent = detail.description[language];
+  document.querySelector('#dish-price').textContent = new Intl.NumberFormat({ru:'ru-MD',ro:'ro-MD',en:'en-GB'}[language]).format(item.price) + ' ' + data.currency;
+  let unit = text(item.unit);
+  if (language !== 'ru') unit = unit.replace('порция', translations[language].portion).replace('шт.', translations[language].piece).replace('г','g').replace('мл','ml').replace('л','l');
+  document.querySelector('#dish-unit').textContent = item.weighted ? translations[language].weight + ' ' + unit : unit;
+  const figure = document.querySelector('.dish-visual');
+  const image = document.querySelector('#dish-photo');
+  figure.hidden = !detail.image;
+  document.querySelector('.dish-body').classList.toggle('without-photo', !detail.image);
+  if (detail.image) {
+    image.src = data.photoAssets?.[detail.image] || detail.image;
+    image.alt = name(item) + ' — ' + detail.photoCaption[language];
+    document.querySelector('#dish-caption').textContent = detail.photoCaption[language];
+  } else {
+    image.removeAttribute('src');
+    image.alt = '';
+    document.querySelector('#dish-caption').textContent = '';
+  }
+  document.querySelector('.dish-close').setAttribute('aria-label', pageCopy[language].dishClose);
+  if (!dishDialog.open) dishDialog.showModal();
+}
+document.querySelector('.dish-close').addEventListener('click', () => dishDialog.close());
+dishDialog.addEventListener('click', event => {
+  const bounds = dishDialog.getBoundingClientRect();
+  if (event.target === dishDialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dishDialog.close();
+});
+dishDialog.addEventListener('close', () => { currentDish = null; });
 function setLanguage(next) {
   language = next;
   const t = translations[language];
@@ -307,6 +356,7 @@ function setLanguage(next) {
   document.querySelectorAll('[data-lang]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.lang === language)));
   if (data) { renderDepartments(); renderCategories(); renderItems(); renderFeaturedBeers(); }
   else if (menuFailed) itemsContainer.replaceChildren(element('p', 'empty', t.error));
+  if (dishDialog.open && currentDish) openDish(currentDish);
 }
 document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.lang)));
 document.querySelectorAll('[data-department]').forEach(button => button.addEventListener('click', () => {

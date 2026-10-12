@@ -31,5 +31,8 @@ if missing:
     raise ValueError('Add English translations to tools/menu_en.json for: ' + ', '.join(missing))
 output = Path(__file__).resolve().parents[1] / 'site' / 'menu.json'
 profiles = json.loads(Path(__file__).with_name('beer_profiles.json').read_text(encoding='utf-8'))
-output.write_text(json.dumps({'currency': source['restaurant']['currency'], 'categories': categories, 'items': items, 'beerProfiles': profiles}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+dish_details = json.loads(Path(__file__).with_name('dish_details.json').read_text(encoding='utf-8'))
+if not set(dish_details).issubset({item['id'] for item in items}):
+    dish_details = {key: value for key, value in dish_details.items() if key in {item['id'] for item in items}}
+output.write_text(json.dumps({'currency': source['restaurant']['currency'], 'categories': categories, 'items': items, 'beerProfiles': profiles, 'dishDetails': dish_details}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 print(f'Exported {len(items)} items in {len(categories)} categories to {output}')
