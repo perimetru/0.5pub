@@ -26,8 +26,9 @@
 Из /workspace/0.5pub, после коммита изменений site/ в main:
 
 ```sh
-pages_commit=$(git subtree split --prefix=site)
-git push origin "$pages_commit":refs/heads/gh-pages
+git fetch origin
+python3 tools/update_pages_branch.py
+git push origin gh-pages
 ```
 
 Не используйте force push. При наличии отдельной истории gh-pages проверьте её перед обновлением. Наличие ветки и CNAME не доказывает включение Pages, готовность DNS или выдачу HTTPS-сертификата. Проверяйте ответы 05pub.md и загрузку menu.json и изображений после включения публикации.
