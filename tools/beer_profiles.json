@@ -36,14 +36,15 @@
     "colorHex": "#b87333"
   },
   "beer-ipa-weiss-05": {
-    "alcohol": null,
-    "originalDensity": null,
-    "bitterness": null,
+    "alcohol": 5.2,
+    "originalDensity": 12.5,
+    "bitterness": 10,
     "color": {
-      "ru": null,
-      "ro": null,
-      "en": null
+      "ru": "Светлый",
+      "ro": "Deschis",
+      "en": "Pale"
     },
-    "clarity": null
+    "clarity": 1,
+    "colorHex": "#e3c264"
   }
 }
