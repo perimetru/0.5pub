@@ -5,96 +5,112 @@
       "id": "bar-draft-beer",
       "ru": "Пиво на розлив",
       "ro": "Bere la draft",
+      "route": "bar",
       "en": "Draught beer"
     },
     {
       "id": "bar-bottled-beer",
       "ru": "Пиво в бутылке",
       "ro": "Bere la sticla",
+      "route": "bar",
       "en": "Bottled beer"
     },
     {
       "id": "bar-alcohol",
       "ru": "Алкогольные напитки",
       "ro": "Bauturi alcoolice",
+      "route": "bar",
       "en": "Alcoholic drinks"
     },
     {
       "id": "bar-soft",
       "ru": "Безалкогольные напитки",
       "ro": "Bauturi nealcoolice",
+      "route": "bar",
       "en": "Soft drinks"
     },
     {
       "id": "bar-coffee-tea",
       "ru": "Кофе/Чай",
       "ro": "Cafea/Ceai",
+      "route": "bar",
       "en": "Coffee & tea"
     },
     {
       "id": "kitchen-sides-snacks",
       "ru": "Картофель и другое",
       "ro": "Cartofi si alte",
+      "route": "kitchen",
       "en": "Potatoes & sides"
     },
     {
       "id": "kitchen-beer-snacks",
       "ru": "Закуски к пиву",
       "ro": "Gustari la bere",
+      "route": "kitchen",
       "en": "Beer snacks"
     },
     {
       "id": "kitchen-burgers-wings",
       "ru": "Бургеры",
       "ro": "Burgeri",
+      "route": "kitchen",
       "en": "Burgers"
     },
     {
       "id": "kitchen-meat-grill",
       "ru": "Мясо и гриль",
       "ro": "Carne si grill",
+      "route": "kitchen",
       "en": "Meat & grill"
     },
     {
       "id": "b66b5c5f-1e23-49fc-9cc5-5ad92e5c6110",
       "ru": "Курица",
       "ro": "Gaina",
+      "route": "kitchen",
       "en": "Chicken"
     },
     {
       "id": "kitchen-seafood",
       "ru": "Морепродукты",
       "ro": "Fructe de mare",
+      "route": "kitchen",
       "en": "Seafood"
     },
     {
       "id": "95107099-9600-443f-b100-b0fea560de7a",
       "ru": "Соусы",
       "ro": "Sousuri",
+      "route": "kitchen",
       "en": "Sauces"
     },
     {
       "id": "095ccf07-67de-4618-bfaf-5873f3607279",
       "ru": "Пиво с собой",
       "ro": "Bere la Litru",
+      "route": "bar",
       "en": "Beer to go"
     },
     {
       "id": "kitchen-fish-beer",
       "ru": "Рыба к пиву",
       "ro": "Peste la bere",
+      "route": "kitchen",
       "en": "Fish snacks"
     },
     {
       "id": "8bf1cceb-859b-4a68-814d-a0c0fa7401e8",
       "ru": "Посуда\\Котейнеры",
       "ro": "Vesela/Containere",
+      "route": "kitchen",
       "en": "Tableware & containers"
     },
     {
       "id": "372ea23f-d907-4664-99ac-016964eb6fb4",
       "ru": "Посуда",
       "ro": "Vesela",
+      "route": "bar",
       "en": "Tableware"
     }
   ],

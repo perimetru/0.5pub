@@ -120,6 +120,9 @@ Object.assign(pageCopy.en, {reservationLabel:'Table reservations', directionsLab
 Object.assign(pageCopy.ru, {abvLabel:'Алкоголь', densityLabel:'Нач. плотность', bitternessLabel:'Горечь', colorLabel:'Цвет', hazeLabel:'Мутность', profilePending:'Характеристики уточняются'});
 Object.assign(pageCopy.ro, {abvLabel:'Alcool', densityLabel:'Densitate inițială', bitternessLabel:'Amăreală', colorLabel:'Culoare', hazeLabel:'Turbiditate', profilePending:'Caracteristici în curs de confirmare'});
 Object.assign(pageCopy.en, {abvLabel:'Alcohol', densityLabel:'Original gravity', bitternessLabel:'Bitterness', colorLabel:'Colour', hazeLabel:'Haze', profilePending:'Details awaiting confirmation'});
+Object.assign(pageCopy.ru, {barMenu:'Бар', kitchenMenu:'Кухня', allBar:'Весь бар', allKitchen:'Вся кухня', departmentsLabel:'Разделы меню'});
+Object.assign(pageCopy.ro, {barMenu:'Bar', kitchenMenu:'Bucătărie', allBar:'Tot barul', allKitchen:'Toată bucătăria', departmentsLabel:'Secțiuni de meniu'});
+Object.assign(pageCopy.en, {barMenu:'Bar', kitchenMenu:'Kitchen', allBar:'All bar items', allKitchen:'All kitchen items', departmentsLabel:'Menu sections'});
 const heroCopy = {
   "ru": {
     "eyebrow": "КАХУЛ · ПАБ ПРИ ПИВОВАРНЕ ALBEER",
@@ -155,6 +158,7 @@ const heroCopy = {
 for (const lang of Object.keys(heroCopy)) Object.assign(translations[lang], heroCopy[lang]);
 let language = 'ru';
 let category = 'all';
+let department = 'bar';
 let data;
 let menuFailed = false;
 const search = document.querySelector('#search');
@@ -169,11 +173,27 @@ function element(tag, className, value) {
   if (value !== undefined) node.textContent = value;
   return node;
 }
+function departmentCategories() {
+  return data.categories.filter(group => group.route === department);
+}
+function departmentItems() {
+  const ids = new Set(departmentCategories().map(group => group.id));
+  return data.items.filter(item => ids.has(item.category));
+}
+function renderDepartments() {
+  document.querySelector('.menu-departments').setAttribute('aria-label', pageCopy[language].departmentsLabel);
+  document.querySelectorAll('[data-department]').forEach(button => {
+    button.setAttribute('aria-pressed', String(button.dataset.department === department));
+    const ids = new Set(data.categories.filter(group => group.route === button.dataset.department).map(group => group.id));
+    button.querySelector('.department-count').textContent = data.items.filter(item => ids.has(item.category)).length;
+  });
+}
 function renderCategories() {
   const t = translations[language];
   categoryContainer.replaceChildren();
-  for (const group of [{id:'all', ru:t.all, ro:t.all, en:t.all}, ...data.categories]) {
-    const count = data.items.filter(item => group.id === 'all' || item.category === group.id).length;
+  const allLabel = pageCopy[language][department === 'bar' ? 'allBar' : 'allKitchen'];
+  for (const group of [{id:'all', ru:allLabel, ro:allLabel, en:allLabel}, ...departmentCategories()]) {
+    const count = departmentItems().filter(item => group.id === 'all' || item.category === group.id).length;
     if (!count) continue;
     const button = element('button', 'category', name(group));
     button.type = 'button';
@@ -191,7 +211,7 @@ function renderCategories() {
 function renderItems() {
   const t = translations[language];
   const query = normalize(search.value.trim());
-  const selected = data.items.filter(item => (category === 'all' || category === item.category) &&
+  const selected = departmentItems().filter(item => (category === 'all' || category === item.category) &&
     (!query || normalize(`${item.ru} ${item.ro} ${item.en}`).includes(query)));
   document.querySelector('#result-count').textContent = `${t.count}: ${selected.length}`;
   itemsContainer.replaceChildren();
@@ -199,11 +219,11 @@ function renderItems() {
     itemsContainer.append(element('p', 'empty', t.empty));
     return;
   }
-  for (const group of data.categories) {
+  for (const group of departmentCategories()) {
     const matching = selected.filter(item => item.category === group.id);
     if (!matching.length) continue;
     const section = element('details', 'menu-section');
-    section.open = Boolean(query) || category !== 'all' || group.id === data.categories[0].id;
+    section.open = Boolean(query) || category !== 'all' || group.id === departmentCategories()[0]?.id;
     const summary = element('summary', 'section-summary');
     const heading = element('h3', 'section-title', name(group));
     summary.append(heading, element('span', 'section-count', matching.length));
@@ -285,10 +305,18 @@ function setLanguage(next) {
   search.setAttribute('aria-label', t.search);
   categoryContainer.setAttribute('aria-label', {ru:'Категории меню', ro:'Categorii de meniu', en:'Menu categories'}[language]);
   document.querySelectorAll('[data-lang]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.lang === language)));
-  if (data) { renderCategories(); renderItems(); renderFeaturedBeers(); }
+  if (data) { renderDepartments(); renderCategories(); renderItems(); renderFeaturedBeers(); }
   else if (menuFailed) itemsContainer.replaceChildren(element('p', 'empty', t.error));
 }
 document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.lang)));
+document.querySelectorAll('[data-department]').forEach(button => button.addEventListener('click', () => {
+  if (!data) return;
+  department = button.dataset.department;
+  category = 'all';
+  renderDepartments();
+  renderCategories();
+  renderItems();
+}));
 search.addEventListener('input', () => { if (data) renderItems(); });
 fetch('menu.json').then(response => {
   if (!response.ok) throw new Error(`Menu request failed: ${response.status}`);

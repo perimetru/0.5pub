@@ -7,7 +7,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument('backup', type=Path)
 args = parser.parse_args()
 source = json.loads(args.backup.read_text(encoding='utf-8'))
-categories = [{k: c[k] for k in ('id', 'ru', 'ro')} for c in source['categories'] if c.get('active')]
+categories = [{k: c[k] for k in ('id', 'ru', 'ro', 'route')} for c in source['categories'] if c.get('active')]
+if any(c['route'] not in ('bar', 'kitchen') for c in categories):
+    raise ValueError('Every active category must belong to bar or kitchen')
 category_ids = {c['id'] for c in categories}
 items = [{k: m.get(k) for k in ('id', 'ru', 'ro', 'category', 'price', 'unit', 'weighted')}
          for m in source['menu'] if m.get('active') and m['category'] in category_ids]
