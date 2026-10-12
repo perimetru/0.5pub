@@ -117,9 +117,9 @@ const pageCopy = {
 Object.assign(pageCopy.ru, {reservationLabel:'Резервация столика', directionsLabel:'Маршрут на автомобиле'});
 Object.assign(pageCopy.ro, {reservationLabel:'Rezervări mese', directionsLabel:'Traseu cu mașina'});
 Object.assign(pageCopy.en, {reservationLabel:'Table reservations', directionsLabel:'Driving directions'});
-Object.assign(pageCopy.ru, {abvLabel:'Алкоголь', densityLabel:'Нач. плотность', bitternessLabel:'Горечь', colorLabel:'Цвет', hazeLabel:'Мутность', profilePending:'Характеристики уточняются'});
-Object.assign(pageCopy.ro, {abvLabel:'Alcool', densityLabel:'Densitate inițială', bitternessLabel:'Amăreală', colorLabel:'Culoare', hazeLabel:'Turbiditate', profilePending:'Caracteristici în curs de confirmare'});
-Object.assign(pageCopy.en, {abvLabel:'Alcohol', densityLabel:'Original gravity', bitternessLabel:'Bitterness', colorLabel:'Colour', hazeLabel:'Haze', profilePending:'Details awaiting confirmation'});
+Object.assign(pageCopy.ru, {abvLabel:'Алкоголь', densityLabel:'Нач. плотность', bitternessLabel:'Горечь', colorLabel:'Цвет', clarityLabel:'Прозрачность', clarityOf:'из', profilePending:'Характеристики уточняются'});
+Object.assign(pageCopy.ro, {abvLabel:'Alcool', densityLabel:'Densitate inițială', bitternessLabel:'Amăreală', colorLabel:'Culoare', clarityLabel:'Limpiditate', clarityOf:'din', profilePending:'Caracteristici în curs de confirmare'});
+Object.assign(pageCopy.en, {abvLabel:'Alcohol', densityLabel:'Original gravity', bitternessLabel:'Bitterness', colorLabel:'Colour', clarityLabel:'Clarity', clarityOf:'of', profilePending:'Details awaiting confirmation'});
 Object.assign(pageCopy.ru, {barMenu:'Бар', kitchenMenu:'Кухня', allBar:'Весь бар', allKitchen:'Вся кухня', departmentsLabel:'Разделы меню'});
 Object.assign(pageCopy.ro, {barMenu:'Bar', kitchenMenu:'Bucătărie', allBar:'Tot barul', allKitchen:'Toată bucătăria', departmentsLabel:'Secțiuni de meniu'});
 Object.assign(pageCopy.en, {barMenu:'Bar', kitchenMenu:'Kitchen', allBar:'All bar items', allKitchen:'All kitchen items', departmentsLabel:'Menu sections'});
@@ -333,14 +333,40 @@ function renderFeaturedBeers() {
     const profile = data.beerProfiles?.[id] || {};
     const stats = element('dl', 'beer-stats');
     let complete = true;
-    for (const [key, labelKey, unit] of [['alcohol', 'abvLabel', '%'], ['originalDensity', 'densityLabel', '°P'], ['bitterness', 'bitternessLabel', 'IBU'], ['color', 'colorLabel', ''], ['haze', 'hazeLabel', '']]) {
+    for (const [key, labelKey, unit] of [['alcohol', 'abvLabel', '%'], ['originalDensity', 'densityLabel', '°P'], ['bitterness', 'bitternessLabel', 'IBU'], ['color', 'colorLabel', ''], ['clarity', 'clarityLabel', '']]) {
       const raw = profile[key];
       const value = raw && typeof raw === 'object' ? raw[language] : raw;
       const missing = value === null || value === undefined || value === '';
       if (missing) complete = false;
       const row = element('div', 'beer-stat');
       row.dataset.stat = key;
-      row.append(element('dt', '', pageCopy[language][labelKey]), element('dd', '', missing ? '—' : typeof value === 'number' ? new Intl.NumberFormat({ru:'ru-MD',ro:'ro-MD',en:'en-GB'}[language]).format(value) + (unit ? ' ' + unit : '') : value));
+      const display = missing ? '—' : key === 'clarity' ? value + ' ' + pageCopy[language].clarityOf + ' 5' : typeof value === 'number' ? new Intl.NumberFormat({ru:'ru-MD',ro:'ro-MD',en:'en-GB'}[language]).format(value) + (unit ? ' ' + unit : '') : value;
+      row.append(element('dt', '', pageCopy[language][labelKey]), element('dd', '', display));
+      if (!missing && key === 'clarity') {
+        const scale = element('div', 'beer-scale');
+        scale.setAttribute('role', 'meter');
+        scale.setAttribute('aria-label', pageCopy[language].clarityLabel);
+        scale.setAttribute('aria-valuemin', '0');
+        scale.setAttribute('aria-valuemax', '5');
+        scale.setAttribute('aria-valuenow', String(value));
+        for (let index = 0; index < 5; index++) scale.append(element('span', index < value ? 'is-filled' : '', ''));
+        row.append(scale);
+      } else if (!missing && typeof value === 'number') {
+        const maximum = {alcohol:10, originalDensity:20, bitterness:100}[key];
+        const scale = element('meter', 'beer-numeric-meter');
+        scale.min = 0;
+        scale.max = Math.max(maximum, value);
+        scale.value = value;
+        scale.setAttribute('aria-label', pageCopy[language][labelKey]);
+        const range = element('div', 'beer-meter-range');
+        range.append(element('span', '', '0'), element('span', '', scale.max + ' ' + unit));
+        row.append(scale, range);
+      } else if (!missing && key === 'color' && /^#[0-9a-f]{6}$/i.test(profile.colorHex || '')) {
+        const swatch = element('div', 'beer-color-sample');
+        swatch.style.backgroundColor = profile.colorHex;
+        swatch.setAttribute('aria-hidden', 'true');
+        row.append(swatch);
+      }
       if (missing) {
         const scale = element('div', 'beer-scale');
         scale.setAttribute('aria-hidden', 'true');

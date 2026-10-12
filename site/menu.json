@@ -1424,19 +1424,16 @@
   ],
   "beerProfiles": {
     "beer-albeer11-05": {
-      "alcohol": null,
-      "originalDensity": null,
-      "bitterness": null,
+      "alcohol": 4.4,
+      "originalDensity": 11,
+      "bitterness": 24,
       "color": {
-        "ru": null,
-        "ro": null,
-        "en": null
+        "ru": "Светлый янтарный",
+        "ro": "Chihlimbar deschis",
+        "en": "Light amber"
       },
-      "haze": {
-        "ru": null,
-        "ro": null,
-        "en": null
-      }
+      "clarity": 4,
+      "colorHex": "#d7a254"
     },
     "beer-albeer12-05": {
       "alcohol": null,
@@ -1447,11 +1444,7 @@
         "ro": null,
         "en": null
       },
-      "haze": {
-        "ru": null,
-        "ro": null,
-        "en": null
-      }
+      "clarity": null
     },
     "beer-ipa-hasdeu-05": {
       "alcohol": null,
@@ -1462,11 +1455,7 @@
         "ro": null,
         "en": null
       },
-      "haze": {
-        "ru": null,
-        "ro": null,
-        "en": null
-      }
+      "clarity": null
     },
     "beer-ipa-weiss-05": {
       "alcohol": null,
@@ -1477,11 +1466,7 @@
         "ro": null,
         "en": null
       },
-      "haze": {
-        "ru": null,
-        "ro": null,
-        "en": null
-      }
+      "clarity": null
     }
   },
   "dishDetails": {
