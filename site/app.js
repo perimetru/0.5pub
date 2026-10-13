@@ -292,14 +292,32 @@ function renderItems() {
     for (const item of matching) {
       const row = element('article', 'menu-item');
       row.dataset.itemId = item.id;
+      const detail = data.dishDetails?.[item.id];
       row.append(element('h4', '', name(item)));
       const price = element('div', 'price', new Intl.NumberFormat({ru:'ru-MD', ro:'ro-MD', en:'en-GB'}[language], {maximumFractionDigits:2}).format(item.price) + ' ');
       price.append(element('small', '', data.currency));
+      if (detail?.image) {
+        row.classList.add('has-thumbnail');
+        const thumbnail = element('button', 'dish-thumbnail');
+        thumbnail.type = 'button';
+        thumbnail.setAttribute('aria-haspopup', 'dialog');
+        thumbnail.setAttribute('aria-label', pageCopy[language].dishPhotoMore + ': ' + name(item));
+        thumbnail.title = detail.photoCaption[language];
+        const photo = element('img', '', '');
+        photo.src = data.photoAssets?.[detail.image] || detail.image;
+        photo.alt = '';
+        photo.loading = 'lazy';
+        photo.decoding = 'async';
+        photo.width = 84;
+        photo.height = 84;
+        thumbnail.append(photo);
+        thumbnail.addEventListener('click', () => openDish(item.id));
+        row.append(thumbnail);
+      }
       row.append(price);
       let unit = text(item.unit);
       if (language !== 'ru') unit = unit.replace('порция', t.portion).replace('шт.', t.piece).replace('г', 'g').replace('мл', 'ml').replace('л', 'l');
       row.append(element('div', 'unit', item.weighted ? `${t.weight} ${unit}` : unit));
-      const detail = data.dishDetails?.[item.id];
       if (detail?.allergens) {
         const labels = detail.allergens.contains.map(code => allergenLabels[language][code]);
         const note = element('p', 'menu-allergens', labels.length ? pageCopy[language].allergenRowLabel + ' ' + labels.join(' · ') : pageCopy[language].allergenRowReview);

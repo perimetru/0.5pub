@@ -39,6 +39,8 @@
 .menu-departments button[data-department=bar][aria-pressed=true]{box-shadow:inset 0 -3px var(--accent-red)}.menu-departments button[data-department=kitchen][aria-pressed=true]{box-shadow:inset 0 -3px var(--accent-honey)}
 .dish-more{border-bottom-color:var(--accent-honey)}.dish-more:hover{border-bottom-color:var(--accent-red)}.symbol-queen{border-bottom:3px solid var(--accent-red)}.symbol-witch{border-bottom:3px solid var(--accent-honey)}.closing-link{border-bottom:2px solid var(--accent-honey)}.closing-link:hover{border-bottom-color:var(--accent-red)}
 @media(prefers-reduced-motion:reduce){.main-nav a:after,.beer-card{transition:none}}
+
+.menu-item.has-thumbnail{grid-template-columns:minmax(0,1fr) 84px auto;column-gap:14px}.has-thumbnail h4{grid-column:1;grid-row:1}.has-thumbnail .price{grid-column:3;grid-row:1}.has-thumbnail .unit,.has-thumbnail .menu-allergens,.has-thumbnail .dish-more{grid-column:1}.dish-thumbnail{grid-column:2;grid-row:1 / span 4;align-self:center;display:block;width:84px;height:84px;padding:0;border:1px solid #d5bf9a;border-radius:3px;overflow:hidden;background:var(--paper);line-height:0}.dish-thumbnail img{display:block;width:100%;height:100%;object-fit:cover}.dish-thumbnail:hover{border-color:var(--accent-red);box-shadow:0 2px 8px #48302018}@media(max-width:700px){.menu-item.has-thumbnail{grid-template-columns:minmax(0,1fr) 64px auto;column-gap:10px}.dish-thumbnail{width:64px;height:64px}}@media(max-width:360px){.menu-item.has-thumbnail{grid-template-columns:minmax(0,1fr) 54px auto;column-gap:8px}.dish-thumbnail{width:54px;height:54px}}
 </style>
 </head>
 <body>
@@ -348,14 +350,32 @@ function renderItems() {
     for (const item of matching) {
       const row = element('article', 'menu-item');
       row.dataset.itemId = item.id;
+      const detail = data.dishDetails?.[item.id];
       row.append(element('h4', '', name(item)));
       const price = element('div', 'price', new Intl.NumberFormat({ru:'ru-MD', ro:'ro-MD', en:'en-GB'}[language], {maximumFractionDigits:2}).format(item.price) + ' ');
       price.append(element('small', '', data.currency));
+      if (detail?.image) {
+        row.classList.add('has-thumbnail');
+        const thumbnail = element('button', 'dish-thumbnail');
+        thumbnail.type = 'button';
+        thumbnail.setAttribute('aria-haspopup', 'dialog');
+        thumbnail.setAttribute('aria-label', pageCopy[language].dishPhotoMore + ': ' + name(item));
+        thumbnail.title = detail.photoCaption[language];
+        const photo = element('img', '', '');
+        photo.src = data.photoAssets?.[detail.image] || detail.image;
+        photo.alt = '';
+        photo.loading = 'lazy';
+        photo.decoding = 'async';
+        photo.width = 84;
+        photo.height = 84;
+        thumbnail.append(photo);
+        thumbnail.addEventListener('click', () => openDish(item.id));
+        row.append(thumbnail);
+      }
       row.append(price);
       let unit = text(item.unit);
       if (language !== 'ru') unit = unit.replace('порция', t.portion).replace('шт.', t.piece).replace('г', 'g').replace('мл', 'ml').replace('л', 'l');
       row.append(element('div', 'unit', item.weighted ? `${t.weight} ${unit}` : unit));
-      const detail = data.dishDetails?.[item.id];
       if (detail?.allergens) {
         const labels = detail.allergens.contains.map(code => allergenLabels[language][code]);
         const note = element('p', 'menu-allergens', labels.length ? pageCopy[language].allergenRowLabel + ' ' + labels.join(' · ') : pageCopy[language].allergenRowReview);
