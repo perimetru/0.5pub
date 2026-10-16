@@ -294,6 +294,7 @@ function renderItems() {
       row.dataset.itemId = item.id;
       const detail = data.dishDetails?.[item.id];
       row.append(element('h4', '', name(item)));
+      if(item.available===false)row.append(element('span','availability',{ru:'Временно нет',ro:'Indisponibil momentan',en:'Temporarily unavailable'}[language]));
       const price = element('div', 'price', new Intl.NumberFormat({ru:'ru-MD', ro:'ro-MD', en:'en-GB'}[language], {maximumFractionDigits:2}).format(item.price) + ' ');
       price.append(element('small', '', data.currency));
       if (detail?.image) {
@@ -398,6 +399,7 @@ function renderFeaturedBeers() {
       stats.append(row);
     }
     card.append(top, element('h3', '', label), stats);
+    if(item.available===false)card.append(element('span','availability',{ru:'Временно нет',ro:'Indisponibil momentan',en:'Temporarily unavailable'}[language]));
     if (!complete) card.append(element('p', 'profile-pending', pageCopy[language].profilePending));
     card.append(bottom);
     container.append(card);
@@ -496,7 +498,21 @@ search.addEventListener('input', () => { if (data) renderItems(); });
 fetch('menu.json').then(response => {
   if (!response.ok) throw new Error(`Menu request failed: ${response.status}`);
   return response.json();
-}).then(menu => { data = menu; setLanguage(language); }).catch(() => {
+}).then(menu => {
+  data=menu;setLanguage(language);
+  async function refresh(){try{
+    const config=await fetch('connection.json',{cache:'no-store',signal:AbortSignal.timeout(5000)}).then(r=>r.json());
+    if(!/^https:\/\/[a-z0-9-]+\.[a-z0-9-]+\.workers\.dev$/.test(config.apiUrl||''))return;
+    const response=await fetch(config.apiUrl+'/menu',{cache:'no-store',signal:AbortSignal.timeout(8000)});
+    if(!response.ok)throw Error();const live=await response.json();
+    if(!Array.isArray(live.items)||!Array.isArray(live.categories)||!live.updatedAt)throw Error();
+    if(window.pubMenuUpdatedAt===live.updatedAt)return;
+    const merge=(rows,original)=>rows.map(row=>{const old=original.find(x=>x.id===row.id);return {...row,en:old&&old.ru===row.ru&&old.ro===row.ro?old.en:row.ro||row.ru}});
+    data={...menu,...live,categories:merge(live.categories,menu.categories),items:merge(live.items,menu.items)};
+    window.pubMenuUpdatedAt=live.updatedAt;window.dispatchEvent(new Event('pub-menu-updated'));setLanguage(language);
+  }catch{window.pubMenuUpdatedAt='';window.dispatchEvent(new Event('pub-menu-updated'));}}
+  refresh();setInterval(()=>{if(!document.hidden)refresh()},60000);
+}).catch(() => {
   menuFailed = true;
   itemsContainer.replaceChildren(element('p', 'empty', translations[language].error));
 });

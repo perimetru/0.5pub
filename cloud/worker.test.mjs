@@ -1,0 +1,28 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {DatabaseSync} from 'node:sqlite';
+import {readFileSync} from 'node:fs';
+import worker,{reservation,publicMenu} from './worker.mjs';
+test('cloud queue: validation, isolation, deduplication, rate limiting and durable delivery',async()=>{
+ const sql=new DatabaseSync(':memory:');sql.exec(readFileSync(new URL('./schema.sql',import.meta.url),'utf8'));
+ const wrap=(query,params=[])=>({bind:(...values)=>wrap(query,values),first:async()=>sql.prepare(query).get(...params)||null,all:async()=>({results:sql.prepare(query).all(...params)}),run:async()=>sql.prepare(query).run(...params)});
+ const DB={prepare:query=>wrap(query),batch:async statements=>{sql.exec('BEGIN');try{const rows=await Promise.all(statements.map(s=>s.run()));sql.exec('COMMIT');return rows}catch(e){sql.exec('ROLLBACK');throw e}}},env={DB,SYNC_TOKEN:'a'.repeat(48)};
+ const call=(path,method='GET',body,headers={})=>worker.fetch(new Request('https://worker.test'+path,{method,headers:{'content-type':'application/json','CF-Connecting-IP':'203.0.113.1',...headers},...(body?{body:JSON.stringify(body)}:{})}),env);
+ const auth={authorization:'Bearer '+env.SYNC_TOKEN},origin={origin:'https://05pub.md'};
+ const date=new Date(Date.now()+2*86400000).toISOString().slice(0,10);
+ const value=()=>({id:crypto.randomUUID(),name:'Test Guest',phone:'+373 79070505',date,time:'18:00',guests:2,zone:'hall',notes:'Test',consent:true});
+ assert.throws(()=>reservation({...value(),date:'2027-02-30'}));assert.throws(()=>reservation({...value(),date:'2000-01-01'}));assert.throws(()=>reservation({...value(),guests:2.5}));assert.throws(()=>reservation({...value(),consent:false}));assert.throws(()=>reservation({...value(),website:'bot'}));
+ assert.equal((await call('/sync/reservations')).status,401);assert.equal((await call('/reservations','GET')).status,404);assert.equal((await call('/reservations','POST',value(),{origin:'https://evil.test'})).status,403);
+ assert.equal((await call('/reservations','OPTIONS',null,origin)).status,204);
+ assert.equal((await call('/reservations','POST',{...value(),notes:'a'.repeat(9000)},origin)).status,413);
+ const first=value();assert.equal((await call('/reservations','POST',first,origin)).status,201);assert.equal((await call('/reservations','POST',first,origin)).status,200);
+ for(let i=0;i<4;i++)assert.equal((await call('/reservations','POST',value(),origin)).status,201);
+ assert.equal((await call('/reservations','POST',value(),origin)).status,429);
+ const queue=await(await call('/sync/reservations','GET',null,auth)).json();assert.equal(queue.reservations.length,5);assert.equal(queue.reservations.filter(x=>x.id===first.id).length,1);
+ assert.equal((await call('/sync/ack','POST',{ids:[first.id]},auth)).status,200);assert.equal((await(await call('/sync/reservations','GET',null,auth)).json()).reservations.length,4);
+ const menu={categories:[{id:'bar',ru:'Бар',ro:'Bar',route:'bar',internal:'private'}],items:[{id:'beer',category:'bar',ru:'Beer',price:35,available:false,cost:5}],staff:[{pin:'private'}]};
+ const clean=publicMenu(menu);assert.ok(!JSON.stringify(clean).includes('private'));assert.ok(!JSON.stringify(clean).includes('cost'));
+ assert.equal((await call('/sync/menu','PUT',menu,auth)).status,200);const response=await call('/menu','GET',null,origin);assert.equal(response.headers.get('access-control-allow-origin'),'https://05pub.md');const live=await response.json();assert.equal(live.items[0].available,false);assert.equal(live.items[0].price,35);assert.ok(live.updatedAt);assert.ok(!live.staff);
+ assert.equal((await call('/sync/ack','POST',{ids:['bad']},auth)).status,400);
+ sql.close();
+});

@@ -1,0 +1,17 @@
+{
+  "name": "05pub-api",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-16",
+  "account_id": "8d6eebd0e8129c8eac7457dbf11718f3",
+  "workers_dev": true,
+  "observability": {
+    "enabled": false
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "05pub",
+      "database_id": "8496a833-8b84-42bb-8019-acb6d201a304"
+    }
+  ]
+}
