@@ -226,7 +226,7 @@ let companyGuests = 4;
 const companyGroups=[
   {kind:'meat',categories:['kitchen-meat-grill','b66b5c5f-1e23-49fc-9cc5-5ad92e5c6110'],first:'k-ciolan-copt'},
   {kind:'potato',categories:['kitchen-sides-snacks'],first:'k-cartofi-fri'},
-  {kind:'fish',categories:['kitchen-fish-beer','kitchen-seafood'],first:'fish-platou'},
+  {kind:'fish',categories:['kitchen-fish-beer','kitchen-seafood'],first:'k-creveti-grill'},
   {kind:'snacks',categories:['kitchen-beer-snacks'],first:'snack-platou-bere'}
 ];
 function companyOptions(menu,kind){
@@ -241,14 +241,22 @@ function recommendCompany(menu,guests,choices={}){
   const rows=[];
   for(const group of companyGroups){
     const options=companyOptions(menu,group.kind);
-    const item=options.find(i=>i.id===choices[group.kind])||options.find(i=>i.id===group.first)||options[0];
-    if(!item)continue;
-    const whole=item.id==='k-ciolan-copt'||item.id==='k-dorado';
-    const grams=!whole&&(item.weighted||/\d+\s*(г|g)/i.test(item.unit||''));
-    const qty=whole?Math.ceil(guests/4):grams?guests*(group.kind==='meat'?150:50):Math.ceil(guests/(group.kind==='meat'||group.kind==='potato'?2:4));
-    rows.push({item,kind:group.kind,qty,unit:whole?'pieces':grams?'grams':'portions'});
+    const selected=choices[group.kind]||[];
+    const primary=options.find(i=>i.id===selected[0]?.id)||options.find(i=>i.id===group.first)||options[0];
+    if(!primary)continue;
+    const items=[primary,...selected.slice(1).map(c=>options.find(i=>i.id===c.id)).filter(Boolean)];
+    const seen=new Set();
+    for(const item of items){
+      if(seen.has(item.id))continue;seen.add(item.id);
+      const whole=item.id==='k-ciolan-copt'||item.id==='k-dorado';
+      const grams=!whole&&(item.weighted||/\d+\s*(г|g)/i.test(item.unit||''));
+      const suggested=whole?Math.ceil(guests/4):grams?guests*(group.kind==='meat'?150:50):Math.ceil(guests/(group.kind==='meat'||group.kind==='potato'?2:4));
+      const manual=selected.find(c=>c.id===item.id)?.qty;
+      const qty=Number.isInteger(manual)&&manual>0&&manual<=(grams?10000:50)?manual:suggested;
+      rows.push({item,kind:group.kind,qty,manual:qty===manual,unit:whole?'pieces':grams?'grams':'portions'});
+    }
   }
-  return {rows,incomplete:rows.length<companyGroups.length};
+  return {rows,incomplete:companyGroups.some(g=>!rows.some(r=>r.kind===g.kind))};
 }
 function mergeCompanyNotes(existing,previous,next){
   const index=previous?existing.indexOf(previous):-1;
@@ -261,6 +269,10 @@ const companyCopy={
   ro:{eyebrow:'0.5 PUB · LA ACEEAȘI MASĂ',title:'Meniu pentru prieteni',intro:'Mai multe preparate la comun, ca fiecare să guste din toate. Alegeți numărul de persoane și schimbați preparatele după preferințe.',people:'pers.',selection:'Număr de persoane',heading:n=>'Pentru un grup de '+n+' persoane',meat:'Carne',potato:'Cartofi și altele',fish:'Pește și fructe de mare',snacks:'Gustări',portions:n=>n+' '+(n===1?'porție':'porții'),pieces:n=>n+' buc. (greutatea se confirmă)',grams:n=>'≈ '+n+' g',note:'Cantități orientative pentru degustare la masa comună. Greutatea preparatelor întregi și meniul final se stabilesc la confirmarea rezervării. Pentru alergii, verificați ingredientele cu personalul.',loading:'Încărcăm meniul actual…',offline:'Nu am putut verifica disponibilitatea. Sună-ne și te ajutăm.',partial:'Nu toate grupurile au preparate disponibile. Verificați meniul telefonic.',empty:'Nu putem alcătui o sugestie acum. Sună-ne.',browse:'Vezi tot meniul',change:'Schimbă',close:'Închide',choose:'Alege un preparat',send:'Trimite la rezervare',hint:'Lista va fi adăugată în comentariu. Apoi completați data, ora și contactele — nu este încă o comandă.',sent:'Meniul a fost adăugat în comentariu. Completați data, ora și contactele.',full:'Nu este suficient loc în comentariu. Scurtați-l pentru a adăuga meniul (limita: 500 de caractere).',locked:'Rezervarea a fost deja trimisă. Pentru schimbarea meniului, sunați-ne.',noteTitle:n=>'Masă comună, '+n+' pers. (orientativ):'},
   en:{eyebrow:'0.5 PUB · AROUND ONE TABLE',title:'Food for your group',intro:'Different dishes for the table, so everyone can try a little of everything. Choose your group size and swap dishes to taste.',people:'guests',selection:'Number of guests',heading:n=>'For a group of '+n,meat:'Meat',potato:'Potatoes and sides',fish:'Fish and seafood',snacks:'Snacks',portions:n=>n+' '+(n===1?'portion':'portions'),pieces:n=>n+' pcs (weight to confirm)',grams:n=>'≈ '+n+' g',note:'Approximate quantities for sharing and tasting. Whole-dish weights and the final menu will be agreed when your booking is confirmed. Please check ingredients with staff if you have allergies.',loading:'Loading the current menu…',offline:'We could not check availability. Call us for help choosing.',partial:'Some groups have no available dishes. Please call to discuss the menu.',empty:'We cannot suggest a menu right now. Please call us.',browse:'Explore the full menu',change:'Swap',close:'Close',choose:'Choose a dish',send:'Add to reservation',hint:'The list will go into the booking comment. Then enter your date, time and contact details — this is not an order yet.',sent:'Menu added to the booking comment. Enter your date, time and contact details.',full:'There is not enough space in the comment. Shorten it to add the menu (500 character limit).',locked:'Your booking has already been sent. Please call us to change the menu.',noteTitle:n=>'Shared table, '+n+' guests (approx.):'}
 };
+Object.assign(companyCopy.ru,{add:'Добавить блюдо',remove:'Убрать блюдо',quantity:'Количество',less:'Уменьшить',more:'Увеличить'});
+Object.assign(companyCopy.ro,{add:'Adaugă un preparat',remove:'Elimină preparatul',quantity:'Cantitate',less:'Micșorează',more:'Mărește'});
+Object.assign(companyCopy.en,{add:'Add a dish',remove:'Remove dish',quantity:'Quantity',less:'Decrease',more:'Increase'});
+let companyPickerIndex=null;
 let companyChoices={},companyPickerKind=null,companyPickerCategory=null,previousCompanyNote='',companyFeedback='';
 const companyPicker=document.querySelector('#company-picker');
 function companyQuantity(row){return companyCopy[language][row.unit](row.qty)}
@@ -270,15 +282,16 @@ function renderCompanyPicker(){
   companyPicker.querySelector('h2').textContent=t.choose+' · '+t[companyPickerKind];
   companyPicker.querySelector('.company-close').textContent=t.close;
   const tabs=companyPicker.querySelector('.company-picker-tabs'),list=companyPicker.querySelector('.company-options');tabs.replaceChildren();list.replaceChildren();
-  const options=data&&window.pubMenuUpdatedAt?companyOptions(data,companyPickerKind):[];
+  const selected=companyChoices[companyPickerKind]||[];
+  const options=data&&window.pubMenuUpdatedAt?companyOptions(data,companyPickerKind).filter(i=>!selected.some((c,index)=>c.id===i.id&&index!==companyPickerIndex)):[];
   const categories=data?.categories.filter(c=>options.some(i=>i.category===c.id))||[];
   if(!categories.some(c=>c.id===companyPickerCategory))companyPickerCategory=categories[0]?.id;
   for(const c of categories){const b=element('button','',name(c));b.type='button';b.setAttribute('aria-pressed',String(c.id===companyPickerCategory));b.onclick=()=>{companyPickerCategory=c.id;renderCompanyPicker()};tabs.append(b)}
   if(!options.length)list.append(element('p','',t.offline));
   for(const item of options.filter(i=>i.category===companyPickerCategory)){
-    const b=element('button','company-option');b.type='button';b.setAttribute('aria-pressed',String(companyChoices[companyPickerKind]===item.id));
+    const b=element('button','company-option');b.type='button';b.setAttribute('aria-pressed',String(selected[companyPickerIndex]?.id===item.id));
     b.append(element('span','',name(item)),element('small','',item.price+' '+(data.currency||'MDL')+' / '+(item.unit||'')));
-    b.onclick=()=>{companyChoices[companyPickerKind]=item.id;companyFeedback='';companyPicker.close();renderCompany()};list.append(b);
+    b.onclick=()=>{if(companyPickerIndex===null)selected.push({id:item.id});else selected[companyPickerIndex]={id:item.id};companyChoices[companyPickerKind]=selected;companyFeedback='';companyPicker.close();renderCompany()};list.append(b);
   }
 }
 function renderCompany(){
@@ -292,12 +305,31 @@ function renderCompany(){
   const list=root.querySelector('.company-list'),status=root.querySelector('.company-status'),send=root.querySelector('.company-send');list.replaceChildren();send.disabled=true;
   if(!data||!window.pubMenuUpdatedAt){status.textContent=window.pubMenuUpdatedAt===''?t.offline:t.loading;if(companyPicker.open)renderCompanyPicker();return}
   const result=recommendCompany(data,companyGuests,companyChoices);status.textContent=!result.rows.length?t.empty:result.incomplete?t.partial:'';send.disabled=result.incomplete;
-  for(const row of result.rows){
-    companyChoices[row.kind]=row.item.id;
-    const li=element('li','company-row'),label=element('div','company-dish'),title=element('button','company-dish-name',name(row.item));
-    title.type='button';title.setAttribute('aria-label',name(row.item)+' — '+t.change);
-    title.onclick=()=>{companyPickerKind=row.kind;companyPickerCategory=row.item.category;renderCompanyPicker();companyPicker.showModal()};
-    const change=element('button','company-change',t.change);change.type='button';change.onclick=title.onclick;label.append(element('small','',t[row.kind]),title,change);li.append(label,element('strong','company-qty',companyQuantity(row)));list.append(li);
+  for(const group of companyGroups){
+    const rows=result.rows.filter(r=>r.kind===group.kind);
+    companyChoices[group.kind]=rows.map(r=>({id:r.item.id,...(r.manual?{qty:r.qty}:{})}));
+    for(const [index,row] of rows.entries()){
+      const li=element('li','company-row'),label=element('div','company-dish'),title=element('button','company-dish-name',name(row.item));
+      title.type='button';title.setAttribute('aria-label',name(row.item)+' — '+t.change);
+      title.onclick=()=>{companyPickerKind=row.kind;companyPickerIndex=index;companyPickerCategory=row.item.category;renderCompanyPicker();companyPicker.showModal()};
+      const change=element('button','company-change',t.change);change.type='button';change.onclick=title.onclick;
+      label.append(element('small','',t[row.kind]),title,change);
+      const controls=element('div','company-controls'),quantity=element('div','company-stepper'),input=element('input','company-count');
+      const step=row.unit==='grams'?50:1,max=row.unit==='grams'?10000:50;
+      input.type='number';input.min=String(step);input.max=String(max);input.step=String(step);input.value=String(row.qty);input.setAttribute('aria-label',t.quantity+' — '+name(row.item));
+      const update=value=>{row.qty=Math.min(max,Math.max(step,Math.round((Number(value)||step)/step)*step));companyChoices[row.kind][index].qty=row.qty;input.value=String(row.qty);controls.querySelector('.company-qty').textContent=companyQuantity(row);minus.disabled=row.qty<=step;plus.disabled=row.qty>=max;companyFeedback='';root.querySelector('.company-feedback').textContent=''};
+      input.onchange=()=>update(input.value);
+      const minus=element('button','','−'),plus=element('button','','+');minus.type=plus.type='button';
+      minus.setAttribute('aria-label',t.less+' — '+name(row.item));plus.setAttribute('aria-label',t.more+' — '+name(row.item));
+      minus.disabled=row.qty<=step;plus.disabled=row.qty>=max;minus.onclick=()=>update(row.qty-step);plus.onclick=()=>update(row.qty+step);
+      quantity.append(minus,input,plus);controls.append(element('strong','company-qty',companyQuantity(row)),quantity);
+      if(index>0){const remove=element('button','company-change',t.remove);remove.type='button';remove.onclick=()=>{companyChoices[row.kind].splice(index,1);companyFeedback='';renderCompany()};controls.append(remove)}
+      li.append(label,controls);list.append(li);
+    }
+    if(companyOptions(data,group.kind).some(i=>!rows.some(r=>r.item.id===i.id))){
+      const li=element('li','company-add-row'),add=element('button','company-add','+ '+t.add+' · '+t[group.kind]);add.type='button';
+      add.onclick=()=>{companyPickerKind=group.kind;companyPickerIndex=null;companyPickerCategory=rows[0]?.item.category;renderCompanyPicker();companyPicker.showModal()};li.append(add);list.append(li);
+    }
   }
   if(companyPicker.open)renderCompanyPicker();
 }
