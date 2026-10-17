@@ -1,3 +1,4 @@
+import {backups} from './backups.mjs';
 const ORIGINS = ['https://05pub.md', 'https://www.05pub.md', 'https://perimetru.github.io'];
 const uuid = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
 function fail(status, message) { throw Object.assign(new Error(message), {status}); }
@@ -61,6 +62,7 @@ export default {
       if(!env.DB)fail(503,'Database is not configured');
       if(path.startsWith('/sync/')) {
         await authorized(request,env);
+        if(path==='/sync/backups'||path.startsWith('/sync/backups/')){delete headers['Access-Control-Allow-Origin'];return await backups(request,env.BACKUPS,reply)}
         if(path==='/sync/menu'&&request.method==='PUT') {
           const menu=publicMenu(await read(request,1000000)),updatedAt=new Date().toISOString();
           await env.DB.prepare('INSERT INTO menu(id,payload,updated_at) VALUES(1,?,?) ON CONFLICT(id) DO UPDATE SET payload=excluded.payload, updated_at=excluded.updated_at').bind(JSON.stringify(menu),updatedAt).run();

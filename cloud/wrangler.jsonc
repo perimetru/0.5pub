@@ -13,5 +13,11 @@
       "database_name": "05pub",
       "database_id": "8496a833-8b84-42bb-8019-acb6d201a304"
     }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BACKUPS",
+      "bucket_name": "restoflow-backups"
+    }
   ]
 }
