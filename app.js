@@ -214,6 +214,15 @@ const heroCopy = {
     "label": "GOOD BEER DESERVES GOOD FOOD"
   }
 };
+Object.assign(translations.ru,{navCompany:'Составить меню',navToggle:'Навигация'});
+Object.assign(translations.ro,{navCompany:'Compune meniul',navToggle:'Navigare'});
+Object.assign(translations.en,{navCompany:'Build your menu',navToggle:'Navigation'});
+const navToggle=document.querySelector('.nav-toggle'),pageNavigation=document.querySelector('#page-navigation');
+function closeNavigation(){document.body.classList.remove('nav-open');navToggle.setAttribute('aria-expanded','false')}
+navToggle.onclick=()=>{const open=document.body.classList.toggle('nav-open');navToggle.setAttribute('aria-expanded',String(open))};
+pageNavigation.querySelectorAll('a').forEach(link=>link.addEventListener('click',closeNavigation));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('nav-open')){closeNavigation();navToggle.focus()}});
+document.addEventListener('click',e=>{if(!pageNavigation.contains(e.target)&&!navToggle.contains(e.target))closeNavigation()});
 for (const lang of Object.keys(heroCopy)) Object.assign(translations[lang], heroCopy[lang]);
 let language = 'ru';
 let category = 'all';
