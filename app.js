@@ -223,39 +223,98 @@ let menuFailed = false;
 let currentDish = null;
 let companyGuests = 4;
 
-function recommendCompany(menu,guests) {
-  if(![4,8,10,12].includes(guests))throw new Error('Unsupported company size');
+const companyGroups=[
+  {kind:'meat',categories:['kitchen-meat-grill','b66b5c5f-1e23-49fc-9cc5-5ad92e5c6110'],first:'k-ciolan-copt'},
+  {kind:'potato',categories:['kitchen-sides-snacks'],first:'k-cartofi-fri'},
+  {kind:'fish',categories:['kitchen-fish-beer','kitchen-seafood'],first:'fish-platou'},
+  {kind:'snacks',categories:['kitchen-beer-snacks'],first:'snack-platou-bere'}
+];
+function companyOptions(menu,kind){
+  const group=companyGroups.find(g=>g.kind===kind);
   const kitchen=new Set(menu.categories.filter(c=>c.route==='kitchen').map(c=>c.id));
-  const slots=[
-    {kind:'main',qty:guests/2,ids:['k-aripioare-bbq','k-aripioare-fresnel','k-buffalo-wings']},
-    {kind:'main',qty:guests/2,ids:['k-frigarui-pui','k-nughete-pui','k-burger-pui','k-burger']},
-    {kind:'side',qty:Math.ceil(guests/2),ids:['k-cartofi-fri','f3b63276-a013-42a5-b613-ecdf6604dd3c','b59d9f46-df3e-4447-9300-8e9ebfef1358','k-inele-ceapa']},
-    {kind:'vegetables',qty:Math.ceil(guests/4),ids:['709465b2-127c-4abb-b107-688332a18b7c','k-varza-murata']},
-    {kind:'sharing',qty:Math.ceil(guests/4),ids:['snack-platou-bere','k-farfurie-asorti','03d13dd5-c8f5-485d-98ff-5b7027ccb9e7','snack-suluguni']}
-  ];
-  const rows=[];
-  for(const slot of slots){const item=slot.ids.map(id=>menu.items.find(i=>i.id===id)).find(i=>i&&kitchen.has(i.category)&&i.available!==false&&!i.weighted&&/порци|por[țt]i|portion/i.test(i.unit||''));if(item)rows.push({item,kind:slot.kind,qty:slot.qty})}
-  return {rows,incomplete:rows.length<slots.length};
+  // These vegetable dishes share the meat category in RestoFlow.
+  const vegetables=['709465b2-127c-4abb-b107-688332a18b7c','b88f9d87-7023-4985-b5e6-5ab7eeb0e3e7'];
+  return menu.items.filter(i=>group.categories.includes(i.category)&&kitchen.has(i.category)&&i.available!==false&&!vegetables.includes(i.id));
 }
-
+function recommendCompany(menu,guests,choices={}){
+  if(![4,8,10,12].includes(guests))throw new Error('Unsupported company size');
+  const rows=[];
+  for(const group of companyGroups){
+    const options=companyOptions(menu,group.kind);
+    const item=options.find(i=>i.id===choices[group.kind])||options.find(i=>i.id===group.first)||options[0];
+    if(!item)continue;
+    const whole=item.id==='k-ciolan-copt'||item.id==='k-dorado';
+    const grams=!whole&&(item.weighted||/\d+\s*(г|g)/i.test(item.unit||''));
+    const qty=whole?Math.ceil(guests/4):grams?guests*(group.kind==='meat'?150:50):Math.ceil(guests/(group.kind==='meat'||group.kind==='potato'?2:4));
+    rows.push({item,kind:group.kind,qty,unit:whole?'pieces':grams?'grams':'portions'});
+  }
+  return {rows,incomplete:rows.length<companyGroups.length};
+}
+function mergeCompanyNotes(existing,previous,next){
+  const index=previous?existing.indexOf(previous):-1;
+  const personal=(index<0?existing:existing.slice(0,index)+existing.slice(index+previous.length)).trim();
+  const merged=[personal,next].filter(Boolean).join('\n\n');
+  return merged.length<=500?merged:null;
+}
 const companyCopy={
-  ru:{eyebrow:'0.5 PUB · ЗА ОДНИМ СТОЛОМ',title:'Меню для компании',intro:'Сколько вас будет? Подскажем, что взять на всех.',people:'чел.',selection:'Количество гостей',heading:n=>'На компанию из '+n+' человек',main:'Горячее',side:'Гарнир',vegetables:'Овощи',sharing:'Закуска на общий стол',portions:n=>n+' '+({one:'порция',few:'порции',many:'порций',other:'порции'}[new Intl.PluralRules('ru').select(n)]),note:'Пример для общего стола. Количество порций ориентировочное: учитывайте аппетит и пожелания гостей. При аллергии уточните состав у сотрудника.',loading:'Загружаем актуальное меню…',offline:'Не удалось проверить наличие блюд. Позвоните нам — поможем составить меню.',partial:'Часть блюд сейчас недоступна. Этот список неполный — уточните дополнения у сотрудника.',empty:'Сейчас не можем составить рекомендацию. Позвоните нам — подберём меню вместе.',browse:'Посмотреть всё меню',details:'Подробнее о блюде'},
-  ro:{eyebrow:'0.5 PUB · LA ACEEAȘI MASĂ',title:'Meniu pentru prieteni',intro:'Câți veți fi? Îți sugerăm ce să alegeți pentru toți.',people:'pers.',selection:'Număr de persoane',heading:n=>'Pentru un grup de '+n+' persoane',main:'Fel principal',side:'Garnitură',vegetables:'Legume',sharing:'Gustare de împărțit',portions:n=>n+' '+(n===1?'porție':'porții'),note:'O sugestie pentru masa comună. Numărul de porții este orientativ: țineți cont de pofta și preferințele oaspeților. Pentru alergii, verificați ingredientele cu personalul.',loading:'Încărcăm meniul actual…',offline:'Nu am putut verifica disponibilitatea preparatelor. Sună-ne și te ajutăm să alegi meniul.',partial:'Unele preparate nu sunt disponibile. Lista este incompletă — discutați completările cu personalul.',empty:'Nu putem alcătui o sugestie acum. Sună-ne și alegem meniul împreună.',browse:'Vezi tot meniul',details:'Detalii despre preparat'},
-  en:{eyebrow:'0.5 PUB · AROUND ONE TABLE',title:'Food for your group',intro:'How many are coming? Here is an idea of what to share.',people:'guests',selection:'Number of guests',heading:n=>'For a group of '+n,main:'Main course',side:'Side dish',vegetables:'Vegetables',sharing:'A snack to share',portions:n=>n+' '+(n===1?'portion':'portions'),note:'A suggestion for a shared table. Portions are a guide: consider your guests’ appetites and preferences. Please check ingredients with staff if you have allergies.',loading:'Loading the current menu…',offline:'We could not check dish availability. Call us and we will help you choose.',partial:'Some dishes are unavailable. This is a partial list — please ask staff about additions.',empty:'We cannot suggest a menu right now. Call us and we will help you choose.',browse:'Explore the full menu',details:'Dish details'}
+  ru:{eyebrow:'0.5 PUB · ЗА ОДНИМ СТОЛОМ',title:'Меню для компании',intro:'Несколько разных блюд на общий стол — чтобы каждый попробовал понемногу. Выберите количество гостей и замените блюда по вкусу.',people:'чел.',selection:'Количество гостей',heading:n=>'На компанию из '+n+' человек',meat:'Мясное',potato:'Картофель и другое',fish:'Рыба и морепродукты',snacks:'Закуски',portions:n=>n+' '+({one:'порция',few:'порции',many:'порций',other:'порции'}[new Intl.PluralRules('ru').select(n)]),pieces:n=>n+' шт. (вес уточним)',grams:n=>'≈ '+n+' г',note:'Количество ориентировочное, для дегустации на общий стол. Вес целых блюд и окончательный состав согласуем при подтверждении брони. При аллергии уточните состав у сотрудника.',loading:'Загружаем актуальное меню…',offline:'Не удалось проверить наличие блюд. Позвоните нам — поможем составить меню.',partial:'Не во всех группах есть доступные блюда. Уточните меню по телефону.',empty:'Сейчас не можем составить рекомендацию. Позвоните нам.',browse:'Посмотреть всё меню',change:'Заменить',close:'Закрыть',choose:'Выберите блюдо',send:'Отправить на резервацию',hint:'Список попадёт в комментарий. Затем укажите дату, время и контакты — это ещё не заказ.',sent:'Меню добавлено в комментарий к брони. Заполните дату, время и контакты.',full:'В комментарии недостаточно места. Сократите его, чтобы добавить меню (лимит 500 символов).',locked:'Бронь уже отправлена. Чтобы изменить меню, свяжитесь с нами.',noteTitle:n=>'Общий стол, '+n+' чел. (примерно):'},
+  ro:{eyebrow:'0.5 PUB · LA ACEEAȘI MASĂ',title:'Meniu pentru prieteni',intro:'Mai multe preparate la comun, ca fiecare să guste din toate. Alegeți numărul de persoane și schimbați preparatele după preferințe.',people:'pers.',selection:'Număr de persoane',heading:n=>'Pentru un grup de '+n+' persoane',meat:'Carne',potato:'Cartofi și altele',fish:'Pește și fructe de mare',snacks:'Gustări',portions:n=>n+' '+(n===1?'porție':'porții'),pieces:n=>n+' buc. (greutatea se confirmă)',grams:n=>'≈ '+n+' g',note:'Cantități orientative pentru degustare la masa comună. Greutatea preparatelor întregi și meniul final se stabilesc la confirmarea rezervării. Pentru alergii, verificați ingredientele cu personalul.',loading:'Încărcăm meniul actual…',offline:'Nu am putut verifica disponibilitatea. Sună-ne și te ajutăm.',partial:'Nu toate grupurile au preparate disponibile. Verificați meniul telefonic.',empty:'Nu putem alcătui o sugestie acum. Sună-ne.',browse:'Vezi tot meniul',change:'Schimbă',close:'Închide',choose:'Alege un preparat',send:'Trimite la rezervare',hint:'Lista va fi adăugată în comentariu. Apoi completați data, ora și contactele — nu este încă o comandă.',sent:'Meniul a fost adăugat în comentariu. Completați data, ora și contactele.',full:'Nu este suficient loc în comentariu. Scurtați-l pentru a adăuga meniul (limita: 500 de caractere).',locked:'Rezervarea a fost deja trimisă. Pentru schimbarea meniului, sunați-ne.',noteTitle:n=>'Masă comună, '+n+' pers. (orientativ):'},
+  en:{eyebrow:'0.5 PUB · AROUND ONE TABLE',title:'Food for your group',intro:'Different dishes for the table, so everyone can try a little of everything. Choose your group size and swap dishes to taste.',people:'guests',selection:'Number of guests',heading:n=>'For a group of '+n,meat:'Meat',potato:'Potatoes and sides',fish:'Fish and seafood',snacks:'Snacks',portions:n=>n+' '+(n===1?'portion':'portions'),pieces:n=>n+' pcs (weight to confirm)',grams:n=>'≈ '+n+' g',note:'Approximate quantities for sharing and tasting. Whole-dish weights and the final menu will be agreed when your booking is confirmed. Please check ingredients with staff if you have allergies.',loading:'Loading the current menu…',offline:'We could not check availability. Call us for help choosing.',partial:'Some groups have no available dishes. Please call to discuss the menu.',empty:'We cannot suggest a menu right now. Please call us.',browse:'Explore the full menu',change:'Swap',close:'Close',choose:'Choose a dish',send:'Add to reservation',hint:'The list will go into the booking comment. Then enter your date, time and contact details — this is not an order yet.',sent:'Menu added to the booking comment. Enter your date, time and contact details.',full:'There is not enough space in the comment. Shorten it to add the menu (500 character limit).',locked:'Your booking has already been sent. Please call us to change the menu.',noteTitle:n=>'Shared table, '+n+' guests (approx.):'}
 };
+let companyChoices={},companyPickerKind=null,companyPickerCategory=null,previousCompanyNote='',companyFeedback='';
+const companyPicker=document.querySelector('#company-picker');
+function companyQuantity(row){return companyCopy[language][row.unit](row.qty)}
+function renderCompanyPicker(){
+  if(!companyPickerKind)return;
+  const t=companyCopy[language];
+  companyPicker.querySelector('h2').textContent=t.choose+' · '+t[companyPickerKind];
+  companyPicker.querySelector('.company-close').textContent=t.close;
+  const tabs=companyPicker.querySelector('.company-picker-tabs'),list=companyPicker.querySelector('.company-options');tabs.replaceChildren();list.replaceChildren();
+  const options=data&&window.pubMenuUpdatedAt?companyOptions(data,companyPickerKind):[];
+  const categories=data?.categories.filter(c=>options.some(i=>i.category===c.id))||[];
+  if(!categories.some(c=>c.id===companyPickerCategory))companyPickerCategory=categories[0]?.id;
+  for(const c of categories){const b=element('button','',name(c));b.type='button';b.setAttribute('aria-pressed',String(c.id===companyPickerCategory));b.onclick=()=>{companyPickerCategory=c.id;renderCompanyPicker()};tabs.append(b)}
+  if(!options.length)list.append(element('p','',t.offline));
+  for(const item of options.filter(i=>i.category===companyPickerCategory)){
+    const b=element('button','company-option');b.type='button';b.setAttribute('aria-pressed',String(companyChoices[companyPickerKind]===item.id));
+    b.append(element('span','',name(item)),element('small','',item.price+' '+(data.currency||'MDL')+' / '+(item.unit||'')));
+    b.onclick=()=>{companyChoices[companyPickerKind]=item.id;companyFeedback='';companyPicker.close();renderCompany()};list.append(b);
+  }
+}
 function renderCompany(){
-  const t=companyCopy[language],root=document.querySelector('#company');
-  if(!root)return;
+  const t=companyCopy[language],root=document.querySelector('#company');if(!root)return;
   root.querySelector('.eyebrow').textContent=t.eyebrow;root.querySelector('h2').textContent=t.title;root.querySelector('.company-intro').textContent=t.intro;
   root.querySelector('.company-sizes').setAttribute('aria-label',t.selection);
   root.querySelectorAll('[data-company-size]').forEach(b=>{b.textContent=b.dataset.companySize+' '+t.people;b.setAttribute('aria-pressed',String(Number(b.dataset.companySize)===companyGuests))});
   root.querySelector('h3').textContent=t.heading(companyGuests);root.querySelector('.company-note').textContent=t.note;root.querySelector('.company-browse').textContent=t.browse;
-  const list=root.querySelector('ul'),status=root.querySelector('[role=status]');list.replaceChildren();
-  if(!data||!window.pubMenuUpdatedAt){status.textContent=window.pubMenuUpdatedAt===''?t.offline:t.loading;return}
-  const result=recommendCompany(data,companyGuests);status.textContent=!result.rows.length?t.empty:result.incomplete?t.partial:'';
-  for(const {item,kind,qty} of result.rows){const row=element('li','company-row'),label=element('div','company-dish'),detail=data.dishDetails?.[item.id];label.append(element('small','',t[kind]));const title=element(detail?'button':'span','company-dish-name',name(item));if(detail){title.type='button';title.setAttribute('aria-label',name(item)+' — '+t.details);title.onclick=()=>openDish(item.id)}label.append(title);row.append(label,element('strong','company-qty',t.portions(qty)));list.append(row)}
+  root.querySelector('.company-send').textContent=t.send;root.querySelector('.company-hint').textContent=t.hint;
+  root.querySelector('.company-feedback').textContent=companyFeedback?t[companyFeedback]:'';
+  const list=root.querySelector('.company-list'),status=root.querySelector('.company-status'),send=root.querySelector('.company-send');list.replaceChildren();send.disabled=true;
+  if(!data||!window.pubMenuUpdatedAt){status.textContent=window.pubMenuUpdatedAt===''?t.offline:t.loading;if(companyPicker.open)renderCompanyPicker();return}
+  const result=recommendCompany(data,companyGuests,companyChoices);status.textContent=!result.rows.length?t.empty:result.incomplete?t.partial:'';send.disabled=result.incomplete;
+  for(const row of result.rows){
+    companyChoices[row.kind]=row.item.id;
+    const li=element('li','company-row'),label=element('div','company-dish'),title=element('button','company-dish-name',name(row.item));
+    title.type='button';title.setAttribute('aria-label',name(row.item)+' — '+t.change);
+    title.onclick=()=>{companyPickerKind=row.kind;companyPickerCategory=row.item.category;renderCompanyPicker();companyPicker.showModal()};
+    const change=element('button','company-change',t.change);change.type='button';change.onclick=title.onclick;label.append(element('small','',t[row.kind]),title,change);li.append(label,element('strong','company-qty',companyQuantity(row)));list.append(li);
+  }
+  if(companyPicker.open)renderCompanyPicker();
 }
-document.querySelectorAll('[data-company-size]').forEach(b=>b.addEventListener('click',()=>{companyGuests=Number(b.dataset.companySize);renderCompany()}));
+document.querySelectorAll('[data-company-size]').forEach(b=>b.addEventListener('click',()=>{companyGuests=Number(b.dataset.companySize);companyFeedback='';renderCompany()}));
+companyPicker.querySelector('.company-close').onclick=()=>companyPicker.close();
+companyPicker.addEventListener('click',e=>{if(e.target===companyPicker)companyPicker.close()});
+document.querySelector('.company-send').onclick=()=>{
+  const form=document.querySelector('#booking-form'),t=companyCopy[language];
+  if(form.elements.notes.disabled){companyFeedback='locked';renderCompany();return}
+  if(!data||!window.pubMenuUpdatedAt)return;
+  const result=recommendCompany(data,companyGuests,companyChoices);if(result.incomplete)return;
+  const note=[t.noteTitle(companyGuests),...result.rows.map(row=>name(row.item)+' — '+companyQuantity(row))].join('\n');
+  const merged=mergeCompanyNotes(form.elements.notes.value,previousCompanyNote,note);
+  if(merged===null){companyFeedback='full';renderCompany();return}
+  form.elements.notes.value=merged;form.elements.guests.value=String(companyGuests);previousCompanyNote=note;companyFeedback='sent';renderCompany();
+  document.querySelector('#booking').scrollIntoView({behavior:'smooth',block:'start'});form.elements.date.focus({preventScroll:true});
+};
 window.addEventListener('pub-menu-updated',renderCompany);
 const dishDialog = document.querySelector('#dish-dialog');
 const search = document.querySelector('#search');
