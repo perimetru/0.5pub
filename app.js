@@ -318,7 +318,7 @@ function renderCompany(){
       const step=row.unit==='grams'?50:1,max=row.unit==='grams'?10000:50;
       input.type='number';input.min=String(step);input.max=String(max);input.step=String(step);input.value=String(row.qty);input.setAttribute('aria-label',t.quantity+' — '+name(row.item));
       const update=value=>{row.qty=Math.min(max,Math.max(step,Math.round((Number(value)||step)/step)*step));companyChoices[row.kind][index].qty=row.qty;input.value=String(row.qty);controls.querySelector('.company-qty').textContent=companyQuantity(row);minus.disabled=row.qty<=step;plus.disabled=row.qty>=max;companyFeedback='';root.querySelector('.company-feedback').textContent=''};
-      input.onchange=()=>update(input.value);
+      input.oninput=()=>{if(input.value!==''&&input.validity.valid)update(input.value)};input.onchange=()=>update(input.value);
       const minus=element('button','','−'),plus=element('button','','+');minus.type=plus.type='button';
       minus.setAttribute('aria-label',t.less+' — '+name(row.item));plus.setAttribute('aria-label',t.more+' — '+name(row.item));
       minus.disabled=row.qty<=step;plus.disabled=row.qty>=max;minus.onclick=()=>update(row.qty-step);plus.onclick=()=>update(row.qty+step);
