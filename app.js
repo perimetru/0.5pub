@@ -214,9 +214,9 @@ const heroCopy = {
     "label": "GOOD BEER DESERVES GOOD FOOD"
   }
 };
-Object.assign(translations.ru,{navCompany:'Составить меню',navToggle:'Навигация'});
-Object.assign(translations.ro,{navCompany:'Compune meniul',navToggle:'Navigare'});
-Object.assign(translations.en,{navCompany:'Build your menu',navToggle:'Navigation'});
+Object.assign(pageCopy.ru,{navCompany:'Составить меню',navToggle:'Навигация'});
+Object.assign(pageCopy.ro,{navCompany:'Compune meniul',navToggle:'Navigare'});
+Object.assign(pageCopy.en,{navCompany:'Build your menu',navToggle:'Navigation'});
 const navToggle=document.querySelector('.nav-toggle'),pageNavigation=document.querySelector('#page-navigation');
 function closeNavigation(){document.body.classList.remove('nav-open');navToggle.setAttribute('aria-expanded','false')}
 navToggle.onclick=()=>{const open=document.body.classList.toggle('nav-open');navToggle.setAttribute('aria-expanded',String(open))};
@@ -611,6 +611,7 @@ function setLanguage(next) {
   document.querySelector('meta[name=description]').content = `${t.footer} ${t.currency}.`;
   const heading = document.querySelector('#hero-title');
   heading.replaceChildren(document.createTextNode(t.title[0]), document.createElement('br'), element('em', '', t.title[1]), document.createElement('br'), document.createTextNode(t.title[2]));
+  navToggle.setAttribute('aria-label',pageCopy[language].navToggle);
   document.querySelector('.main-nav').setAttribute('aria-label', {ru:'Навигация', ro:'Navigare', en:'Navigation'}[language]);
   for (const node of document.querySelectorAll('[data-copy]')) {
     const lines = pageCopy[language][node.dataset.copy].split('\n');
