@@ -242,6 +242,7 @@ function recommendCompany(menu,guests,choices={}){
   for(const group of companyGroups){
     const options=companyOptions(menu,group.kind);
     const selected=choices[group.kind]||[];
+    if(choices[group.kind]&&selected.length===0)continue;
     const primary=options.find(i=>i.id===selected[0]?.id)||options.find(i=>i.id===group.first)||options[0];
     if(!primary)continue;
     const items=[primary,...selected.slice(1).map(c=>options.find(i=>i.id===c.id)).filter(Boolean)];
@@ -256,7 +257,7 @@ function recommendCompany(menu,guests,choices={}){
       rows.push({item,kind:group.kind,qty,manual:qty===manual,unit:whole?'pieces':grams?'grams':'portions'});
     }
   }
-  return {rows,incomplete:companyGroups.some(g=>!rows.some(r=>r.kind===g.kind))};
+  return {rows,incomplete:companyGroups.some(g=>choices[g.kind]?.length!==0&&!rows.some(r=>r.kind===g.kind))};
 }
 function mergeCompanyNotes(existing,previous,next){
   const index=previous?existing.indexOf(previous):-1;
@@ -269,9 +270,9 @@ const companyCopy={
   ro:{eyebrow:'0.5 PUB · LA ACEEAȘI MASĂ',title:'Meniu pentru prieteni',intro:'Mai multe preparate la comun, ca fiecare să guste din toate. Alegeți numărul de persoane și schimbați preparatele după preferințe.',people:'pers.',selection:'Număr de persoane',heading:n=>'Pentru un grup de '+n+' persoane',meat:'Carne',potato:'Cartofi și altele',fish:'Pește și fructe de mare',snacks:'Gustări',portions:n=>n+' '+(n===1?'porție':'porții'),pieces:n=>n+' buc. (greutatea se confirmă)',grams:n=>'≈ '+n+' g',note:'Cantități orientative pentru degustare la masa comună. Greutatea preparatelor întregi și meniul final se stabilesc la confirmarea rezervării. Pentru alergii, verificați ingredientele cu personalul.',loading:'Încărcăm meniul actual…',offline:'Nu am putut verifica disponibilitatea. Sună-ne și te ajutăm.',partial:'Nu toate grupurile au preparate disponibile. Verificați meniul telefonic.',empty:'Nu putem alcătui o sugestie acum. Sună-ne.',browse:'Vezi tot meniul',change:'Schimbă',close:'Închide',choose:'Alege un preparat',send:'Trimite la rezervare',hint:'Lista va fi adăugată în comentariu. Apoi completați data, ora și contactele — nu este încă o comandă.',sent:'Meniul a fost adăugat în comentariu. Completați data, ora și contactele.',full:'Nu este suficient loc în comentariu. Scurtați-l pentru a adăuga meniul (limita: 500 de caractere).',locked:'Rezervarea a fost deja trimisă. Pentru schimbarea meniului, sunați-ne.',noteTitle:n=>'Masă comună, '+n+' pers. (orientativ):'},
   en:{eyebrow:'0.5 PUB · AROUND ONE TABLE',title:'Food for your group',intro:'Different dishes for the table, so everyone can try a little of everything. Choose your group size and swap dishes to taste.',people:'guests',selection:'Number of guests',heading:n=>'For a group of '+n,meat:'Meat',potato:'Potatoes and sides',fish:'Fish and seafood',snacks:'Snacks',portions:n=>n+' '+(n===1?'portion':'portions'),pieces:n=>n+' pcs (weight to confirm)',grams:n=>'≈ '+n+' g',note:'Approximate quantities for sharing and tasting. Whole-dish weights and the final menu will be agreed when your booking is confirmed. Please check ingredients with staff if you have allergies.',loading:'Loading the current menu…',offline:'We could not check availability. Call us for help choosing.',partial:'Some groups have no available dishes. Please call to discuss the menu.',empty:'We cannot suggest a menu right now. Please call us.',browse:'Explore the full menu',change:'Swap',close:'Close',choose:'Choose a dish',send:'Add to reservation',hint:'The list will go into the booking comment. Then enter your date, time and contact details — this is not an order yet.',sent:'Menu added to the booking comment. Enter your date, time and contact details.',full:'There is not enough space in the comment. Shorten it to add the menu (500 character limit).',locked:'Your booking has already been sent. Please call us to change the menu.',noteTitle:n=>'Shared table, '+n+' guests (approx.):'}
 };
-Object.assign(companyCopy.ru,{add:'Добавить блюдо',remove:'Убрать блюдо',quantity:'Количество',less:'Уменьшить',more:'Увеличить'});
-Object.assign(companyCopy.ro,{add:'Adaugă un preparat',remove:'Elimină preparatul',quantity:'Cantitate',less:'Micșorează',more:'Mărește'});
-Object.assign(companyCopy.en,{add:'Add a dish',remove:'Remove dish',quantity:'Quantity',less:'Decrease',more:'Increase'});
+Object.assign(companyCopy.ru,{add:'Добавить блюдо',remove:'Удалить',clear:'Очистить всё',cleared:'Список пуст. Добавьте нужные блюда или забронируйте столик без меню.',quantity:'Количество',less:'Уменьшить',more:'Увеличить'});
+Object.assign(companyCopy.ro,{add:'Adaugă un preparat',remove:'Elimină',clear:'Golește lista',cleared:'Lista este goală. Adăugați preparate sau rezervați o masă fără meniu.',quantity:'Cantitate',less:'Micșorează',more:'Mărește'});
+Object.assign(companyCopy.en,{add:'Add a dish',remove:'Remove',clear:'Clear all',cleared:'The list is empty. Add dishes or book a table without a menu.',quantity:'Quantity',less:'Decrease',more:'Increase'});
 let companyPickerIndex=null;
 let companyChoices={},companyPickerKind=null,companyPickerCategory=null,previousCompanyNote='',companyFeedback='';
 const companyPicker=document.querySelector('#company-picker');
@@ -300,11 +301,12 @@ function renderCompany(){
   root.querySelector('.company-sizes').setAttribute('aria-label',t.selection);
   root.querySelectorAll('[data-company-size]').forEach(b=>{b.textContent=b.dataset.companySize+' '+t.people;b.setAttribute('aria-pressed',String(Number(b.dataset.companySize)===companyGuests))});
   root.querySelector('h3').textContent=t.heading(companyGuests);root.querySelector('.company-note').textContent=t.note;root.querySelector('.company-browse').textContent=t.browse;
+  root.querySelector('.company-clear').textContent=t.clear;root.querySelector('.company-clear').disabled=true;
   root.querySelector('.company-send').textContent=t.send;root.querySelector('.company-hint').textContent=t.hint;
   root.querySelector('.company-feedback').textContent=companyFeedback?t[companyFeedback]:'';
   const list=root.querySelector('.company-list'),status=root.querySelector('.company-status'),send=root.querySelector('.company-send');list.replaceChildren();send.disabled=true;
   if(!data||!window.pubMenuUpdatedAt){status.textContent=window.pubMenuUpdatedAt===''?t.offline:t.loading;if(companyPicker.open)renderCompanyPicker();return}
-  const result=recommendCompany(data,companyGuests,companyChoices);status.textContent=!result.rows.length?t.empty:result.incomplete?t.partial:'';send.disabled=result.incomplete;
+  const result=recommendCompany(data,companyGuests,companyChoices);status.textContent=!result.rows.length?t.cleared:result.incomplete?t.partial:'';send.disabled=result.incomplete||!result.rows.length;root.querySelector('.company-clear').disabled=!result.rows.length;
   for(const group of companyGroups){
     const rows=result.rows.filter(r=>r.kind===group.kind);
     companyChoices[group.kind]=rows.map(r=>({id:r.item.id,...(r.manual?{qty:r.qty}:{})}));
@@ -323,7 +325,7 @@ function renderCompany(){
       minus.setAttribute('aria-label',t.less+' — '+name(row.item));plus.setAttribute('aria-label',t.more+' — '+name(row.item));
       minus.disabled=row.qty<=step;plus.disabled=row.qty>=max;minus.onclick=()=>update(row.qty-step);plus.onclick=()=>update(row.qty+step);
       quantity.append(minus,input,plus);controls.append(element('strong','company-qty',companyQuantity(row)),quantity);
-      if(index>0){const remove=element('button','company-change',t.remove);remove.type='button';remove.onclick=()=>{companyChoices[row.kind].splice(index,1);companyFeedback='';renderCompany()};controls.append(remove)}
+      const remove=element('button','company-change',t.remove);remove.type='button';remove.setAttribute('aria-label',t.remove+' — '+name(row.item));remove.onclick=()=>{companyChoices[row.kind].splice(index,1);clearTransferredCompanyNote();companyFeedback='';renderCompany()};controls.append(remove);
       li.append(label,controls);list.append(li);
     }
     if(companyOptions(data,group.kind).some(i=>!rows.some(r=>r.item.id===i.id))){
@@ -333,6 +335,11 @@ function renderCompany(){
   }
   if(companyPicker.open)renderCompanyPicker();
 }
+function clearTransferredCompanyNote(){
+  const notes=document.querySelector('#booking-form').elements.notes;
+  if(previousCompanyNote&&!notes.disabled){notes.value=mergeCompanyNotes(notes.value,previousCompanyNote,'');previousCompanyNote=''}
+}
+document.querySelector('.company-clear').onclick=()=>{companyChoices=Object.fromEntries(companyGroups.map(g=>[g.kind,[]]));clearTransferredCompanyNote();companyFeedback='';renderCompany()};
 document.querySelectorAll('[data-company-size]').forEach(b=>b.addEventListener('click',()=>{companyGuests=Number(b.dataset.companySize);companyFeedback='';renderCompany()}));
 companyPicker.querySelector('.company-close').onclick=()=>companyPicker.close();
 companyPicker.addEventListener('click',e=>{if(e.target===companyPicker)companyPicker.close()});
@@ -340,7 +347,7 @@ document.querySelector('.company-send').onclick=()=>{
   const form=document.querySelector('#booking-form'),t=companyCopy[language];
   if(form.elements.notes.disabled){companyFeedback='locked';renderCompany();return}
   if(!data||!window.pubMenuUpdatedAt)return;
-  const result=recommendCompany(data,companyGuests,companyChoices);if(result.incomplete)return;
+  const result=recommendCompany(data,companyGuests,companyChoices);if(result.incomplete||!result.rows.length)return;
   const note=[t.noteTitle(companyGuests),...result.rows.map(row=>name(row.item)+' — '+companyQuantity(row))].join('\n');
   const merged=mergeCompanyNotes(form.elements.notes.value,previousCompanyNote,note);
   if(merged===null){companyFeedback='full';renderCompany();return}

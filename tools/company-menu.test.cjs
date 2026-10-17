@@ -34,3 +34,10 @@ test('extra dishes, custom quantities and automatic size scaling stay independen
  choices.fish.push({id:'k-creveti-grill',qty:9},{id:'k-ciolan-copt',qty:5});assert.equal(ctx.recommendCompany(menu(),4,choices).rows.filter(r=>r.kind==='fish').length,2);
  choices.fish[0].qty=-2;assert.equal(ctx.recommendCompany(menu(),4,choices).rows.find(r=>r.kind==='fish').qty,1);
 });
+
+test('removed categories stay empty across group sizes and partial menus can be booked',()=>{
+ for(const guests of [4,8,10,12]){const r=ctx.recommendCompany(menu(),guests,{fish:[],snacks:[]});assert.equal(r.rows.length,2);assert.equal(r.incomplete,false);assert.ok(!r.rows.some(x=>['fish','snacks'].includes(x.kind)))}
+ const cleared={meat:[],potato:[],fish:[],snacks:[]};assert.equal(ctx.recommendCompany(menu(),4,cleared).rows.length,0);
+ cleared.fish.push({id:'k-midii',qty:2});const r=ctx.recommendCompany(menu(),4,cleared);assert.equal(r.rows.length,1);assert.equal(r.rows[0].item.id,'k-midii');assert.equal(r.incomplete,false);
+ assert.equal(ctx.mergeCompanyNotes('Window table\n\nPrevious list','Previous list',''),'Window table');
+});
