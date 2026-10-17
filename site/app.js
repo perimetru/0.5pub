@@ -221,6 +221,42 @@ let department = 'bar';
 let data;
 let menuFailed = false;
 let currentDish = null;
+let companyGuests = 4;
+
+function recommendCompany(menu,guests) {
+  if(![4,8,10,12].includes(guests))throw new Error('Unsupported company size');
+  const kitchen=new Set(menu.categories.filter(c=>c.route==='kitchen').map(c=>c.id));
+  const slots=[
+    {kind:'main',qty:guests/2,ids:['k-aripioare-bbq','k-aripioare-fresnel','k-buffalo-wings']},
+    {kind:'main',qty:guests/2,ids:['k-frigarui-pui','k-nughete-pui','k-burger-pui','k-burger']},
+    {kind:'side',qty:Math.ceil(guests/2),ids:['k-cartofi-fri','f3b63276-a013-42a5-b613-ecdf6604dd3c','b59d9f46-df3e-4447-9300-8e9ebfef1358','k-inele-ceapa']},
+    {kind:'vegetables',qty:Math.ceil(guests/4),ids:['709465b2-127c-4abb-b107-688332a18b7c','k-varza-murata']},
+    {kind:'sharing',qty:Math.ceil(guests/4),ids:['snack-platou-bere','k-farfurie-asorti','03d13dd5-c8f5-485d-98ff-5b7027ccb9e7','snack-suluguni']}
+  ];
+  const rows=[];
+  for(const slot of slots){const item=slot.ids.map(id=>menu.items.find(i=>i.id===id)).find(i=>i&&kitchen.has(i.category)&&i.available!==false&&!i.weighted&&/порци|por[țt]i|portion/i.test(i.unit||''));if(item)rows.push({item,kind:slot.kind,qty:slot.qty})}
+  return {rows,incomplete:rows.length<slots.length};
+}
+
+const companyCopy={
+  ru:{eyebrow:'0.5 PUB · ЗА ОДНИМ СТОЛОМ',title:'Меню для компании',intro:'Сколько вас будет? Подскажем, что взять на всех.',people:'чел.',selection:'Количество гостей',heading:n=>'На компанию из '+n+' человек',main:'Горячее',side:'Гарнир',vegetables:'Овощи',sharing:'Закуска на общий стол',portions:n=>n+' '+({one:'порция',few:'порции',many:'порций',other:'порции'}[new Intl.PluralRules('ru').select(n)]),note:'Пример для общего стола. Количество порций ориентировочное: учитывайте аппетит и пожелания гостей. При аллергии уточните состав у сотрудника.',loading:'Загружаем актуальное меню…',offline:'Не удалось проверить наличие блюд. Позвоните нам — поможем составить меню.',partial:'Часть блюд сейчас недоступна. Этот список неполный — уточните дополнения у сотрудника.',empty:'Сейчас не можем составить рекомендацию. Позвоните нам — подберём меню вместе.',browse:'Посмотреть всё меню',details:'Подробнее о блюде'},
+  ro:{eyebrow:'0.5 PUB · LA ACEEAȘI MASĂ',title:'Meniu pentru prieteni',intro:'Câți veți fi? Îți sugerăm ce să alegeți pentru toți.',people:'pers.',selection:'Număr de persoane',heading:n=>'Pentru un grup de '+n+' persoane',main:'Fel principal',side:'Garnitură',vegetables:'Legume',sharing:'Gustare de împărțit',portions:n=>n+' '+(n===1?'porție':'porții'),note:'O sugestie pentru masa comună. Numărul de porții este orientativ: țineți cont de pofta și preferințele oaspeților. Pentru alergii, verificați ingredientele cu personalul.',loading:'Încărcăm meniul actual…',offline:'Nu am putut verifica disponibilitatea preparatelor. Sună-ne și te ajutăm să alegi meniul.',partial:'Unele preparate nu sunt disponibile. Lista este incompletă — discutați completările cu personalul.',empty:'Nu putem alcătui o sugestie acum. Sună-ne și alegem meniul împreună.',browse:'Vezi tot meniul',details:'Detalii despre preparat'},
+  en:{eyebrow:'0.5 PUB · AROUND ONE TABLE',title:'Food for your group',intro:'How many are coming? Here is an idea of what to share.',people:'guests',selection:'Number of guests',heading:n=>'For a group of '+n,main:'Main course',side:'Side dish',vegetables:'Vegetables',sharing:'A snack to share',portions:n=>n+' '+(n===1?'portion':'portions'),note:'A suggestion for a shared table. Portions are a guide: consider your guests’ appetites and preferences. Please check ingredients with staff if you have allergies.',loading:'Loading the current menu…',offline:'We could not check dish availability. Call us and we will help you choose.',partial:'Some dishes are unavailable. This is a partial list — please ask staff about additions.',empty:'We cannot suggest a menu right now. Call us and we will help you choose.',browse:'Explore the full menu',details:'Dish details'}
+};
+function renderCompany(){
+  const t=companyCopy[language],root=document.querySelector('#company');
+  if(!root)return;
+  root.querySelector('.eyebrow').textContent=t.eyebrow;root.querySelector('h2').textContent=t.title;root.querySelector('.company-intro').textContent=t.intro;
+  root.querySelector('.company-sizes').setAttribute('aria-label',t.selection);
+  root.querySelectorAll('[data-company-size]').forEach(b=>{b.textContent=b.dataset.companySize+' '+t.people;b.setAttribute('aria-pressed',String(Number(b.dataset.companySize)===companyGuests))});
+  root.querySelector('h3').textContent=t.heading(companyGuests);root.querySelector('.company-note').textContent=t.note;root.querySelector('.company-browse').textContent=t.browse;
+  const list=root.querySelector('ul'),status=root.querySelector('[role=status]');list.replaceChildren();
+  if(!data||!window.pubMenuUpdatedAt){status.textContent=window.pubMenuUpdatedAt===''?t.offline:t.loading;return}
+  const result=recommendCompany(data,companyGuests);status.textContent=!result.rows.length?t.empty:result.incomplete?t.partial:'';
+  for(const {item,kind,qty} of result.rows){const row=element('li','company-row'),label=element('div','company-dish'),detail=data.dishDetails?.[item.id];label.append(element('small','',t[kind]));const title=element(detail?'button':'span','company-dish-name',name(item));if(detail){title.type='button';title.setAttribute('aria-label',name(item)+' — '+t.details);title.onclick=()=>openDish(item.id)}label.append(title);row.append(label,element('strong','company-qty',t.portions(qty)));list.append(row)}
+}
+document.querySelectorAll('[data-company-size]').forEach(b=>b.addEventListener('click',()=>{companyGuests=Number(b.dataset.companySize);renderCompany()}));
+window.addEventListener('pub-menu-updated',renderCompany);
 const dishDialog = document.querySelector('#dish-dialog');
 const search = document.querySelector('#search');
 const itemsContainer = document.querySelector('#items');
@@ -483,6 +519,7 @@ function setLanguage(next) {
   document.querySelectorAll('[data-lang]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.lang === language)));
   if (data) { renderDepartments(); renderCategories(); renderItems(); renderFeaturedBeers(); }
   else if (menuFailed) itemsContainer.replaceChildren(element('p', 'empty', t.error));
+  renderCompany();
   if (dishDialog.open && currentDish) openDish(currentDish);
 }
 document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.lang)));
