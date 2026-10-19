@@ -1,6 +1,6 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
 const root=path.join(__dirname,'../site'),source=fs.readFileSync(path.join(root,'app.js'),'utf8');
-const ctx={};vm.runInNewContext(source.slice(source.indexOf('const companyGroups='),source.indexOf('const companyCopy=')),ctx);
+const ctx={};vm.runInNewContext(fs.readFileSync(path.join(root,'company-rules.mjs'),'utf8').replaceAll('export ',''),ctx);vm.runInNewContext(source.slice(source.indexOf('const companyGroups='),source.indexOf('const companyCopy=')),ctx);
 const menu=()=>JSON.parse(fs.readFileSync(path.join(root,'menu.json'),'utf8'));
 test('shared table scales four groups, supports replacements and respects current kitchen availability',()=>{
  for(const guests of [4,8,10,12]){const result=ctx.recommendCompany(menu(),guests);assert.equal(result.incomplete,false);assert.equal(result.rows.length,4);assert.equal(result.rows[0].item.id,'k-ciolan-copt');assert.equal(result.rows[0].unit,'pieces');assert.equal(result.rows[0].qty,Math.ceil(guests/4));assert.equal(result.rows[1].qty,Math.ceil(guests/2));}
@@ -48,4 +48,16 @@ test('administrator controls offered dishes, defaults and disabled groups',()=>{
  let result=ctx.recommendCompany(current,4);assert.equal(result.rows[0].item.id,'k-costita-bbq');assert.ok(!result.rows.some(r=>r.kind==='fish'));assert.equal(result.incomplete,false);
  current.items.find(i=>i.id==='k-costita-bbq').available=false;assert.equal(ctx.recommendCompany(current,4).rows[0].item.id,'k-ciolan-copt');
  current.items=current.items.filter(i=>i.id!=='k-ciolan-copt');assert.equal(ctx.companyOptions(current,'meat').length,0);assert.equal(ctx.recommendCompany(current,4).incomplete,true);
+});
+
+test('groups reject unrelated categories and saved amounts follow group size',()=>{
+ const current=menu();
+ assert.ok(!ctx.companyCandidates(current,'fish').some(i=>i.id==='k-ciolan-copt'));
+ assert.ok(!ctx.companyCandidates(current,'meat').some(i=>i.id==='k-creveti-grill'));
+ current.company={meat:['k-creveti-grill','k-ciolan-copt']};
+ assert.equal(ctx.companyOptions(current,'meat').length,1);
+ current.quantities={'k-ciolan-copt':{4:2,8:3,10:4,12:5}};
+ for(const [guests,qty] of [[4,2],[8,3],[10,4],[12,5]])assert.equal(ctx.recommendCompany(current,guests).rows[0].qty,qty);
+ const overridden=ctx.recommendCompany(current,4,{meat:[{id:'k-ciolan-copt',qty:7}]});assert.equal(overridden.rows[0].qty,7);
+ current.quantities['k-ciolan-copt'][4]=-1;assert.equal(ctx.recommendCompany(current,4).rows[0].qty,1);
 });

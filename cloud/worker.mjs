@@ -1,4 +1,5 @@
 import {backups} from './backups.mjs';
+import {companyCandidates,companyAmount} from '../site/company-rules.mjs';
 const ORIGINS = ['https://05pub.md', 'https://www.05pub.md', 'https://perimetru.github.io'];
 const uuid = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
 function fail(status, message) { throw Object.assign(new Error(message), {status}); }
@@ -69,13 +70,24 @@ export default {
           return reply(200,{settings:row?JSON.parse(row.payload):{company:{},hidden:[]},menu:JSON.parse(menu.payload)});
         }
         if(request.method==='PUT') {
-          const input=await read(request,64000);
+          const input=await read(request,256000);
           const row=await env.DB.prepare('SELECT payload FROM menu WHERE id=1').first();
           if(!row)fail(409,'Synchronize the menu first');
-          const menu=JSON.parse(row.payload),kitchen=new Set(menu.categories.filter(c=>c.route==='kitchen').map(c=>c.id));
-          const ids=new Set(menu.items.filter(i=>kitchen.has(i.category)).map(i=>i.id));
-          if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).some(k=>!['company','hidden'].includes(k))||!input.company||typeof input.company!=='object'||Array.isArray(input.company)||Object.keys(input.company).some(k=>!['meat','potato','fish','snacks'].includes(k)))fail(400,'Invalid groups');
-          for(const values of Object.values(input.company))if(!Array.isArray(values)||values.length>100||new Set(values).size!==values.length||values.some(id=>typeof id!=='string'||!ids.has(id)))fail(400,'Choose existing kitchen dishes');
+          const menu=JSON.parse(row.payload);
+          if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).some(k=>!['company','hidden','quantities'].includes(k))||!input.company||typeof input.company!=='object'||Array.isArray(input.company)||Object.keys(input.company).some(k=>!['meat','potato','fish','snacks'].includes(k)))fail(400,'Invalid groups');
+          for(const [kind,values] of Object.entries(input.company)){
+            const ids=new Set(companyCandidates(menu,kind).map(i=>i.id));
+            if(!Array.isArray(values)||values.length>100||new Set(values).size!==values.length||values.some(id=>typeof id!=='string'||!ids.has(id)))fail(400,'Choose dishes from the matching category');
+          }
+          if(input.quantities!==undefined){
+            if(!input.quantities||typeof input.quantities!=='object'||Array.isArray(input.quantities)||Object.keys(input.quantities).length>3000)fail(400,'Invalid quantities');
+            for(const [id,values] of Object.entries(input.quantities)){
+              const item=menu.items.find(i=>i.id===id),kind=['meat','potato','fish','snacks'].find(k=>companyCandidates(menu,k).some(i=>i.id===id));
+              if(!item||!kind||!values||typeof values!=='object'||Array.isArray(values)||Object.keys(values).some(n=>!['4','8','10','12'].includes(n)))fail(400,'Invalid quantities');
+              const amount=companyAmount(item,kind,4);
+              if(Object.values(values).some(q=>!Number.isInteger(q)||q<amount.step||q>amount.max||q%amount.step!==0))fail(400,'Invalid quantities');
+            }
+          }
           if(!Array.isArray(input.hidden)||input.hidden.length>3000||new Set(input.hidden).size!==input.hidden.length||input.hidden.some(id=>typeof id!=='string'||!id||id.length>180))fail(400,'Invalid hidden dishes');
           const updatedAt=new Date().toISOString();
           await env.DB.prepare('INSERT INTO website_settings(id,payload,updated_at) VALUES(1,?,?) ON CONFLICT(id) DO UPDATE SET payload=excluded.payload, updated_at=excluded.updated_at').bind(JSON.stringify(input),updatedAt).run();
@@ -109,7 +121,7 @@ export default {
         const settings=await env.DB.prepare('SELECT payload,updated_at FROM website_settings WHERE id=1').first();
         const menu=JSON.parse(row.payload),preferences=settings?JSON.parse(settings.payload):{company:{},hidden:[]};
         menu.items=menu.items.filter(i=>!preferences.hidden.includes(i.id));
-        return reply(200,{...menu,company:preferences.company,updatedAt:settings?.updated_at>row.updated_at?settings.updated_at:row.updated_at});
+        return reply(200,{...menu,company:preferences.company,quantities:preferences.quantities||{},updatedAt:settings?.updated_at>row.updated_at?settings.updated_at:row.updated_at});
       }
       if(path==='/reservations'&&request.method==='POST') {
         if(!allowed)fail(403,'Origin not allowed');

@@ -1,4 +1,5 @@
 'use strict';
+import {companyRules,companyCandidates,companyAmount} from './company-rules.mjs';
 const $=s=>document.querySelector(s),kinds={meat:'Мясное',potato:'Картофель и другое',fish:'Рыба и морепродукты',snacks:'Закуски'};
 let api='',key='',menu,preferences,dirty=false;
 const status=message=>{$('#status').textContent=message};
@@ -24,23 +25,42 @@ function render(){
   renderGroups();
 }
 function renderGroups(){
-  const root=$('#groups');root.replaceChildren();
-  const kitchen=new Set(menu.categories.filter(c=>c.route==='kitchen').map(c=>c.id));
-  const items=menu.items.filter(i=>kitchen.has(i.category));
+  const root=$('#groups'),open=new Set([...root.querySelectorAll('details[open]')].map(n=>n.dataset.kind));root.replaceChildren();
   for(const [kind,title] of Object.entries(kinds)){
-    const details=el('details');details.append(el('summary',title));
+    const items=companyCandidates(menu,kind),rule=companyRules.find(g=>g.kind===kind);
+    const details=el('details');details.open=open.has(kind);details.append(el('summary',title));details.dataset.kind=kind;
     const custom=Array.isArray(preferences.company[kind]);
-    const toggle=checkbox('Настроить свой список',custom,checked=>{if(checked)preferences.company[kind]=[];else delete preferences.company[kind];renderGroups();root.querySelector('[data-kind="'+kind+'"]').open=true});toggle.className='group-toggle';details.append(toggle);details.dataset.kind=kind;
+    const toggle=checkbox('Настроить свой список и порции',custom,checked=>{
+      if(checked)preferences.company[kind]=[...items].sort((a,b)=>Number(b.id===rule.first)-Number(a.id===rule.first)).map(i=>i.id);else delete preferences.company[kind];
+      renderGroups();root.querySelector('[data-kind="'+kind+'"]').open=true;
+    });toggle.className='group-toggle';details.append(toggle);
     if(custom){
       const values=preferences.company[kind];
       const primary=el('label','Блюдо по умолчанию'),select=el('select');primary.className='primary';
       const active=values.filter(id=>items.some(i=>i.id===id&&i.available!==false)&&!preferences.hidden.includes(id));
       if(!active.length){const option=el('option','Нет доступных выбранных блюд');option.value='';select.append(option);select.disabled=true}
       for(const id of active){const item=items.find(i=>i.id===id),option=el('option',item.ru||item.ro);option.value=id;select.append(option)}
-      select.onchange=()=>{preferences.company[kind]=[select.value,...values.filter(id=>id!==select.value)];dirty=true;status('Есть несохранённые изменения.')};primary.append(select);details.append(primary);
+      select.onchange=()=>{preferences.company[kind]=[select.value,...preferences.company[kind].filter(id=>id!==select.value)];dirty=true;status('Есть несохранённые изменения.')};primary.append(select);details.append(primary);
       const list=el('div');list.className='choices';
-      for(const item of items){const row=checkbox((item.ru||item.ro)+(preferences.hidden.includes(item.id)?' · скрыто с сайта':item.available===false?' · временно нет':''),values.includes(item.id),checked=>{preferences.company[kind]=values.filter(id=>id!==item.id);if(checked)preferences.company[kind].push(item.id);renderGroups();root.querySelector('[data-kind="'+kind+'"]').open=true});row.className='dish';list.append(row)}details.append(list);
-    }else details.append(el('p','Используется стандартный подбор блюд из текущего меню.'));
+      for(const item of items){
+        const block=el('div');block.className='choice';
+        const row=checkbox((item.ru||item.ro)+(preferences.hidden.includes(item.id)?' · скрыто с сайта':item.available===false?' · временно нет':''),values.includes(item.id),checked=>{preferences.company[kind]=preferences.company[kind].filter(id=>id!==item.id);if(checked)preferences.company[kind].push(item.id);renderGroups()});row.className='dish';block.append(row);
+        if(values.includes(item.id)){
+          const quantities=el('div');quantities.className='quantities';
+          const amount=companyAmount(item,kind,4),unit={pieces:'шт.',grams:'г',portions:'порций'}[amount.unit];
+          for(const guests of [4,8,10,12]){
+            const label=el('label',guests+' чел. · '+unit),input=el('input');input.type='number';input.min=amount.step;input.max=amount.max;input.step=amount.step;input.placeholder='Авто: '+companyAmount(item,kind,guests).qty;
+            input.value=preferences.quantities[item.id]?.[guests]??'';input.setAttribute('aria-label',(item.ru||item.ro)+' — '+guests+' чел., '+unit);
+            input.oninput=()=>{
+              if(!input.validity.valid)return;
+              preferences.quantities[item.id]??={};if(input.value==='')delete preferences.quantities[item.id][guests];else preferences.quantities[item.id][guests]=Number(input.value);
+              if(!Object.keys(preferences.quantities[item.id]).length)delete preferences.quantities[item.id];dirty=true;status('Есть несохранённые изменения.');
+            };
+            label.append(input);quantities.append(label);
+          }block.append(quantities);
+        }list.append(block);
+      }details.append(list);
+    }else details.append(el('p','Стандартный подбор блюд своей категории с автоматическим расчётом количества.'));
     root.append(details);
   }
 }
@@ -49,9 +69,12 @@ $('#login').onsubmit=async event=>{
   try{
     const config=await fetch('connection.json',{cache:'no-store',signal:AbortSignal.timeout(5000)}).then(r=>r.json());
     if(!/^https:\/\/[a-z0-9-]+\.[a-z0-9-]+\.workers\.dev$/.test(config.apiUrl||''))throw Error('Не указан адрес сервера.');
-    api=config.apiUrl;key=$('#key').value;const result=await request();menu=result.menu;preferences=result.settings;
-    // Removed RestoFlow dishes must not prevent saving the remaining selection.
-    for(const values of Object.values(preferences.company))for(let i=values.length-1;i>=0;i--)if(!menu.items.some(item=>item.id===values[i]))values.splice(i,1);
+    api=config.apiUrl;key=$('#key').value;const result=await request();menu=result.menu;preferences=result.settings;preferences.quantities??={};
+    // Drop stale or misplaced dishes from older saved settings.
+    for(const [kind,values] of Object.entries(preferences.company)){
+      const allowed=new Set(companyCandidates(menu,kind).map(i=>i.id));preferences.company[kind]=values.filter(id=>allowed.has(id));
+    }
+    const ids=new Set(menu.items.map(i=>i.id));for(const id of Object.keys(preferences.quantities))if(!ids.has(id))delete preferences.quantities[id];
     $('#key').value='';$('#login').hidden=true;$('#settings').hidden=false;$('#logout').hidden=false;render();dirty=false;status('Меню загружено.');
   }catch(error){key='';status(error.name==='TimeoutError'?'Сервер не ответил. Повторите попытку.':error.message)}finally{button.disabled=false}
 };
