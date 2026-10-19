@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>Управление меню · 0.5 PUB</title><link rel="stylesheet" href="admin.css"><script src="admin.js" defer></script></head>
+<body><header><a href="./">← На сайт</a><strong>0.5 PUB · Управление меню</strong><button id="logout" hidden>Выйти</button></header>
+<main><h1>Меню на сайте</h1><p>Названия, цены и наличие обновляются из RestoFlow. Здесь можно скрыть позиции с сайта и настроить предложения для компании.</p>
+<form id="login"><label for="key">Ключ администратора</label><input id="key" type="password" required minlength="32" autocomplete="off"><button>Войти</button></form>
+<p id="status" role="status" aria-live="polite"></p>
+<form id="settings" hidden>
+<section><h2>Что показывать гостям</h2><p>Снимите галочку, чтобы убрать позицию со всего сайта. В RestoFlow она сохранится. Новые позиции из RestoFlow появляются на сайте автоматически.</p><label for="search">Поиск по названию или категории</label><input id="search" type="search"><div id="catalog"></div></section>
+<section><h2>Меню для компании</h2><p>В каждой группе можно задать список предлагаемых блюд и блюдо по умолчанию. Скрытые с сайта и отсутствующие блюда гостям не предлагаются. Пустой список отключает группу.</p><div id="groups"></div></section>
+<div class="save"><button id="save">Сохранить изменения</button><span>Изменения появятся у гостей при обновлении страницы или в течение минуты.</span></div>
+</form></main></body></html>
