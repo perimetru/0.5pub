@@ -1,4 +1,6 @@
 import {backups} from './backups.mjs';
+import {companyCandidates,companyAmount} from '../site/company-rules.mjs';
+import {recordVisit,visitorStats} from './visitors.mjs';
 const ORIGINS = ['https://05pub.md', 'https://www.05pub.md', 'https://perimetru.github.io'];
 const uuid = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
 function fail(status, message) { throw Object.assign(new Error(message), {status}); }
@@ -38,11 +40,11 @@ export function publicMenu(input) {
   if(items.some(i=>!i.id||!ids.has(i.category)||typeof i.price!=='number'||!Number.isFinite(i.price)||i.price<0))fail(400,'Invalid item');
   return {currency:'MDL',categories,items};
 }
-async function authorized(request, env) {
+async function authorized(request, env, key='SYNC_TOKEN') {
   const token = request.headers.get('authorization') || '';
-  if (!env.SYNC_TOKEN || env.SYNC_TOKEN.length<32) fail(503, 'Sync is not configured');
+  if (!env[key] || env[key].length<32) fail(503, key==='ADMIN_TOKEN'?'Admin access is not configured':'Sync is not configured');
   const digest=async s=>new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)));
-  const [a,b]=await Promise.all([digest(token),digest('Bearer '+env.SYNC_TOKEN)]);
+  const [a,b]=await Promise.all([digest(token),digest('Bearer '+env[key])]);
   let difference=0; for(let i=0;i<a.length;i++)difference|=a[i]^b[i];
   if(difference)fail(401,'Unauthorized');
 }
@@ -56,10 +58,55 @@ export default {
       const path=new URL(request.url).pathname;
       if(request.method==='OPTIONS') {
         if(!allowed)return reply(403,{error:'Origin not allowed'});
-        return new Response(null,{status:204,headers:{...headers,'Access-Control-Allow-Methods':'GET, POST, OPTIONS','Access-Control-Allow-Headers':'Content-Type','Access-Control-Max-Age':'3600'}});
+        return new Response(null,{status:204,headers:{...headers,'Access-Control-Allow-Methods':'GET, POST, PUT, OPTIONS','Access-Control-Allow-Headers':'Content-Type, Authorization','Access-Control-Max-Age':'3600'}});
       }
       if(path==='/health' && request.method==='GET')return reply(200,{ok:true,configured:!!env.DB&&!!env.SYNC_TOKEN});
       if(!env.DB)fail(503,'Database is not configured');
+      if(path==='/visits'&&request.method==='POST'){
+        if(!allowed)fail(403,'Origin not allowed');
+        const input=await read(request,1024);
+        if(!input||typeof input.id!=='string'||!uuid.test(input.id))fail(400,'Invalid visitor');
+        await recordVisit(env.DB,input.id);
+        return reply(200,{ok:true});
+      }
+      if(path==='/admin/visitors'&&request.method==='GET'){
+        await authorized(request,env,'ADMIN_TOKEN');
+        return reply(200,await visitorStats(env.DB));
+      }
+      if(path==='/admin/settings') {
+        await authorized(request,env,'ADMIN_TOKEN');
+        if(request.method==='GET') {
+          const row=await env.DB.prepare('SELECT payload FROM website_settings WHERE id=1').first();
+          const menu=await env.DB.prepare('SELECT payload FROM menu WHERE id=1').first();
+          if(!menu)fail(409,'Synchronize the menu first');
+          return reply(200,{settings:row?JSON.parse(row.payload):{company:{},hidden:[]},menu:JSON.parse(menu.payload)});
+        }
+        if(request.method==='PUT') {
+          const input=await read(request,256000);
+          const row=await env.DB.prepare('SELECT payload FROM menu WHERE id=1').first();
+          if(!row)fail(409,'Synchronize the menu first');
+          const menu=JSON.parse(row.payload);
+          if(!input||typeof input!=='object'||Array.isArray(input)||Object.keys(input).some(k=>!['company','hidden','quantities'].includes(k))||!input.company||typeof input.company!=='object'||Array.isArray(input.company)||Object.keys(input.company).some(k=>!['meat','potato','fish','snacks'].includes(k)))fail(400,'Invalid groups');
+          for(const [kind,values] of Object.entries(input.company)){
+            const ids=new Set(companyCandidates(menu,kind).map(i=>i.id));
+            if(!Array.isArray(values)||values.length>100||new Set(values).size!==values.length||values.some(id=>typeof id!=='string'||!ids.has(id)))fail(400,'Choose dishes from the matching category');
+          }
+          if(input.quantities!==undefined){
+            if(!input.quantities||typeof input.quantities!=='object'||Array.isArray(input.quantities)||Object.keys(input.quantities).length>3000)fail(400,'Invalid quantities');
+            for(const [id,values] of Object.entries(input.quantities)){
+              const item=menu.items.find(i=>i.id===id),kind=['meat','potato','fish','snacks'].find(k=>companyCandidates(menu,k).some(i=>i.id===id));
+              if(!item||!kind||!values||typeof values!=='object'||Array.isArray(values)||Object.keys(values).some(n=>!['4','8','10','12'].includes(n)))fail(400,'Invalid quantities');
+              const amount=companyAmount(item,kind,4);
+              if(Object.values(values).some(q=>!Number.isInteger(q)||q<amount.step||q>amount.max||q%amount.step!==0))fail(400,'Invalid quantities');
+            }
+          }
+          if(!Array.isArray(input.hidden)||input.hidden.length>3000||new Set(input.hidden).size!==input.hidden.length||input.hidden.some(id=>typeof id!=='string'||!id||id.length>180))fail(400,'Invalid hidden dishes');
+          const updatedAt=new Date().toISOString();
+          await env.DB.prepare('INSERT INTO website_settings(id,payload,updated_at) VALUES(1,?,?) ON CONFLICT(id) DO UPDATE SET payload=excluded.payload, updated_at=excluded.updated_at').bind(JSON.stringify(input),updatedAt).run();
+          return reply(200,{ok:true});
+        }
+        fail(405,'Method not allowed');
+      }
       if(path.startsWith('/sync/')) {
         await authorized(request,env);
         if(path==='/sync/backups'||path.startsWith('/sync/backups/')){delete headers['Access-Control-Allow-Origin'];return await backups(request,env.BACKUPS,reply)}
@@ -83,7 +130,10 @@ export default {
       if(path==='/menu'&&request.method==='GET') {
         const row=await env.DB.prepare('SELECT payload,updated_at FROM menu WHERE id=1').first();
         if(!row)fail(503,'Menu is not synchronized yet');
-        return reply(200,{...JSON.parse(row.payload),updatedAt:row.updated_at});
+        const settings=await env.DB.prepare('SELECT payload,updated_at FROM website_settings WHERE id=1').first();
+        const menu=JSON.parse(row.payload),preferences=settings?JSON.parse(settings.payload):{company:{},hidden:[]};
+        menu.items=menu.items.filter(i=>!preferences.hidden.includes(i.id));
+        return reply(200,{...menu,company:preferences.company,quantities:preferences.quantities||{},updatedAt:settings?.updated_at>row.updated_at?settings.updated_at:row.updated_at});
       }
       if(path==='/reservations'&&request.method==='POST') {
         if(!allowed)fail(403,'Origin not allowed');

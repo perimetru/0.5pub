@@ -1,4 +1,5 @@
 'use strict';
+import {companyRules,companyCandidates,companyAmount} from './company-rules.mjs';
 const translations = {
   ru: {eyebrow:'0.5 PUB · ПАБ ПРИ ПИВОВАРНЕ ALBEER', title:['Пиво Albeer.','Встречаемся в пабе.'], description:'Пиво с нашей пивоварни. Еда и компания — в 0.5 PUB.', explore:'Посмотреть меню', label:'НАЙДИТЕ СВОЙ ВКУС', heading:'Меню паба', currency:'Цены в MDL', search:'Найти блюдо или напиток', all:'Всё меню', count:'Найдено позиций', empty:'Ничего не найдено. Попробуйте другое название или категорию.', footer:'0.5 PUB — паб при пивоварне Albeer.', weight:'Цена за', portion:'порция', piece:'шт.', error:'Не удалось загрузить меню. Обновите страницу.'},
   ro: {eyebrow:'0.5 PUB · PUB LA BERĂRIA ALBEER', title:['Bere Albeer.','Ne vedem la pub.'], description:'Bere din berăria noastră. Mâncare și companie — la 0.5 PUB.', explore:'Descoperă meniul', label:'GĂSEȘTE GUSTUL TĂU', heading:'Meniul pubului', currency:'Prețuri în MDL', search:'Caută un preparat sau o băutură', all:'Tot meniul', count:'Produse găsite', empty:'Nu am găsit nimic. Încearcă alt nume sau altă categorie.', footer:'0.5 PUB — pub la berăria Albeer.', weight:'Preț pentru', portion:'porție', piece:'buc.', error:'Meniul nu a putut fi încărcat. Reîncarcă pagina.'},
@@ -114,9 +115,9 @@ const pageCopy = {
     "beerVolume": "0.5 L"
   }
 };
-Object.assign(pageCopy.ru, {reservationLabel:'Резервация столика', directionsLabel:'Маршрут на автомобиле'});
-Object.assign(pageCopy.ro, {reservationLabel:'Rezervări mese', directionsLabel:'Traseu cu mașina'});
-Object.assign(pageCopy.en, {reservationLabel:'Table reservations', directionsLabel:'Driving directions'});
+Object.assign(pageCopy.ru, {hoursLabel:'Часы работы',reservationLabel:'Резервация столика', directionsLabel:'Маршрут на автомобиле'});
+Object.assign(pageCopy.ro, {hoursLabel:'Program',reservationLabel:'Rezervări mese', directionsLabel:'Traseu cu mașina'});
+Object.assign(pageCopy.en, {hoursLabel:'Opening hours',reservationLabel:'Table reservations', directionsLabel:'Driving directions'});
 Object.assign(pageCopy.ru, {abvLabel:'Алкоголь', densityLabel:'Нач. плотность', bitternessLabel:'Горечь', colorLabel:'Цвет', clarityLabel:'Прозрачность', clarityOf:'из', profilePending:'Характеристики уточняются'});
 Object.assign(pageCopy.ro, {abvLabel:'Alcool', densityLabel:'Densitate inițială', bitternessLabel:'Amăreală', colorLabel:'Culoare', clarityLabel:'Limpiditate', clarityOf:'din', profilePending:'Caracteristici în curs de confirmare'});
 Object.assign(pageCopy.en, {abvLabel:'Alcohol', densityLabel:'Original gravity', bitternessLabel:'Bitterness', colorLabel:'Colour', clarityLabel:'Clarity', clarityOf:'of', profilePending:'Details awaiting confirmation'});
@@ -214,9 +215,9 @@ const heroCopy = {
     "label": "GOOD BEER DESERVES GOOD FOOD"
   }
 };
-Object.assign(pageCopy.ru,{navCompany:'Составить меню',navToggle:'Навигация'});
-Object.assign(pageCopy.ro,{navCompany:'Compune meniul',navToggle:'Navigare'});
-Object.assign(pageCopy.en,{navCompany:'Build your menu',navToggle:'Navigation'});
+Object.assign(pageCopy.ru,{navAdmin:'Администратор',navCompany:'Составить меню',navToggle:'Навигация'});
+Object.assign(pageCopy.ro,{navAdmin:'Administrator',navCompany:'Compune meniul',navToggle:'Navigare'});
+Object.assign(pageCopy.en,{navAdmin:'Administrator',navCompany:'Build your menu',navToggle:'Navigation'});
 const navToggle=document.querySelector('.nav-toggle'),pageNavigation=document.querySelector('#page-navigation');
 function closeNavigation(){document.body.classList.remove('nav-open');navToggle.setAttribute('aria-expanded','false')}
 navToggle.onclick=()=>{const open=document.body.classList.toggle('nav-open');navToggle.setAttribute('aria-expanded',String(open))};
@@ -232,18 +233,10 @@ let menuFailed = false;
 let currentDish = null;
 let companyGuests = 4;
 
-const companyGroups=[
-  {kind:'meat',categories:['kitchen-meat-grill','b66b5c5f-1e23-49fc-9cc5-5ad92e5c6110'],first:'k-ciolan-copt'},
-  {kind:'potato',categories:['kitchen-sides-snacks'],first:'k-cartofi-fri'},
-  {kind:'fish',categories:['kitchen-fish-beer','kitchen-seafood'],first:'k-creveti-grill'},
-  {kind:'snacks',categories:['kitchen-beer-snacks'],first:'snack-platou-bere'}
-];
+const companyGroups=companyRules;
 function companyOptions(menu,kind){
-  const group=companyGroups.find(g=>g.kind===kind);
-  const kitchen=new Set(menu.categories.filter(c=>c.route==='kitchen').map(c=>c.id));
-  // These vegetable dishes share the meat category in RestoFlow.
-  const vegetables=['709465b2-127c-4abb-b107-688332a18b7c','b88f9d87-7023-4985-b5e6-5ab7eeb0e3e7'];
-  return menu.items.filter(i=>group.categories.includes(i.category)&&kitchen.has(i.category)&&i.available!==false&&!vegetables.includes(i.id));
+  if(menu.company?.[kind]?.length===0)return [];
+  return companyCandidates(menu,kind).filter(i=>i.available!==false);
 }
 function recommendCompany(menu,guests,choices={}){
   if(![4,8,10,12].includes(guests))throw new Error('Unsupported company size');
@@ -252,21 +245,22 @@ function recommendCompany(menu,guests,choices={}){
     const options=companyOptions(menu,group.kind);
     const selected=choices[group.kind]||[];
     if(choices[group.kind]&&selected.length===0)continue;
-    const primary=options.find(i=>i.id===selected[0]?.id)||options.find(i=>i.id===group.first)||options[0];
+    const defaults=menu.company?.[group.kind];
+    const primary=options.find(i=>i.id===selected[0]?.id)||(Array.isArray(defaults)?defaults.map(id=>options.find(i=>i.id===id)).find(Boolean):options.find(i=>i.id===group.first))||options[0];
     if(!primary)continue;
     const items=[primary,...selected.slice(1).map(c=>options.find(i=>i.id===c.id)).filter(Boolean)];
     const seen=new Set();
     for(const item of items){
       if(seen.has(item.id))continue;seen.add(item.id);
-      const whole=item.id==='k-ciolan-copt'||item.id==='k-dorado';
-      const grams=!whole&&(item.weighted||/\d+\s*(г|g)/i.test(item.unit||''));
-      const suggested=whole?Math.ceil(guests/4):grams?guests*(group.kind==='meat'?150:50):Math.ceil(guests/(group.kind==='meat'||group.kind==='potato'?2:4));
+      const amount=companyAmount(item,group.kind,guests);
+      const configured=Array.isArray(menu.company?.[group.kind])?menu.quantities?.[item.id]?.[guests]:undefined;
+      const suggested=Number.isInteger(configured)&&configured>0&&configured<=amount.max?configured:amount.qty;
       const manual=selected.find(c=>c.id===item.id)?.qty;
-      const qty=Number.isInteger(manual)&&manual>0&&manual<=(grams?10000:50)?manual:suggested;
-      rows.push({item,kind:group.kind,qty,manual:qty===manual,unit:whole?'pieces':grams?'grams':'portions'});
+      const qty=Number.isInteger(manual)&&manual>0&&manual<=amount.max?manual:suggested;
+      rows.push({item,kind:group.kind,qty,manual:qty===manual,unit:amount.unit});
     }
   }
-  return {rows,incomplete:companyGroups.some(g=>choices[g.kind]?.length!==0&&!rows.some(r=>r.kind===g.kind))};
+  return {rows,incomplete:companyGroups.some(g=>choices[g.kind]?.length!==0&&menu.company?.[g.kind]?.length!==0&&!rows.some(r=>r.kind===g.kind))};
 }
 function mergeCompanyNotes(existing,previous,next){
   const index=previous?existing.indexOf(previous):-1;
@@ -644,18 +638,18 @@ fetch('menu.json').then(response => {
   if (!response.ok) throw new Error(`Menu request failed: ${response.status}`);
   return response.json();
 }).then(menu => {
-  data=menu;setLanguage(language);
+  setLanguage(language);
   async function refresh(){try{
     const config=await fetch('connection.json',{cache:'no-store',signal:AbortSignal.timeout(5000)}).then(r=>r.json());
-    if(!/^https:\/\/[a-z0-9-]+\.[a-z0-9-]+\.workers\.dev$/.test(config.apiUrl||''))return;
+    if(!/^https:\/\/[a-z0-9-]+\.[a-z0-9-]+\.workers\.dev$/.test(config.apiUrl||''))throw Error();
     const response=await fetch(config.apiUrl+'/menu',{cache:'no-store',signal:AbortSignal.timeout(8000)});
     if(!response.ok)throw Error();const live=await response.json();
     if(!Array.isArray(live.items)||!Array.isArray(live.categories)||!live.updatedAt)throw Error();
     if(window.pubMenuUpdatedAt===live.updatedAt)return;
     const merge=(rows,original)=>rows.map(row=>{const old=original.find(x=>x.id===row.id);return {...row,en:old&&old.ru===row.ru&&old.ro===row.ro?old.en:row.ro||row.ru}});
-    data={...menu,...live,categories:merge(live.categories,menu.categories),items:merge(live.items,menu.items)};
+    menuFailed=false;data={...menu,...live,categories:merge(live.categories,menu.categories),items:merge(live.items,menu.items)};
     window.pubMenuUpdatedAt=live.updatedAt;window.dispatchEvent(new Event('pub-menu-updated'));setLanguage(language);
-  }catch{window.pubMenuUpdatedAt='';window.dispatchEvent(new Event('pub-menu-updated'));}}
+  }catch{window.pubMenuUpdatedAt='';menuFailed=!data;if(menuFailed)itemsContainer.replaceChildren(element('p','empty',translations[language].error));window.dispatchEvent(new Event('pub-menu-updated'));}}
   refresh();setInterval(()=>{if(!document.hidden)refresh()},60000);
 }).catch(() => {
   menuFailed = true;

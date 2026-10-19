@@ -1,6 +1,6 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
 const root=path.join(__dirname,'../site'),source=fs.readFileSync(path.join(root,'app.js'),'utf8');
-const ctx={};vm.runInNewContext(source.slice(source.indexOf('const companyGroups='),source.indexOf('const companyCopy=')),ctx);
+const ctx={};vm.runInNewContext(fs.readFileSync(path.join(root,'company-rules.mjs'),'utf8').replaceAll('export ',''),ctx);vm.runInNewContext(source.slice(source.indexOf('const companyGroups='),source.indexOf('const companyCopy=')),ctx);
 const menu=()=>JSON.parse(fs.readFileSync(path.join(root,'menu.json'),'utf8'));
 test('shared table scales four groups, supports replacements and respects current kitchen availability',()=>{
  for(const guests of [4,8,10,12]){const result=ctx.recommendCompany(menu(),guests);assert.equal(result.incomplete,false);assert.equal(result.rows.length,4);assert.equal(result.rows[0].item.id,'k-ciolan-copt');assert.equal(result.rows[0].unit,'pieces');assert.equal(result.rows[0].qty,Math.ceil(guests/4));assert.equal(result.rows[1].qty,Math.ceil(guests/2));}
@@ -40,4 +40,35 @@ test('removed categories stay empty across group sizes and partial menus can be 
  const cleared={meat:[],potato:[],fish:[],snacks:[]};assert.equal(ctx.recommendCompany(menu(),4,cleared).rows.length,0);
  cleared.fish.push({id:'k-midii',qty:2});const r=ctx.recommendCompany(menu(),4,cleared);assert.equal(r.rows.length,1);assert.equal(r.rows[0].item.id,'k-midii');assert.equal(r.incomplete,false);
  assert.equal(ctx.mergeCompanyNotes('Window table\n\nPrevious list','Previous list',''),'Window table');
+});
+
+test('administrator defaults preserve guest alternatives and disabled groups',()=>{
+ const current=menu();current.company={meat:['k-costita-bbq','k-ciolan-copt'],fish:[]};
+ assert.ok(ctx.companyOptions(current,'meat').some(i=>i.id==='k-platou-carne'));
+ let result=ctx.recommendCompany(current,4);assert.equal(result.rows[0].item.id,'k-costita-bbq');assert.ok(!result.rows.some(r=>r.kind==='fish'));assert.equal(result.incomplete,false);
+ current.items.find(i=>i.id==='k-costita-bbq').available=false;assert.equal(ctx.recommendCompany(current,4).rows[0].item.id,'k-ciolan-copt');
+ current.items=current.items.filter(i=>i.id!=='k-ciolan-copt');assert.ok(ctx.companyOptions(current,'meat').length>0);assert.equal(ctx.recommendCompany(current,4).incomplete,false);
+});
+
+test('groups reject unrelated categories and saved amounts follow group size',()=>{
+ const current=menu();
+ assert.ok(!ctx.companyCandidates(current,'fish').some(i=>i.id==='k-ciolan-copt'));
+ assert.ok(!ctx.companyCandidates(current,'meat').some(i=>i.id==='k-creveti-grill'));
+ current.company={meat:['k-creveti-grill','k-ciolan-copt']};
+ assert.ok(!ctx.companyOptions(current,'meat').some(i=>i.id==='k-creveti-grill'));
+ current.quantities={'k-ciolan-copt':{4:2,8:3,10:4,12:5}};
+ for(const [guests,qty] of [[4,2],[8,3],[10,4],[12,5]])assert.equal(ctx.recommendCompany(current,guests).rows[0].qty,qty);
+ const overridden=ctx.recommendCompany(current,4,{meat:[{id:'k-ciolan-copt',qty:7}]});assert.equal(overridden.rows[0].qty,7);
+ current.quantities['k-ciolan-copt'][4]=-1;assert.equal(ctx.recommendCompany(current,4).rows[0].qty,1);
+});
+
+test('single saved default still allows guest replacement, additions and quantities',()=>{
+ const current=menu();current.company={meat:['k-platou-carne'],potato:['k-cartofan'],fish:['k-creveti-rose','k-creveti-grill'],snacks:['snack-platou-bere']};
+ current.quantities={'k-platou-carne':{4:1,8:2,10:3,12:3}};
+ const defaults=ctx.recommendCompany(current,4);assert.equal(defaults.rows[0].item.id,'k-platou-carne');assert.equal(defaults.rows[0].qty,1);
+ const options=ctx.companyOptions(current,'meat');assert.ok(options.some(i=>i.id==='k-ciolan-copt'));assert.ok(options.some(i=>i.category==='b66b5c5f-1e23-49fc-9cc5-5ad92e5c6110'));
+ const choices={meat:[{id:'k-ciolan-copt',qty:2},{id:'k-costita-bbq',qty:500}]};
+ let result=ctx.recommendCompany(current,4,choices);assert.equal(result.rows[0].item.id,'k-ciolan-copt');assert.equal(result.rows[0].qty,2);assert.equal(result.rows[1].item.id,'k-costita-bbq');assert.equal(result.rows[1].qty,500);
+ current.items=current.items.filter(i=>i.id!=='k-ciolan-copt');assert.ok(!ctx.companyOptions(current,'meat').some(i=>i.id==='k-ciolan-copt'));
+ result=ctx.recommendCompany(current,4,choices);assert.equal(result.rows[0].item.id,'k-platou-carne');
 });
