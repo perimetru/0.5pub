@@ -1,5 +1,6 @@
 import {backups} from './backups.mjs';
 import {companyCandidates,companyAmount} from '../site/company-rules.mjs';
+import {recordVisit,visitorStats} from './visitors.mjs';
 const ORIGINS = ['https://05pub.md', 'https://www.05pub.md', 'https://perimetru.github.io'];
 const uuid = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
 function fail(status, message) { throw Object.assign(new Error(message), {status}); }
@@ -61,6 +62,17 @@ export default {
       }
       if(path==='/health' && request.method==='GET')return reply(200,{ok:true,configured:!!env.DB&&!!env.SYNC_TOKEN});
       if(!env.DB)fail(503,'Database is not configured');
+      if(path==='/visits'&&request.method==='POST'){
+        if(!allowed)fail(403,'Origin not allowed');
+        const input=await read(request,1024);
+        if(!input||typeof input.id!=='string'||!uuid.test(input.id))fail(400,'Invalid visitor');
+        await recordVisit(env.DB,input.id);
+        return reply(200,{ok:true});
+      }
+      if(path==='/admin/visitors'&&request.method==='GET'){
+        await authorized(request,env,'ADMIN_TOKEN');
+        return reply(200,await visitorStats(env.DB));
+      }
       if(path==='/admin/settings') {
         await authorized(request,env,'ADMIN_TOKEN');
         if(request.method==='GET') {

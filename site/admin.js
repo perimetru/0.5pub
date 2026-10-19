@@ -4,8 +4,8 @@ const $=s=>document.querySelector(s),kinds={meat:'Мясное',potato:'Карт
 let api='',key='',menu,preferences,dirty=false;
 const status=message=>{$('#status').textContent=message};
 function el(tag,text){const n=document.createElement(tag);if(text)n.textContent=text;return n}
-async function request(method='GET',body){
-  const response=await fetch(api+'/admin/settings',{method,cache:'no-store',signal:AbortSignal.timeout(15000),headers:{Authorization:'Bearer '+key,...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});
+async function request(method='GET',body,path='/admin/settings'){
+  const response=await fetch(api+path,{method,cache:'no-store',signal:AbortSignal.timeout(15000),headers:{Authorization:'Bearer '+key,...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});
   if(!response.ok)throw Error(({401:'Неверный ключ администратора.',409:'Меню ещё не синхронизировано с RestoFlow.',503:'Админка пока не подключена. Проверьте настройки сервера.',400:'Не удалось сохранить: обновите страницу и проверьте выбранные блюда.'})[response.status]||'Ошибка сервера. Повторите попытку.');
   return response.json();
 }
@@ -75,7 +75,7 @@ $('#login').onsubmit=async event=>{
       const allowed=new Set(companyCandidates(menu,kind).map(i=>i.id));preferences.company[kind]=values.filter(id=>allowed.has(id));
     }
     const ids=new Set(menu.items.map(i=>i.id));for(const id of Object.keys(preferences.quantities))if(!ids.has(id))delete preferences.quantities[id];
-    $('#key').value='';$('#login').hidden=true;$('#settings').hidden=false;$('#logout').hidden=false;render();dirty=false;status('Меню загружено.');
+    $('#key').value='';$('#login').hidden=true;$('#settings').hidden=false;$('#logout').hidden=false;render();dirty=false;status('Меню загружено.');$('#visitor-stats').hidden=false;loadVisitors();
   }catch(error){key='';status(error.name==='TimeoutError'?'Сервер не ответил. Повторите попытку.':error.message)}finally{button.disabled=false}
 };
 $('#settings').onsubmit=async event=>{
@@ -84,5 +84,13 @@ $('#settings').onsubmit=async event=>{
   const controls=[...$('#settings').querySelectorAll('input,select')],disabled=controls.map(n=>n.disabled);controls.forEach(n=>n.disabled=true);
   status('Сохраняем…');try{await request('PUT',preferences);dirty=false;status('Изменения сохранены на сайте.')}catch(error){status('Изменения не сохранены. '+error.message)}finally{button.disabled=false;controls.forEach((n,i)=>n.disabled=disabled[i])}
 };
-$('#logout').onclick=()=>{if(dirty&&!confirm('Выйти без сохранения изменений?'))return;key='';dirty=false;menu=null;preferences=null;$('#catalog').replaceChildren();$('#groups').replaceChildren();$('#settings').hidden=true;$('#logout').hidden=true;$('#login').hidden=false;status('Вы вышли.');$('#key').focus()};
+$('#logout').onclick=()=>{if(dirty&&!confirm('Выйти без сохранения изменений?'))return;key='';dirty=false;$('#visitor-stats').hidden=true;for(const period of ['today','week','month'])$('#visitors-'+period).textContent='—';menu=null;preferences=null;$('#catalog').replaceChildren();$('#groups').replaceChildren();$('#settings').hidden=true;$('#logout').hidden=true;$('#login').hidden=false;status('Вы вышли.');$('#key').focus()};
 window.addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue=''}});
+
+async function loadVisitors(){
+  const authKey=key;if(!authKey)return;const button=$('#refresh-visitors');button.disabled=true;$('#visitor-status').textContent='Загружаем статистику…';
+  try{const stats=await request('GET',null,'/admin/visitors');if(key!==authKey)return;for(const period of ['today','week','month'])$('#visitors-'+period).textContent=stats[period].toLocaleString('ru-RU');$('#visitor-status').textContent='Обновлено: '+new Date(stats.updatedAt).toLocaleString('ru-MD',{timeZone:'Europe/Chisinau'});}
+  catch{if(key===authKey)$('#visitor-status').textContent='Не удалось загрузить статистику. Нажмите «Обновить статистику».';}
+  finally{button.disabled=false;}
+}
+$('#refresh-visitors').onclick=loadVisitors;
