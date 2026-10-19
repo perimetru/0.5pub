@@ -1,4 +1,5 @@
 'use strict';
+import {companyRules,companyCandidates,companyAmount} from './company-rules.mjs';
 const translations = {
   ru: {eyebrow:'0.5 PUB · ПАБ ПРИ ПИВОВАРНЕ ALBEER', title:['Пиво Albeer.','Встречаемся в пабе.'], description:'Пиво с нашей пивоварни. Еда и компания — в 0.5 PUB.', explore:'Посмотреть меню', label:'НАЙДИТЕ СВОЙ ВКУС', heading:'Меню паба', currency:'Цены в MDL', search:'Найти блюдо или напиток', all:'Всё меню', count:'Найдено позиций', empty:'Ничего не найдено. Попробуйте другое название или категорию.', footer:'0.5 PUB — паб при пивоварне Albeer.', weight:'Цена за', portion:'порция', piece:'шт.', error:'Не удалось загрузить меню. Обновите страницу.'},
   ro: {eyebrow:'0.5 PUB · PUB LA BERĂRIA ALBEER', title:['Bere Albeer.','Ne vedem la pub.'], description:'Bere din berăria noastră. Mâncare și companie — la 0.5 PUB.', explore:'Descoperă meniul', label:'GĂSEȘTE GUSTUL TĂU', heading:'Meniul pubului', currency:'Prețuri în MDL', search:'Caută un preparat sau o băutură', all:'Tot meniul', count:'Produse găsite', empty:'Nu am găsit nimic. Încearcă alt nume sau altă categorie.', footer:'0.5 PUB — pub la berăria Albeer.', weight:'Preț pentru', portion:'porție', piece:'buc.', error:'Meniul nu a putut fi încărcat. Reîncarcă pagina.'},
@@ -232,19 +233,11 @@ let menuFailed = false;
 let currentDish = null;
 let companyGuests = 4;
 
-const companyGroups=[
-  {kind:'meat',categories:['kitchen-meat-grill','b66b5c5f-1e23-49fc-9cc5-5ad92e5c6110'],first:'k-ciolan-copt'},
-  {kind:'potato',categories:['kitchen-sides-snacks'],first:'k-cartofi-fri'},
-  {kind:'fish',categories:['kitchen-fish-beer','kitchen-seafood'],first:'k-creveti-grill'},
-  {kind:'snacks',categories:['kitchen-beer-snacks'],first:'snack-platou-bere'}
-];
+const companyGroups=companyRules;
 function companyOptions(menu,kind){
-  const group=companyGroups.find(g=>g.kind===kind);
-  const kitchen=new Set(menu.categories.filter(c=>c.route==='kitchen').map(c=>c.id));
-  if(Array.isArray(menu.company?.[kind]))return menu.company[kind].map(id=>menu.items.find(i=>i.id===id&&kitchen.has(i.category)&&i.available!==false)).filter(Boolean);
-  // These vegetable dishes share the meat category in RestoFlow.
-  const vegetables=['709465b2-127c-4abb-b107-688332a18b7c','b88f9d87-7023-4985-b5e6-5ab7eeb0e3e7'];
-  return menu.items.filter(i=>group.categories.includes(i.category)&&kitchen.has(i.category)&&i.available!==false&&!vegetables.includes(i.id));
+  const candidates=companyCandidates(menu,kind).filter(i=>i.available!==false);
+  if(Array.isArray(menu.company?.[kind]))return menu.company[kind].map(id=>candidates.find(i=>i.id===id)).filter(Boolean);
+  return candidates;
 }
 function recommendCompany(menu,guests,choices={}){
   if(![4,8,10,12].includes(guests))throw new Error('Unsupported company size');
@@ -259,12 +252,12 @@ function recommendCompany(menu,guests,choices={}){
     const seen=new Set();
     for(const item of items){
       if(seen.has(item.id))continue;seen.add(item.id);
-      const whole=item.id==='k-ciolan-copt'||item.id==='k-dorado';
-      const grams=!whole&&(item.weighted||/\d+\s*(г|g)/i.test(item.unit||''));
-      const suggested=whole?Math.ceil(guests/4):grams?guests*(group.kind==='meat'?150:50):Math.ceil(guests/(group.kind==='meat'||group.kind==='potato'?2:4));
+      const amount=companyAmount(item,group.kind,guests);
+      const configured=Array.isArray(menu.company?.[group.kind])?menu.quantities?.[item.id]?.[guests]:undefined;
+      const suggested=Number.isInteger(configured)&&configured>0&&configured<=amount.max?configured:amount.qty;
       const manual=selected.find(c=>c.id===item.id)?.qty;
-      const qty=Number.isInteger(manual)&&manual>0&&manual<=(grams?10000:50)?manual:suggested;
-      rows.push({item,kind:group.kind,qty,manual:qty===manual,unit:whole?'pieces':grams?'grams':'portions'});
+      const qty=Number.isInteger(manual)&&manual>0&&manual<=amount.max?manual:suggested;
+      rows.push({item,kind:group.kind,qty,manual:qty===manual,unit:amount.unit});
     }
   }
   return {rows,incomplete:companyGroups.some(g=>choices[g.kind]?.length!==0&&menu.company?.[g.kind]?.length!==0&&!rows.some(r=>r.kind===g.kind))};
