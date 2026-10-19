@@ -235,9 +235,8 @@ let companyGuests = 4;
 
 const companyGroups=companyRules;
 function companyOptions(menu,kind){
-  const candidates=companyCandidates(menu,kind).filter(i=>i.available!==false);
-  if(Array.isArray(menu.company?.[kind]))return menu.company[kind].map(id=>candidates.find(i=>i.id===id)).filter(Boolean);
-  return candidates;
+  if(menu.company?.[kind]?.length===0)return [];
+  return companyCandidates(menu,kind).filter(i=>i.available!==false);
 }
 function recommendCompany(menu,guests,choices={}){
   if(![4,8,10,12].includes(guests))throw new Error('Unsupported company size');
@@ -246,7 +245,8 @@ function recommendCompany(menu,guests,choices={}){
     const options=companyOptions(menu,group.kind);
     const selected=choices[group.kind]||[];
     if(choices[group.kind]&&selected.length===0)continue;
-    const primary=options.find(i=>i.id===selected[0]?.id)||(Array.isArray(menu.company?.[group.kind])?options[0]:options.find(i=>i.id===group.first)||options[0]);
+    const defaults=menu.company?.[group.kind];
+    const primary=options.find(i=>i.id===selected[0]?.id)||(Array.isArray(defaults)?defaults.map(id=>options.find(i=>i.id===id)).find(Boolean):options.find(i=>i.id===group.first))||options[0];
     if(!primary)continue;
     const items=[primary,...selected.slice(1).map(c=>options.find(i=>i.id===c.id)).filter(Boolean)];
     const seen=new Set();
