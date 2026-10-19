@@ -41,3 +41,11 @@ test('removed categories stay empty across group sizes and partial menus can be 
  cleared.fish.push({id:'k-midii',qty:2});const r=ctx.recommendCompany(menu(),4,cleared);assert.equal(r.rows.length,1);assert.equal(r.rows[0].item.id,'k-midii');assert.equal(r.incomplete,false);
  assert.equal(ctx.mergeCompanyNotes('Window table\n\nPrevious list','Previous list',''),'Window table');
 });
+
+test('administrator controls offered dishes, defaults and disabled groups',()=>{
+ const current=menu();current.company={meat:['k-costita-bbq','k-ciolan-copt'],fish:[]};
+ assert.deepEqual(Array.from(ctx.companyOptions(current,'meat'),i=>i.id),current.company.meat);
+ let result=ctx.recommendCompany(current,4);assert.equal(result.rows[0].item.id,'k-costita-bbq');assert.ok(!result.rows.some(r=>r.kind==='fish'));assert.equal(result.incomplete,false);
+ current.items.find(i=>i.id==='k-costita-bbq').available=false;assert.equal(ctx.recommendCompany(current,4).rows[0].item.id,'k-ciolan-copt');
+ current.items=current.items.filter(i=>i.id!=='k-ciolan-copt');assert.equal(ctx.companyOptions(current,'meat').length,0);assert.equal(ctx.recommendCompany(current,4).incomplete,true);
+});

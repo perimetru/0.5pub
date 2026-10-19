@@ -214,9 +214,9 @@ const heroCopy = {
     "label": "GOOD BEER DESERVES GOOD FOOD"
   }
 };
-Object.assign(pageCopy.ru,{navCompany:'Составить меню',navToggle:'Навигация'});
-Object.assign(pageCopy.ro,{navCompany:'Compune meniul',navToggle:'Navigare'});
-Object.assign(pageCopy.en,{navCompany:'Build your menu',navToggle:'Navigation'});
+Object.assign(pageCopy.ru,{navAdmin:'Администратор',navCompany:'Составить меню',navToggle:'Навигация'});
+Object.assign(pageCopy.ro,{navAdmin:'Administrator',navCompany:'Compune meniul',navToggle:'Navigare'});
+Object.assign(pageCopy.en,{navAdmin:'Administrator',navCompany:'Build your menu',navToggle:'Navigation'});
 const navToggle=document.querySelector('.nav-toggle'),pageNavigation=document.querySelector('#page-navigation');
 function closeNavigation(){document.body.classList.remove('nav-open');navToggle.setAttribute('aria-expanded','false')}
 navToggle.onclick=()=>{const open=document.body.classList.toggle('nav-open');navToggle.setAttribute('aria-expanded',String(open))};
@@ -241,6 +241,7 @@ const companyGroups=[
 function companyOptions(menu,kind){
   const group=companyGroups.find(g=>g.kind===kind);
   const kitchen=new Set(menu.categories.filter(c=>c.route==='kitchen').map(c=>c.id));
+  if(Array.isArray(menu.company?.[kind]))return menu.company[kind].map(id=>menu.items.find(i=>i.id===id&&kitchen.has(i.category)&&i.available!==false)).filter(Boolean);
   // These vegetable dishes share the meat category in RestoFlow.
   const vegetables=['709465b2-127c-4abb-b107-688332a18b7c','b88f9d87-7023-4985-b5e6-5ab7eeb0e3e7'];
   return menu.items.filter(i=>group.categories.includes(i.category)&&kitchen.has(i.category)&&i.available!==false&&!vegetables.includes(i.id));
@@ -252,7 +253,7 @@ function recommendCompany(menu,guests,choices={}){
     const options=companyOptions(menu,group.kind);
     const selected=choices[group.kind]||[];
     if(choices[group.kind]&&selected.length===0)continue;
-    const primary=options.find(i=>i.id===selected[0]?.id)||options.find(i=>i.id===group.first)||options[0];
+    const primary=options.find(i=>i.id===selected[0]?.id)||(Array.isArray(menu.company?.[group.kind])?options[0]:options.find(i=>i.id===group.first)||options[0]);
     if(!primary)continue;
     const items=[primary,...selected.slice(1).map(c=>options.find(i=>i.id===c.id)).filter(Boolean)];
     const seen=new Set();
@@ -266,7 +267,7 @@ function recommendCompany(menu,guests,choices={}){
       rows.push({item,kind:group.kind,qty,manual:qty===manual,unit:whole?'pieces':grams?'grams':'portions'});
     }
   }
-  return {rows,incomplete:companyGroups.some(g=>choices[g.kind]?.length!==0&&!rows.some(r=>r.kind===g.kind))};
+  return {rows,incomplete:companyGroups.some(g=>choices[g.kind]?.length!==0&&menu.company?.[g.kind]?.length!==0&&!rows.some(r=>r.kind===g.kind))};
 }
 function mergeCompanyNotes(existing,previous,next){
   const index=previous?existing.indexOf(previous):-1;
@@ -644,18 +645,18 @@ fetch('menu.json').then(response => {
   if (!response.ok) throw new Error(`Menu request failed: ${response.status}`);
   return response.json();
 }).then(menu => {
-  data=menu;setLanguage(language);
+  setLanguage(language);
   async function refresh(){try{
     const config=await fetch('connection.json',{cache:'no-store',signal:AbortSignal.timeout(5000)}).then(r=>r.json());
-    if(!/^https:\/\/[a-z0-9-]+\.[a-z0-9-]+\.workers\.dev$/.test(config.apiUrl||''))return;
+    if(!/^https:\/\/[a-z0-9-]+\.[a-z0-9-]+\.workers\.dev$/.test(config.apiUrl||''))throw Error();
     const response=await fetch(config.apiUrl+'/menu',{cache:'no-store',signal:AbortSignal.timeout(8000)});
     if(!response.ok)throw Error();const live=await response.json();
     if(!Array.isArray(live.items)||!Array.isArray(live.categories)||!live.updatedAt)throw Error();
     if(window.pubMenuUpdatedAt===live.updatedAt)return;
     const merge=(rows,original)=>rows.map(row=>{const old=original.find(x=>x.id===row.id);return {...row,en:old&&old.ru===row.ru&&old.ro===row.ro?old.en:row.ro||row.ru}});
-    data={...menu,...live,categories:merge(live.categories,menu.categories),items:merge(live.items,menu.items)};
+    menuFailed=false;data={...menu,...live,categories:merge(live.categories,menu.categories),items:merge(live.items,menu.items)};
     window.pubMenuUpdatedAt=live.updatedAt;window.dispatchEvent(new Event('pub-menu-updated'));setLanguage(language);
-  }catch{window.pubMenuUpdatedAt='';window.dispatchEvent(new Event('pub-menu-updated'));}}
+  }catch{window.pubMenuUpdatedAt='';menuFailed=!data;if(menuFailed)itemsContainer.replaceChildren(element('p','empty',translations[language].error));window.dispatchEvent(new Event('pub-menu-updated'));}}
   refresh();setInterval(()=>{if(!document.hidden)refresh()},60000);
 }).catch(() => {
   menuFailed = true;
