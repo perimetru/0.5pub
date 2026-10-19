@@ -115,9 +115,9 @@ const pageCopy = {
     "beerVolume": "0.5 L"
   }
 };
-Object.assign(pageCopy.ru, {reservationLabel:'Резервация столика', directionsLabel:'Маршрут на автомобиле'});
-Object.assign(pageCopy.ro, {reservationLabel:'Rezervări mese', directionsLabel:'Traseu cu mașina'});
-Object.assign(pageCopy.en, {reservationLabel:'Table reservations', directionsLabel:'Driving directions'});
+Object.assign(pageCopy.ru, {hoursLabel:'Часы работы',reservationLabel:'Резервация столика', directionsLabel:'Маршрут на автомобиле'});
+Object.assign(pageCopy.ro, {hoursLabel:'Program',reservationLabel:'Rezervări mese', directionsLabel:'Traseu cu mașina'});
+Object.assign(pageCopy.en, {hoursLabel:'Opening hours',reservationLabel:'Table reservations', directionsLabel:'Driving directions'});
 Object.assign(pageCopy.ru, {abvLabel:'Алкоголь', densityLabel:'Нач. плотность', bitternessLabel:'Горечь', colorLabel:'Цвет', clarityLabel:'Прозрачность', clarityOf:'из', profilePending:'Характеристики уточняются'});
 Object.assign(pageCopy.ro, {abvLabel:'Alcool', densityLabel:'Densitate inițială', bitternessLabel:'Amăreală', colorLabel:'Culoare', clarityLabel:'Limpiditate', clarityOf:'din', profilePending:'Caracteristici în curs de confirmare'});
 Object.assign(pageCopy.en, {abvLabel:'Alcohol', densityLabel:'Original gravity', bitternessLabel:'Bitterness', colorLabel:'Colour', clarityLabel:'Clarity', clarityOf:'of', profilePending:'Details awaiting confirmation'});
